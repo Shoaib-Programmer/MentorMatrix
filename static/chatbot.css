@@ -1,0 +1,42 @@
+/* Style for bot messages (left-aligned, normal text) */
+.message.bot {
+    background-color: transparent; /* No special background */
+    color: white;
+    align-self: flex-start; /* Align to the left */
+    padding: 0.75rem 1rem;
+    border: none; /* No border for bot messages */
+    max-width: 70%; /* Limit text width */
+    word-wrap: break-word;
+}
+
+/* Style for user messages (right-aligned with lighter background) */
+.message.user {
+    background-color: rgba(255, 255, 255, 0.1); /* Slightly lighter background */
+    color: white;
+    align-self: flex-end; /* Align to the right */
+    padding: 0.75rem 1rem;
+    border-radius: 10px; /* Rounded corners */
+    max-width: 70%; /* Limit text width */
+    word-wrap: break-word;
+}
+
+/* Style for the horizontal rule between messages */
+hr.my-2 {
+    margin: 0.5rem 0; /* Spacing around the <hr> */
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.2); /* Subtle horizontal line */
+}
+
+/* Fix the input field position */
+#input {
+    flex-grow: 1;
+    padding: 0.75rem 1rem;
+    border-radius: 15px; /* Fully rounded ends */
+    border: 1px solid #ddd;
+    outline: none;
+}
+
+#input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}

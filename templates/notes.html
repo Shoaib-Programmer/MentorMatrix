@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Notes - MentorMatrix
+{% endblock %}
+
+{% block other_head_stuff %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='notes.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="main-content">
+            <h1>My Notes</h1>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul class="flashes">
+                        {% for category, message in messages %}
+                            <li class="flash {{ category }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+
+        <!-- Display notes list -->
+            <ul class="notes-list">
+                {% for note in notes %}
+                    <li class="note-item">
+                <!-- Use note.note_title for the title -->
+                        <h2>{{ note.note_title }}</h2>
+                        <small>Created on: {{ note.created_at }}</small>
+
+                <!-- Add a button for viewing more details -->
+                        <!-- Replace the button with a link -->
+                        <a href="{{ url_for('notes.view_note', note_id=note.id) }}" class="view-details-btn">View Details</a>
+
+                <!-- Hidden details section, toggled by the button -->
+                        <div class="note-details" id="details-{{ note.id }}" style="display: none;">
+                            {% if note.transcript_title %}
+                                <p><strong>Associated Transcript:</strong> {{ note.transcript_title }}</p>
+                            {% endif %}
+                            {% if note.file_name %}
+                                <p><strong>Source File:</strong> {{ note.file_name }}</p>
+                                <p><strong>File Type:</strong> {{ note.file_type }}</p>
+                                {% if note.metadata %}
+                                    <p><strong>Metadata:</strong> {{ note.metadata }}</p>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </li>
+                {% else %}
+                    <p>No notes available. Generate one to get started!</p>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+<!-- Add this button to open the modal -->
+    <button id="openModalBtn" class="premium-button">Create New Note</button>
+
+<!-- Modal for creating a new note -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" aria-label="Close Modal">&times;</span>
+            <h2>Create a New Note</h2>
+            <form action="{{ url_for('notes.add_note') }}" method="POST">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required>
+
+                <label for="content">Content:</label>
+                <textarea id="content" name="content" required></textarea>
+
+                <button type="submit" class="premium-button">Save Note</button>
+            </form>
+            <button id="closeModalBtn" class="premium-button">Cancel</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='notes.js') }}"></script>
+{% endblock %}

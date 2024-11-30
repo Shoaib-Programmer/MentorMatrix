@@ -1,0 +1,32 @@
+@import 'base.css';
+
+body {
+    background-color: #333333; /* Dark background */
+    color: #f0f0f0;            /* Light text */
+}
+
+header, footer {
+    background-color: #222222;
+    color: #f0f0f0;
+}
+
+h1, h2, h3 {
+    color: #e0e0e0;
+}
+
+p {
+    color: #cccccc;
+}
+
+a {
+    color: #bb86fc;            /* Lighter link color */
+}
+
+button {
+    background-color: #6200ea; /* Purple button */
+    color: white;
+}
+
+button:hover {
+    background-color: #3700b3; /* Darker purple on hover */
+}

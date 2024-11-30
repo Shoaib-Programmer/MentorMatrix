@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{ note.note_title }} - MentorMatrix
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="main-content">
+        <h1>{{ note.note_title }}</h1>
+        <p>{{ note.note_content }}</p>
+        <p><small>Created on: {{ note.created_at }}</small></p>
+        {% if note.transcript_title %}
+            <p><strong>Associated Transcript:</strong> {{ note.transcript_title }}</p>
+        {% endif %}
+        {% if note.file_name %}
+            <p><strong>Source File:</strong> {{ note.file_name }}</p>
+            <p><strong>File Type:</strong> {{ note.file_type }}</p>
+            {% if note.metadata %}
+                <p><strong>Metadata:</strong> {{ note.metadata }}</p>
+            {% endif %}
+        {% endif %}
+        <a href="{{ url_for('notes.notes') }}" class="premium-button">Back to Notes</a>
+    </div>
+</div>
+{% endblock %}

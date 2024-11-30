@@ -1,0 +1,149 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Flashcards - MentorMatrix
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="main-content">
+      <h1>Flashcards</h1>
+
+      <!-- Display flashcard list -->
+      <ul class="flashcard-list">
+        {% for flashcard in flashcards %}
+          <li class="flashcard-item" onclick="flipCard({{ loop.index }})">
+            <div class="flashcard-content" id="flashcard-{{ loop.index }}">
+              <div class="flashcard-front" style="display: block;">
+                <h2>Q: {{ flashcard.question }}</h2>
+              </div>
+              <div class="flashcard-back" style="display: none;">
+                <h2>A: {{ flashcard.answer }}</h2>
+              </div>
+            </div>
+            <small>Created on: {{ flashcard.created_at }}</small>
+          </li>
+        {% else %}
+          <li>No flashcards were created. Want to make some?</li><!--temp text-->
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <!-- Modal for creating a new flashcard -->
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" aria-label="Close Modal">&times;</span>
+      <h2>Create a New Flashcard</h2>
+      <form action="/add_flashcard" method="POST">
+        <label for="question">Question:</label>
+        <input type="text" id="question" name="question" required>
+
+        <label for="answer">Answer:</label>
+        <textarea id="answer" name="answer" required></textarea>
+
+        <button type="submit" class="premium-button">Save Flashcard</button>
+      </form>
+      <button id="closeModalBtn" class="premium-button">Cancel</button>
+    </div>
+  </div>
+
+  <style>
+    /* Modal background styling */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Modal content styling */
+    .modal-content {
+      background-color: #1e1e1e;
+      color: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      width: 90%;
+      max-width: 500px;
+    }
+
+    .modal-content h2 {
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Modal close button */
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.5rem;
+      color: #bbb;
+      cursor: pointer;
+    }
+
+    .flashcard-list {
+      list-style-type: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    .flashcard-item {
+      background-color: #1b1b1b;
+      padding: 1rem;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      position: relative;
+      text-align: center;
+    }
+
+    .flashcard-item h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .flashcard-front, .flashcard-back {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      color: #fff;
+    }
+
+    .flashcard-front {
+      color: #00bfff;
+    }
+
+    .flashcard-back {
+      color: #32cd32;
+    }
+
+    .flashcard-item small {
+      display: block;
+      font-size: 0.9rem;
+      margin-top: 10px;
+      color: #888;
+    }
+  </style>
+
+  <script>
+
+    // Modal functionality
+    document.getElementById("openModalBtn").addEventListener("click", function() {
+      document.getElementById("myModal").style.display = "flex";
+    });
+
+    document.getElementById("closeModalBtn").addEventListener("click", function() {
+      document.getElementById("myModal").style.display = "none";
+    });
+
+    document.querySelector(".close-btn").addEventListener("click", function() {
+      document.getElementById("myModal").style.display = "none";
+    });
+  </script>
+{% endblock %}

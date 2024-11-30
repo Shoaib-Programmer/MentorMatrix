@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block title %}View Transcript - {{ transcript_name }}{% endblock %}
+
+{% block content %}
+<section class="view-transcript">
+    <h2>{{ transcript_name }}</h2>
+    <div class="transcript-content">
+        <pre>{{ content }}</pre>
+    </div>
+    <div class="navigation">
+        <a href="{{ url_for('transcribe.transcript') }}" class="btn btn-primary">Back to Transcripts</a>
+    </div>
+</section>
+{% endblock %}

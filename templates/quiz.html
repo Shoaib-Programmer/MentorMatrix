@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Quiz - MentorMatrix
+{% endblock %}
+
+{% block other_head_stuff %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='quiz.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="main-content">
+            <h1>Quiz Questions & Hints</h1>
+
+        <!-- Quiz session controls with status message -->
+            <div class="quiz-controls">
+                {% if session_active %}
+                    <p class="session-status">You have an active quiz session.</p>
+                    <button class="resume-btn" onclick="resumeSession()">Resume Session</button>
+                    <button class="end-session-btn" onclick="endSession()">End Session</button>
+                {% else %}
+                    <p class="session-status">No active session. Start a new quiz!</p>
+                    <button class="start-session-btn" onclick="startNewSession()">Start New Session</button>
+                {% endif %}
+            </div>
+
+        <!-- Completed questions section with accordion display -->
+            <h2>Completed Questions</h2>
+            <ul class="quiz-list completed-list">
+                {% if completed_questions %}
+                    {% for question in completed_questions %}
+                        <li class="question-item">
+                            <h2>Q{{ loop.index }}: {{ question.title }}</h2>
+                            <p>{{ question.content }}</p>
+                            <button class="hint-btn" onclick="toggleHint({{ loop.index }}, 'completed')">Show Hint</button>
+                            <p class="hint-content" id="completed-hint-{{ loop.index }}" style="display: none;">Hint: {{ question.hint }}</p>
+                            <p class="answer-content">Your Answer: {{ question.user_answer }}</p>
+                            <small>Completed on: {{ question.completed_at }}</small>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <li>No completed questions yet. Try completing a few from your active session!</li>
+                {% endif %}
+            </ul>
+
+        <!-- Quiz questions in progress with collapsible answers -->
+            <h2>Quiz in Progress</h2>
+            <ul class="quiz-list">
+                {% for question in questions %}
+                    <li class="question-item">
+                        <h2>Q{{ loop.index }}: {{ question.title }}</h2>
+                        <p>{{ question.content }}</p>
+                        <button class="hint-btn" onclick="toggleHint({{ loop.index }})">Show Hint</button>
+                        <p class="hint-content" id="hint-{{ loop.index }}" style="display: none;">Hint: {{ question.hint }}</p>
+                        <form action="/submit_answer" method="POST" class="answer-form">
+                            <input type="hidden" name="question_id" value="{{ question.id }}">
+                            <textarea name="answer" placeholder="Type your answer here" required></textarea>
+                            <button type="submit" class="submit-answer-btn">Submit Answer</button>
+                        </form>
+                        <small>Created on: {{ question.created_at }}</small>
+                    </li>
+                {% else %}
+                    <li>No questions available. Start a session to view questions.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+<!-- Modal for creating a new question -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" aria-label="Close Modal">&times;</span>
+            <h2>Add a New Question</h2>
+            <form action="/add_question" method="POST">
+                <label for="title">Question:</label>
+                <input type="text" id="title" name="title" required>
+
+                <label for="content">Details:</label>
+                <textarea id="content" name="content" required></textarea>
+
+                <label for="hint">Hint:</label>
+                <textarea id="hint" name="hint"></textarea>
+
+                <button type="submit" class="premium-button">Save Question</button>
+            </form>
+            <button id="closeModalBtn" class="premium-button">Cancel</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='quiz.js') }}"></script>
+{% endblock %}

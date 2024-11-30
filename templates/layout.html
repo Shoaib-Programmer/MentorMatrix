@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}MentorMatrix{% endblock %}</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        {% block other_head_stuff %}
+        {% endblock %}
+    </head>
+
+    <body>
+        <div class="container">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="logo">
+                    <center>
+                    <img src="{{ url_for('static', filename='images/MentorMatrix_logo.png') }}" 
+                        alt="MentorMatrix Logo"
+                        style="width: 120px;
+                                height: 120px;
+                                border-radius: 50%; /* Makes it a circle */
+                                overflow: hidden; /* Ensures contents stay within the circle */"
+                        >
+                        <h1>MentorMatrix</h1>
+                    </center>
+                </div>
+                <nav class="nav-links">
+                    <!-- Buttons with redirect functionality -->
+                    <button class="nav-item {% if current_route == 'dashboard' %}active{% endif %}" onclick="redirectToPage('/dashboard')">
+                        <i class="fas fa-home nav-icon"></i> Dashboard
+                    </button>
+
+                    <button class="nav-item {% if current_route == 'notes' %}active{% endif %}" onclick="redirectToPage('/notes')">
+                        <i class="fas fa-book nav-icon"></i> Notes
+                    </button>
+
+                    <button class="nav-item {% if current_route == 'chatbot' %}active{% endif %}" onclick="redirectToPage('/chatbot')">
+                        <i class="fas fa-comments nav-icon"></i> Chat Bot
+                    </button>
+
+                    <button class="nav-item {% if current_route == 'flashcards' %}active{% endif %}" onclick="redirectToPage('/flashcards')">
+                        <i class="fas fa-chalkboard-teacher nav-icon"></i> Flashcards
+                    </button>
+
+                    <button class="nav-item {% if current_route == 'quiz' %}active{% endif %}" onclick="redirectToPage('/quiz')">
+                        <i class="fas fa-question-circle nav-icon"></i> Quiz
+                    </button>
+
+                    <button class="nav-item {% if current_route == 'transcript' %}active{% endif %}" onclick="redirectToPage('/transcript')">
+                        <i class="fas fa-file-alt nav-icon"></i> Transcript
+                    </button>
+
+                    <button class="nav-item {% if current_route == 'settings' %}active{% endif %}" onclick="redirectToPage('/settings')">
+                        <i class="fas fa-cogs nav-icon"></i> Settings
+                    </button>
+                </nav>
+
+                <button class="premium-button" onclick="redirectToPage('/pricing')">
+                    <i class="fas fa-star nav-icon"></i> ✨ Upgrade to Premium
+                </button>
+            </aside>
+
+            <!-- Main content area where other templates can inject content -->
+            <main class="main-content">
+                <div class="profile">
+                    <span class="profile-icon">S</span>
+                    <span class="profile-name">Shoaib Shaik</span>
+                </div>
+
+                <!-- Block for page-specific content -->
+                {% block content %}
+                {% endblock %}
+            </main>
+        </div>
+
+        <script src="{{ url_for('static', filename='util.js') }}"></script>
+
+    </body>
+
+</html>
