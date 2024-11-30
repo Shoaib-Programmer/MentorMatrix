@@ -47,9 +47,9 @@ function sendMessage() {
                 messages.appendChild(botMessageDiv);
 
                 // Add a horizontal rule after bot's response
-                const hr = document.createElement('hr');
-                hr.className = 'my-2';
-                messages.appendChild(hr);
+                // const hr = document.createElement('hr');
+                // hr.className = 'my-2';
+                // messages.appendChild(hr);
 
                 messages.scrollTop = messages.scrollHeight; // Scroll to the latest message
             })
