@@ -1,29 +1,29 @@
 # 1. Using BART
-from transformers import BartForConditionalGeneration, BartTokenizer
+# from transformers import BartForConditionalGeneration, BartTokenizer
 
-# Load pre-trained BART model and tokenizer from Hugging Face
-model_name_bart = "facebook/bart-large-cnn"
-model_bart = BartForConditionalGeneration.from_pretrained(model_name_bart)
-tokenizer_bart = BartTokenizer.from_pretrained(model_name_bart)
+# # Load pre-trained BART model and tokenizer from Hugging Face
+# model_name_bart = "facebook/bart-large-cnn"
+# model_bart = BartForConditionalGeneration.from_pretrained(model_name_bart)
+# tokenizer_bart = BartTokenizer.from_pretrained(model_name_bart)
 
-# Function to summarize text using BART
-def summarize_text(text: str, max_length=150, min_length=50) -> str:
-    # Tokenize the input text
-    inputs = tokenizer_bart([text], max_length=1024, return_tensors="pt", truncation=True, padding=True)
+# # Function to summarize text using BART
+# def summarize_text(text: str, max_length=150, min_length=50) -> str:
+#     # Tokenize the input text
+#     inputs = tokenizer_bart([text], max_length=1024, return_tensors="pt", truncation=True, padding=True)
 
-    # Generate the summary ids
-    summary_ids = model_bart.generate(
-        inputs["input_ids"],
-        max_length=max_length,
-        min_length=min_length,
-        length_penalty=2.0,
-        num_beams=4,
-        early_stopping=True
-    )
+#     # Generate the summary ids
+#     summary_ids = model_bart.generate(
+#         inputs["input_ids"],
+#         max_length=max_length,
+#         min_length=min_length,
+#         length_penalty=2.0,
+#         num_beams=4,
+#         early_stopping=True
+#     )
 
-    # Decode the summary
-    summary = tokenizer_bart.decode(summary_ids[0], skip_special_tokens=True)
-    return summary
+#     # Decode the summary
+#     summary = tokenizer_bart.decode(summary_ids[0], skip_special_tokens=True)
+#     return summary
 
 # 2. Using deepseek-llm-67b-base. This is requiring way too much storage space. So better keep this code commented guys
 # import torch
@@ -86,15 +86,15 @@ def summarize_text(text: str, max_length=150, min_length=50) -> str:
 #     return summary
 
 # Just for testing! But this is preferably what you should be using when developing the project.
-# def summarize_text(text: str) -> str:
-#     summary = """
-#     This is the summarized text.
+def summarize_text(text: str) -> str:
+    summary = """
+    This is the summarized text.
 
-#     AI summarizing models are not loaded to save time in starting the server. This is only for testing during prototyping.
+    AI summarizing models are not loaded to save time in starting the server. This is only for testing during prototyping.
 
-#     If this issue persists, contact Mr. Sarthak.
-#     """
-#     return summary
+    If this issue persists, contact Mr. Sarthak.
+    """
+    return summary
 
 if __name__ == "__main__":
     text_to_summarize = 'Artificial Intelligence (AI) is intelligence demonstrated by machines, in contrast to the natural intelligence displayed by humans and animals. Leading AI textbooks define the field as the study of "intelligent agents": any device that perceives its environment and takes actions that maximize its chance of successfully achieving its goals. Colloquially, the term "artificial intelligence" is often used to describe machines (or computers) that mimic "cognitive" functions that humans associate with the human mind, such as "learning" and "problem-solving".'

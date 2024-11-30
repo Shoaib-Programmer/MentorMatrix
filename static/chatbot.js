@@ -25,9 +25,9 @@ function sendMessage() {
         messages.appendChild(userMessageDiv);
 
         // Add a horizontal rule after user's message
-        const hr = document.createElement('hr');
-        hr.className = 'my-2';
-        messages.appendChild(hr);
+        // const hr = document.createElement('hr');
+        // hr.className = 'my-2';
+        // messages.appendChild(hr);
 
         input.value = ''; // Clear the input field
         messages.scrollTop = messages.scrollHeight; // Scroll to the latest message
