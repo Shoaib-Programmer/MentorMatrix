@@ -1,10 +1,7 @@
 from flask import Flask, render_template
 from config import Config, DevelopmentConfig  # Import the config dictionary
-from flask_session import Session
 from routes import dashboard_blueprint, notes_blueprint, transcribe_blueprint, chatbot_blueprint, quiz_blueprint, flashcards_blueprint
 from models import init_db
-
-import os
 
 # Initialize the Flask app
 app = Flask(__name__)
