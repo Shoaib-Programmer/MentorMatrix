@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from config import Config, DevelopmentConfig  # Import the config dictionary
 from flask_session import Session
-from routes import dashboard_blueprint, notes_blueprint, transcribe_blueprint, chatbot_blueprint
+from routes import dashboard_blueprint, notes_blueprint, transcribe_blueprint, chatbot_blueprint, quiz_blueprint, flashcards_blueprint
 from models import init_db
 
 import os
@@ -24,15 +24,10 @@ app.register_blueprint(dashboard_blueprint)
 app.register_blueprint(notes_blueprint)
 app.register_blueprint(transcribe_blueprint)
 app.register_blueprint(chatbot_blueprint)
+app.register_blueprint(quiz_blueprint)
+app.register_blueprint(flashcards_blueprint)
 
 # Miscellaneous routes for now
-@app.route('/flashcards')
-def flashcards():
-    return render_template('flashcards.html', current_route='flashcards')
-
-@app.route('/quiz')
-def quiz():
-    return render_template('quiz.html', current_route='quiz')
 
 @app.route('/settings')
 def settings():

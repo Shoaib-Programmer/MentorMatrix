@@ -45,3 +45,4 @@ icecream
 google-api-python-client
 flasgger
 accelerate
+sentencepiece
