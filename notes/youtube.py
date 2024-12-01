@@ -1,66 +1,95 @@
 import os
 import time
+import random
+from typing import Generator, Tuple, Optional
+from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api._errors import NoTranscriptFound, VideoUnavailable
 from .audio import download_audio, is_audio_usable
 from .video import download_video, transcribe_video_without_audio
-from .util import extract_youtube_subtitles
+from .youtube_id import get_video_id_from_url
+from icecream import ic
 
-# TODO: this file contains print messages that need to be removed
 
-def get_transcript_from_youtube(youtube_url, lang='en'):
+def simulate_progress(
+    total_steps: int = 10, step_duration: float = 1.0
+) -> Generator[int, None, None]:
     """
-    This function attempts to transcribe a YouTube video by first checking for available subtitles.
-    If subtitles are available, it uses them; otherwise, it downloads the audio for transcription.
-    If audio is unsuitable, it falls back to visual analysis.
-    Yields progress updates and eventually returns the full transcript.
+    Simulates progress updates.
+    :param total_steps: Total number of progress steps.
+    :param step_duration: Duration (in seconds) for each step.
+    """
+    progress = 0
+    increment = 100 // total_steps
+    while progress < 100:
+        time.sleep(step_duration + random.uniform(0.1, 0.5))
+        progress += increment
+        yield progress
+
+
+def clean_up_file(file_path: str) -> None:
+    """
+    Safely removes a file if it exists.
+    :param file_path: Path to the file.
+    """
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        ic(f"Cleaned up file: {file_path}")
+
+
+def fetch_subtitles(video_id: str, lang: str) -> Optional[str]:
+    """
+    Fetches subtitles for a YouTube video.
+    :param video_id: YouTube video ID.
+    :param lang: Language code for subtitles.
+    :return: Subtitle text if available, else None.
     """
     try:
-        # Step 1: Check for subtitles
-        print("Checking for subtitles...")
-        subtitles = extract_youtube_subtitles(youtube_url, lang=lang)
-        if subtitles:
-            print("Subtitles found! Using subtitles for transcription.")
-            transcript = "\n".join([sub['text'] for sub in subtitles])
-            yield (transcript, 100)  # Subtitles are instantly 100% complete
-            return transcript
-    except ValueError as e:
-        print(f"No subtitles available or error occurred: {e}")
-        print("Falling back to audio transcription...")
+        subtitles = YouTubeTranscriptApi.get_transcript(video_id, languages=[lang])
+        return "\n".join([sub['text'] for sub in subtitles])
+    except (NoTranscriptFound, VideoUnavailable) as e:
+        ic(f"Subtitles not available: {e}")
+        return None
 
-    # Step 2: Download the audio
+
+def get_transcript_from_youtube(youtube_url: str, lang: str = 'en') -> Generator[Tuple[str, int], None, str]:
+    """
+    Transcribes a YouTube video, prioritizing subtitles if available.
+    Falls back to audio transcription or visual analysis.
+    :param youtube_url: YouTube video URL.
+    :param lang: Preferred subtitle language.
+    :yield: Partial transcript and progress updates.
+    :return: Final transcript.
+    """
+    video_id = get_video_id_from_url(youtube_url)
+    transcript = ""
+
+    # Step 1: Attempt to fetch subtitles
+    ic("Checking for subtitles...")
+    subtitle_text = fetch_subtitles(video_id, lang)
+    if subtitle_text:
+        ic("Using subtitles for transcription.")
+        yield (subtitle_text, 100)
+        return subtitle_text
+
+    # Step 2: Fallback to audio transcription
     audio_file = download_audio(youtube_url)
+    try:
+        if is_audio_usable(audio_file):
+            ic("Audio is suitable. Starting transcription...")
+            for progress in simulate_progress():
+                partial_transcript = "Transcribed text chunk... "  # Simulated text
+                transcript += partial_transcript
+                yield (transcript, progress)
+            ic("Audio transcription completed.")
+        else:
+            ic("Audio unsuitable. Falling back to video analysis.")
+            video_file = download_video(youtube_url)
+            try:
+                transcript = transcribe_video_without_audio(video_file)
+                yield (transcript, 100)
+            finally:
+                clean_up_file(video_file)
+    finally:
+        clean_up_file(audio_file)
 
-    # Check if the audio is suitable for transcription
-    if is_audio_usable(audio_file):
-        # Simulate the transcription process and yield progress
-        total_duration = 10  # Simulate a 10-second transcription process
-        progress = 0
-        transcript = ""
-
-        # Simulating transcription process with progress updates
-        while progress < 100:
-            time.sleep(1)  # Simulate delay (1 second)
-            progress += 10  # Increment progress
-            transcript += "Transcribed text chunk... "  # Simulated transcript chunk
-
-            # Yield the current progress (used in streaming)
-            yield (transcript, progress)
-
-        print("\nAudio Transcription Completed:\n")
-        print(transcript)
-
-    else:
-        print("Audio is not suitable for transcription, proceeding with visual analysis...")
-        # If audio is not usable, fall back to video analysis
-        video_file = download_video(youtube_url)
-        visual_transcript = transcribe_video_without_audio(video_file)
-
-        # Simulate a similar progress update for visual analysis
-        transcript = visual_transcript  # Assigning the visual transcript as fallback
-
-        yield (transcript, 100)  # Mark as 100% complete
-
-    # Clean up the downloaded audio file
-    if os.path.exists(audio_file):
-        os.remove(audio_file)
-
-    return transcript  # Final transcript
+    return transcript

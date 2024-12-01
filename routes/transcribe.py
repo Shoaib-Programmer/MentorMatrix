@@ -1,10 +1,12 @@
 import os
-from flask import Blueprint, request, jsonify, flash, redirect, url_for, render_template, current_app
+import json
+from flask import Blueprint, request, jsonify, flash, redirect, url_for, render_template, current_app, Response
 from werkzeug.utils import secure_filename
 from models import db
 from notes import transcribe_audio, convert_pdf_to_text, get_video_id_from_url, get_transcript_from_youtube
 import logging
 from icecream import ic
+from pytube import YouTube
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -73,7 +75,8 @@ def upload_pdf():
         # Extract text from the PDF
         extracted_text = convert_pdf_to_text(file_path)
         if not extracted_text.strip():
-            raise ValueError("Failed to extract text from the PDF.")
+            flash("Failed to extract text from the PDF.")
+            return redirect(url_for('dashboard.dashboard'))
 
         # Get or derive the title
         title = request.form.get('title', filename)
@@ -97,31 +100,42 @@ def upload_pdf():
 @transcribe_blueprint.route('/upload_youtube', methods=['POST'])
 def upload_youtube():
     youtube_url = request.form.get('youtube_url')
-    title = request.form.get('title', youtube_url)
+    if not youtube_url:
+        flash("Missing YouTube URL.", "error")
+        return redirect(url_for('dashboard.dashboard'))
 
     try:
-        # Extract YouTube video ID
-        video_id = get_video_id_from_url(youtube_url)
-        if not video_id:
-            raise ValueError("Invalid YouTube URL")
+        # Fetch video title using pytube
+        yt = YouTube(youtube_url)
+        title = yt.title
 
-        # Get transcript from YouTube
-        transcript, progress = get_transcript_from_youtube(youtube_url)
+        def generate_transcription():
+            try:
+                for partial_transcript, progress in get_transcript_from_youtube(youtube_url):
+                    yield f"data: {json.dumps({'progress': progress, 'transcript': partial_transcript})}\n\n"
+                
+                # Save transcript to the database after processing
+                final_transcript = partial_transcript
+                db.execute('INSERT INTO transcripts (title, content) VALUES (?, ?)', title, final_transcript)
+                transcript_id = db.execute(
+                    'SELECT id FROM transcripts WHERE content = ?', final_transcript
+                )[0]['id']
+                db.execute(
+                    '''
+                    INSERT INTO files (transcript_id, file_type, name, metadata, uploaded_at)
+                    VALUES (?, 'youtube', ?, ?, CURRENT_TIMESTAMP)
+                    ''',
+                    transcript_id, title, f'{{"url": "{youtube_url}", "video_id": "{yt.video_id}"}}'
+                )
 
-        # Save the transcript and file metadata in the database
-        db.execute('INSERT INTO transcripts (title, content) VALUES (?, ?)', title, transcript)
-        transcript_id = db.execute(
-            'SELECT id FROM transcripts WHERE content = ?', transcript)[0]['id']
-        db.execute('''
-            INSERT INTO files (transcript_id, file_type, name, metadata, uploaded_at)
-            VALUES (?, 'youtube', ?, ?, CURRENT_TIMESTAMP)
-        ''', transcript_id, title, f'{{"url": "{youtube_url}", "video_id": "{video_id}"}}')
+            except Exception as e:
+                yield f"data: {json.dumps({'error': str(e)})}\n\n"
 
-        flash("YouTube video processed successfully.", "success")
+        return Response(generate_transcription(), mimetype='text/event-stream')
+
     except Exception as e:
         flash(f"Error processing YouTube URL: {e}", "error")
-
-    return redirect(url_for('notes.generate_notes'))
+        return redirect(url_for('notes.generate_notes'))
 
 
 @transcribe_blueprint.route('/transcript')

@@ -1,4 +1,6 @@
 yt-dlp
+youtube-transcript-api
+pytube
 openai
 openai-whisper
 pydub

@@ -1,150 +1,6 @@
-/* popup.css */
+@import url('/static/dashboard/popup.css');
 
-/* General Modal Styles */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.8); /* Slightly darker background */
-    display: none; /* Hidden by default */
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-/* Show the modal when active */
-.modal.active {
-    display: flex; /* Flex to center the content */
-}
-
-/* Modal Content Box */
-.modal-content {
-    background-color: #1e1e1e; /* Dark theme */
-    color: #ffffff;            /* Light text for contrast */
-    width: 90%;
-    max-width: 500px;          /* Constrain the width */
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Subtle shadow */
-    text-align: center;        /* Center the text */
-    transform: scale(0.9);     /* Animation start scale */
-    transition: transform 0.3s ease-in-out; /* Smooth scale-in animation */
-    animation: slideIn 0.3s ease-out; /* Added slideIn animation from the second block */
-}
-
-/* When Modal is Active */
-.modal.active .modal-content {
-    transform: scale(1); /* Scale the content to normal size when modal is active */
-}
-
-/* Optional: Add slide-in keyframe animation (if not defined elsewhere) */
-@keyframes slideIn {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-
-/* Close Button */
-.close-btn {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 1.5em;
-    cursor: pointer;
-    color: white;
-}
-
-input[type="file"] {
-    width: 100%;
-    padding: 12px;
-    font-size: 1rem;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    background: #333;
-    color: #fff;
-    border: 2px solid #555;
-    transition: border-color 0.3s ease, background-color 0.3s ease;
-}
-
-input[type="file"]:hover {
-    background-color: #444;
-    border-color: #007bff;
-}
-
-input[type="file"]:focus {
-    outline: 3px solid #007bff;
-    outline-offset: 2px;
-}
-
-/* Animation for modal */
-@keyframes slideIn {
-    from {
-        transform: translateY(-20px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-
-/* General Popup Overlay Styles */
-#popup-overlay,
-#youtube-popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-/* Popup Container Styles */
-#popup-container,
-#youtube-popup-container {
-    width: 90%;
-    max-width: 500px;
-    padding: 30px;
-    background-color: #1e1e1e;
-    border-radius: 12px;
-    color: #ffffff;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    transform: scale(0.9);
-    transition: transform 0.3s ease-in-out;
-}
-
-#popup-container.open,
-#youtube-popup-container.open {
-    transform: scale(1);
-}
-
-/* Popup Title Styles */
-#popup-container h3,
-#youtube-popup-container h3 {
-    font-size: 1.6em;
-    margin-bottom: 15px;
-    font-weight: 600;
-    text-align: center;
-    color: #ffffff;
-}
-
-/* General Input Styles */
-input[type="file"],
+/* YouTube URL Input Field */
 #youtube-url {
     width: 100%;
     padding: 15px 20px;
@@ -154,104 +10,45 @@ input[type="file"],
     border: 2px solid #e0e0e0;
     border-radius: 12px;
     transition: all 0.3s ease;
+    box-sizing: border-box;
     margin-bottom: 20px;
     font-family: 'Helvetica Neue', Arial, sans-serif;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
 }
 
-input[type="file"]:hover,
-#youtube-url:hover {
-    border-color: #008CBA;
+/* Focus Effect */
+#youtube-url:focus {
+    border-color: #008CBA; /* Blue for focus */
     background-color: #fff;
-    cursor: pointer;
+    box-shadow: 0 0 8px rgba(0, 140, 186, 0.3); /* Softer shadow */
+    outline: none;
 }
 
-input[type="file"]:disabled,
+/* Placeholder Styling */
+#youtube-url::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+/* Disabled State */
 #youtube-url:disabled {
-    background-color: #555;
-    color: #888;
+    background-color: #f4f4f4;
     border-color: #ccc;
     cursor: not-allowed;
+    color: #bbb;
 }
 
-/* File Input Specific Styles */
-input[type="file"]::-webkit-file-upload-button {
-    cursor: pointer;
-    background-color: #007bff;
-    color: white;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1em;
-    transition: background-color 0.3s ease;
+/* Progress and Transcript Containers */
+#progress-container {
+    margin-top: 20px;
 }
 
-input[type="file"]::-webkit-file-upload-button:hover {
-    background-color: #0056b3;
-}
-
-label[for="file-upload"] {
-    font-size: 1.1em;
-    color: #007bff;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-label[for="file-upload"]:hover {
-    color: #0056b3;
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-    #popup-container,
-    #youtube-popup-container {
-        width: 85%;
-        padding: 25px;
-    }
-
-    #popup-container h3,
-    #youtube-popup-container h3 {
-        font-size: 1.4em;
-    }
-
-    button {
-        font-size: 0.9em;
-    }
-}
-
-@media (max-width: 480px) {
-    #popup-container,
-    #youtube-popup-container {
-        width: 90%;
-        padding: 20px;
-    }
-
-    #popup-container h3,
-    #youtube-popup-container h3 {
-        font-size: 1.2em;
-    }
-
-    button {
-        font-size: 0.9em;
-    }
-
-    input[type="file"],
-    #youtube-url {
-        font-size: 0.9em;
-    }
-}
-
-/* Subtle input focus animation */
-@keyframes inputFocusAnimation {
-    0% {
-        transform: scale(1);
-    }
-
-    100% {
-        transform: scale(1.02);
-    }
-}
-
-#youtube-url:focus {
-    animation: inputFocusAnimation 0.3s ease-in-out;
+#transcript-container {
+    margin-top: 20px;
+    text-align: left;
+    color: #ffffff; /* Match dark theme */
+    background: #1e1e1e;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 1rem;
 }

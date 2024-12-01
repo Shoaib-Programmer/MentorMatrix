@@ -51,6 +51,24 @@
 
 
 <!-- Add similar modals for YouTube and PDF uploads as needed -->
+<!-- YouTube Popup Modal -->
+    <div id="youtube-popup" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="toggleYoutubePopup(true)">&times;</span>
+            <h3>Upload YouTube Video</h3>
+            <label for="youtube-url">YouTube URL:</label>
+            <input id="youtube-url" type="url" placeholder="Enter YouTube URL" required />
+            <button id="submit-youtube-button">Submit</button>
+            <div id="progress-container" class="hidden">
+                <progress id="progress-bar" max="100" value="0"></progress>
+            </div>
+            <div id="transcript-container" class="hidden">
+                <h4>Transcript</h4>
+                <pre id="transcript-text"></pre>
+            </div>
+        </div>
+    </div>
+
 
     <script src="{{ url_for('static', filename='dashboard/audio_popup.js') }}"></script>
     <script src="{{ url_for('static', filename='dashboard/youtube_popup.js') }}"></script>

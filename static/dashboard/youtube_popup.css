@@ -1,6 +1,6 @@
 @import url('/static/dashboard/popup.css');
 
-/* General input styles */
+/* YouTube URL Input Field */
 #youtube-url {
     width: 100%;
     padding: 15px 20px;
@@ -16,28 +16,21 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
 }
 
-/* Focus effect - smoother transition with a more defined border color */
+/* Focus Effect */
 #youtube-url:focus {
-    border-color: #008CBA; /* A blue shade for a more noticeable effect */
+    border-color: #008CBA; /* Blue for focus */
     background-color: #fff;
     box-shadow: 0 0 8px rgba(0, 140, 186, 0.3); /* Softer shadow */
     outline: none;
 }
 
-/* Placeholder styling with lighter, more subtle color */
+/* Placeholder Styling */
 #youtube-url::placeholder {
     color: #999;
     font-style: italic;
 }
 
-/* Hover effect - add subtle emphasis */
-#youtube-url:hover {
-    border-color: #008CBA; /* Blue border on hover */
-    background-color: #fff;
-    cursor: pointer;
-}
-
-/* Disabled state styling with better contrast for disabled input */
+/* Disabled State */
 #youtube-url:disabled {
     background-color: #f4f4f4;
     border-color: #ccc;
@@ -45,24 +38,17 @@
     color: #bbb;
 }
 
-/* Responsive design for mobile and smaller screens */
-@media (max-width: 600px) {
-    #youtube-url {
-        font-size: 14px;
-        padding: 12px 15px;
-    }
+/* Progress and Transcript Containers */
+#progress-container {
+    margin-top: 20px;
 }
 
-/* Optional: Add a subtle animation to the input field to make it feel more interactive */
-@keyframes inputFocusAnimation {
-    0% {
-        transform: scale(1);
-    }
-    100% {
-        transform: scale(1.02);
-    }
-}
-
-#youtube-url:focus {
-    animation: inputFocusAnimation 0.3s ease-in-out;
+#transcript-container {
+    margin-top: 20px;
+    text-align: left;
+    color: #ffffff; /* Match dark theme */
+    background: #1e1e1e;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 1rem;
 }
