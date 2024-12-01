@@ -10,8 +10,6 @@ notes_blueprint = Blueprint('notes', __name__)
 def notes():
     # Fetch notes along with associated files and transcript titles
 
-    print(f"DB initialized: {db}")  # Debugging: check if db is initialized
-
     notes_data = db.execute('''
         SELECT
             notes.id,
