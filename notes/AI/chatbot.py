@@ -1,13 +1,13 @@
-# 1. DialogGPT-large
+# # 1. DialogGPT-large
 # from transformers import AutoModelForCausalLM, AutoTokenizer
 # import torch
 
-# Load the model and tokenizer
-# model_name = "microsoft/DialoGPT-large"
+# # Load the model and tokenizer
+# model_name = "microsoft/DialoGPT-small"
 # tokenizer = AutoTokenizer.from_pretrained(model_name)
 # model = AutoModelForCausalLM.from_pretrained(model_name)
 
-# Function to chat with the model
+# # Function to chat with the model
 # def chat(user_message, chat_history=None):
 #     # Encode the new user input, add the eos_token and return a tensor
 #     new_user_input_ids = tokenizer.encode(user_message + tokenizer.eos_token, return_tensors='pt')
