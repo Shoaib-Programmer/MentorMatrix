@@ -6,6 +6,7 @@
 
 {% block other_head_stuff %}
     <link rel="stylesheet" href="{{ url_for('static', filename='quiz.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='popup.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -40,7 +41,7 @@
                         </li>
                     {% endfor %}
                 {% else %}
-                    <li>No completed questions yet. Try completing a few from your active session!</li>
+                    No completed questions yet. Try completing a few from your active session!
                 {% endif %}
             </ul>
 

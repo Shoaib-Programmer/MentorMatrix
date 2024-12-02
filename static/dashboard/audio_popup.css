@@ -1,5 +1,5 @@
 /* Import global popup styles */
-@import url('/static/dashboard/popup.css');
+@import url('/static/popup.css');
 
 
 /* Specific Modal Styling for #audio-popup */
