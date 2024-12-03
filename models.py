@@ -35,6 +35,11 @@ def init_db():
                     metadata TEXT,  -- JSON or additional metadata
                     uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (transcript_id) REFERENCES transcripts(id) ON DELETE CASCADE);''')
+    
+    db.execute('''CREATE TABLE IF NOT EXISTS quizzes (
+               id INTEGER PRIMARY KEY AUTOINCREMENT,
+               note_id INTEGER NOT NULL,
+               FOREIGN KEY (note_id) REFERENCES notes(id) ON DELETE CASCADE);''')
 
     # Create indexes for faster lookups
     db.execute('CREATE INDEX IF NOT EXISTS idx_transcript_id ON notes (transcript_id);')
