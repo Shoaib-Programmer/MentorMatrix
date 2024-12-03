@@ -3,7 +3,7 @@ import random
 import re
 from .stopwords import stopwords
 
-def generate_fill_in_the_blank(sentence, mask_token="[MASK]"):
+def generate_fill_in_the_blank(sentence, mask_token="[MASK]") -> dict:
     """
     Generate a fill-in-the-blank question by masking a capitalized word in the sentence.
 
