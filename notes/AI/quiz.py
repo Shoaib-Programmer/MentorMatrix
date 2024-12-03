@@ -1,51 +1,88 @@
 from .fill_in_the_blank import generate_fill_in_the_blank
+# This is the code for your reference:
+# from transformers import AutoTokenizer, AutoModelForMaskedLM
+# import random
+# import re
+# from .stopwords import stopwords
+
+# def generate_fill_in_the_blank(sentence, mask_token="[MASK]"):
+#     """
+#     Generate a fill-in-the-blank question by masking a capitalized word in the sentence.
+
+#     Args:
+#     - sentence (str): The full sentence to generate a blank from.
+#     - mask_token (str): The token to use as the blank placeholder.
+
+#     Returns:
+#     - dict: A dictionary containing the question and the correct answer.
+#     """
+#     # Load pre-trained tokenizer and model
+#     model_name = "bert-base-uncased"
+#     tokenizer = AutoTokenizer.from_pretrained(model_name)
+#     model = AutoModelForMaskedLM.from_pretrained(model_name)
+
+#     # Split the sentence into words
+#     words = sentence.split()
+    
+#     # Identify indices of capitalized words that are not stopwords
+#     eligible_indices = [
+#         i for i, word in enumerate(words)
+#         if word[0].isupper()  # Starts with a capital letter
+#         and word.isalpha()  # Ignore punctuation or non-alphabetic tokens
+#         and word.lower() not in stopwords  # Exclude stopwords
+#     ]
+    
+#     if not eligible_indices:
+#         return {"question": sentence, "answer": None}  # No valid word to mask
+
+#     # Randomly select a capitalized word to mask
+#     mask_index = random.choice(eligible_indices)
+#     masked_words = words[:]
+#     original_word = masked_words[mask_index]
+#     masked_words[mask_index] = mask_token
+
+#     # Reconstruct the masked sentence
+#     masked_sentence = " ".join(masked_words)
+
+#     # Prepare inputs for the model
+#     inputs = tokenizer.encode(masked_sentence, return_tensors="pt")
+    
+#     # Predict the masked token
+#     outputs = model(inputs)
+#     predictions = outputs.logits[0]
+#     predicted_token_id = predictions.argmax(dim=-1)[mask_index].item()
+#     predicted_token = tokenizer.decode([predicted_token_id]).strip()
+
+#     # Replace the original word with a blank in the sentence
+#     question = sentence.replace(original_word, "____", 1)
+
+#     # Return the question and answer
+#     return {
+#         "question": question,
+#         "answer": original_word
+#     }
+
+# # Example usage
+# if __name__ == "__main__":
+#     sentence = "The Great Wall of China is one of the most impressive architectural feats in history."
+#     result = generate_fill_in_the_blank(sentence)
+#     print("Fill-in-the-Blank Question:", result["question"])
+#     print("Answer:", result["answer"])
+
 from .multiple_choice import generate_choices_from_context
+
 from .question_generation import generate_question
+from .semantic_compare import evaluate_answer
 from .answer_open import generate_answer
 
-def generate_quiz(context: str, num_choices=4) -> list[dict]:
-    """
-    This function generates a list of quiz questions, including fill-in-the-blank questions,
-    open-ended questions, and corresponding multiple-choice options.
+class Quiz():
+  def __init__(self, context):
+    if not context:
+      raise ValueError('There must be some context to create a quiz.')
+    self.context = context
 
-    Args:
-    - context (str): The context from which to generate the quiz.
-    - num_choices (int): The number of multiple choice options to generate (default is 4).
-
-    Returns:
-    - list[dict]: A list of dictionaries containing the generated questions, choices, and answers.
-    """
-
-    quiz = []
-
-    # Generate a fill-in-the-blank question from the context
-    fill_in_result = generate_fill_in_the_blank(context)
-    if fill_in_result["answer"]:  # Ensure there is a valid answer
-        quiz.append({
-            "type": "fill_in_the_blank",
-            "question": fill_in_result["question"],
-            "answer": fill_in_result["answer"]
-        })
-
-        # Generate multiple-choice options for the fill-in-the-blank question
-        choices_result = generate_choices_from_context(context, fill_in_result["question"], fill_in_result["answer"], num_choices)
-        quiz[-1]["choices"] = choices_result
-
-    # Generate an open-ended question from the context
-    open_ended_question = generate_question(context)
-    answer_open = generate_answer(context, open_ended_question["question"])
-
-    quiz.append({
-        "type": "open_ended",
-        "question": open_ended_question["question"],
-        "answer": answer_open
-    })
-
-    return quiz
-
-# Example usage
-if __name__ == "__main__":
-    context = "The Great Wall of China is one of the most impressive architectural feats in history."
-    quiz = generate_quiz(context)
-    for q in quiz:
-        print(q)
+  def generate(self, question_type, answer_type):
+    '''
+    question_type can be one of: fill-in-the-blank, open-ended
+    answer_type can be one of: multiple-choice, open-ended
+    '''
