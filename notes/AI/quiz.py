@@ -72,55 +72,118 @@ from .answer_open import generate_answer
 #     Returns:
 #     - str: The generated answer.
 #   ChatGPT, this can be used to get the answer to a question
-class Quiz():
-    def __init__(self, context):
+import random
+
+class Quiz:
+    def __init__(self, context: str):
+        """
+        Initializes a Quiz instance with the given context.
+
+        Args:
+        - context (str): The text from which the quiz questions will be generated.
+
+        Attributes:
+        - context (str): The provided text to base the quiz on.
+        - multiple_choice (list): A list to store multiple-choice questions and their options.
+        - open_ended (list): A list to store open-ended questions and their answers.
+        
+        Raises:
+        - ValueError: If the provided context is empty.
+        """
         if not context:
             raise ValueError('There must be some context to create a quiz.')
-            self.context = context
-            self.multiple_choice = []
-            self.open_ended = []
+        self.context = context
+        self.multiple_choice = []
+        self.open_ended = []
 
+    def generate_all_questions(self, ratio: float = 0.9):
+        """
+        Generates all questions from the context with a specified ratio of open-ended to fill-in-the-blank.
 
-    def open_ended_generate(self, question_type):
-        '''
-        question_type can be one of: fill-in-the-blank, open-ended
+        Args:
+        - ratio (float): The proportion of open-ended questions to total questions (default is 0.9).
 
-        It should generate a single question, and its answer based on self.context.
-        It should then answer the question.
+        Process:
+        - Splits the context into sentences.
+        - Randomly selects the question type for each sentence based on the ratio.
+        - Generates open-ended or fill-in-the-blank questions accordingly.
 
-        It should then append a dict to self.open_ended with the question and answer as the keys.
-        '''
-        ...
-            
+        Populates:
+        - self.open_ended: A list of open-ended questions and their answers.
+        - self.multiple_choice: A list of multiple-choice questions and their options.
 
-    def multiple_choice_generate(self, question_type):
-        '''
-        question_type can be one of: fill-in-the-blank, open-ended
+        Raises:
+        - ValueError: If the ratio is not between 0 and 1.
+        """
+        if not (0 <= ratio <= 1):
+            raise ValueError("Ratio must be between 0 and 1.")
+        
+        sentences = [s.strip() for s in self.context.split(".") if s.strip()]
+        total_sentences = len(sentences)
+        open_ended_count = round(total_sentences * ratio)
 
-        It should generate a single question, and its answer based on self.context.
-        It should then answer the question, and generate choices for the multiple choice question.
-        It should then store it as a dict, appending to self.multiple_choice, containing the question, mapped to a list of answers.
-        '''
-        ...
+        for idx, sentence in enumerate(sentences):
+            if idx < open_ended_count:
+                # Generate an open-ended question
+                question = generate_question(self.context, sentence)
+                answer = generate_answer(self.context, question)
+                self.open_ended.append({
+                    'question': question,
+                    'answer': answer
+                })
+            else:
+                # Generate a fill-in-the-blank question
+                result = generate_fill_in_the_blank(sentence)
+                self.open_ended.append({
+                    'question': result['question'],
+                    'answer': result['result']
+                })
+                choices = generate_choices_from_context(self.context, result['question'], result['result'])
+                self.multiple_choice.append({
+                    'question': choices['question'],
+                    'choices': choices['choices']
+                })
 
-    def evaluate(self, question, answer) -> bool:
-        '''
-        I suppose the question is just open-ended, because in the UI, you would just click on the buttons to answer.
-        Just use the evaluate_answer function, and return the result.
-        '''
-        ...
+    def evaluate(self, question: str, answer: str) -> bool:
+        """
+        Evaluates whether the provided answer is correct for a given question.
 
-def generate_quiz_basic(context: str) -> Quiz:
-    '''
-    In the website, I'm not planning to allow so much customizability, as to what allowing
-    the user to choose what type of question to generate, and what input they are gonna give, but for basic users.
-    This is just a prototype, so we'll only focus now, on the quiz generation for basic users.
-    It could be expanded later for allowing more customizability with a function like generate_quiz_premium, but
-    that's for later.
+        Args:
+        - question (str): The question to evaluate the answer for.
+        - answer (str): The answer provided by the user.
 
-    So this function will take in a string, and split it into sentences. For important sentences, it will generate
-    a question and answer, and store it in the quiz object. (This is done because the generate_quesgtion function
-    expects two arguments: context and highlighted text)
+        Returns:
+        - bool: True if the answer is correct, False otherwise.
 
-    Then, it'll just create a quiz object and return it.
-    '''
+        Raises:
+        - ValueError: If the question is not found in the quiz.
+        """
+        correct_answer = None
+        for q in self.open_ended + self.multiple_choice:
+            if q['question'] == question:
+                correct_answer = q.get('answer') or q['choices'][0]  # First choice is the correct answer
+                break
+        if not correct_answer:
+            raise ValueError("Question not found in the quiz.")
+        return evaluate_answer(answer, correct_answer)
+
+def generate_quiz_basic(context: str, ratio: float = 0.9) -> Quiz:
+    """
+    Generates a basic quiz using the provided context, with open-ended and fill-in-the-blank questions
+    distributed according to the specified ratio.
+
+    Args:
+    - context (str): The text from which to generate the quiz.
+    - ratio (float): Proportion of open-ended questions to total questions (default is 0.9).
+
+    Returns:
+    - Quiz: A `Quiz` instance containing open-ended and multiple-choice questions.
+    """
+    quiz = Quiz(context)
+    quiz.generate_all_questions(ratio=ratio)
+    return quiz
+
+if __name__ == "__main__":
+    quiz = generate_quiz_basic("The sun is a star. It provides light to Earth. Solar panels harness this light.", ratio=0.8)
+    print("Open-ended Questions:", quiz.open_ended)
+    print("Multiple-choice Questions:", quiz.multiple_choice)
