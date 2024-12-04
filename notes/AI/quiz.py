@@ -136,9 +136,9 @@ class Quiz:
                 result = generate_fill_in_the_blank(sentence)
                 self.open_ended.append({
                     'question': result['question'],
-                    'answer': result['result']
+                    'answer': result['answer']
                 })
-                choices = generate_choices_from_context(self.context, result['question'], result['result'])
+                choices = generate_choices_from_context(self.context, result['question'], result['answer'])
                 self.multiple_choice.append({
                     'question': choices['question'],
                     'choices': choices['choices']
