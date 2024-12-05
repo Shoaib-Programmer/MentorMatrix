@@ -1,0 +1,382 @@
+/* base.css */
+
+/* General reset and font */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --font-family: 'Arial', sans-serif;
+    --background-color: #121212;
+    --text-color: #e0e0e0;
+    --primary-purple: #6a0dad;
+    --hover-purple: #5c0ab8;
+    --active-purple: #4b0997;
+    --hover-bg-color: #333333;
+    --active-bg-color: #333333;
+    --white: #ffffff;
+    --soft-text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+
+.logo h1 {
+    font-size: 1.5rem;
+    color: #ffffff;
+    margin: 1rem 0;
+}
+
+.nav-links {
+    flex-grow: 1;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    color: #bbbbbb;
+    font-size: 1rem;
+    padding: 0.75rem 0;
+    text-decoration: none;
+}
+
+.nav-item i {
+    margin-right: 10px;
+}
+
+.nav-item.active,
+.nav-item:hover {
+    color: #ffffff;
+    background-color: #333333;
+    border-radius: 8px;
+    padding-left: 10px;
+}
+
+/* Premium Button Styles */
+.premium-button {
+    background-color: var(--primary-purple);;
+    /* Deep purple */
+    color: var(--white);
+    font-size: 1rem;
+    font-weight: 600;
+    /* Add boldness for emphasis */
+    padding: 0.75rem 1.5rem;
+    /* Horizontal padding added for balance */
+    text-align: center;
+    border-radius: 12px;
+    /* Softer, larger radius */
+    border: 2px solid #6a0dad;
+    /* Subtle border for depth */
+    cursor: pointer;
+    margin-top: 1rem;
+    display: inline-block;
+    transition: all 0.3s ease-in-out;
+    /* Smooth transition for all properties */
+}
+
+/* Hover and Active States */
+.premium-button:hover {
+    background-color: var(--hover-purple);
+    /* Slightly darker purple */
+    transform: translateY(-2px);
+    /* Slight elevation effect */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow for depth */
+}
+
+.premium-button:active {
+    background-color: var(--active-purple);
+    /* Darker shade for pressed state */
+    transform: translateY(0);
+    /* Reset elevation on click */
+    box-shadow: none;
+    /* Remove shadow on click */
+}
+
+.premium-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(106, 13, 173, 0.4);
+    /* Focus ring for accessibility */
+}
+
+/* Button Styles */
+button {
+    cursor: pointer;
+    background-color: #333333;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    /* Transparent border for better focus ring visibility */
+    display: inline-block;
+    transition: all 0.3s ease;
+    /* Smooth transition for hover and active states */
+}
+
+/* Hover and Active States */
+button:hover {
+    background-color: #444444;
+    transform: translateY(-2px);
+    /* Slight elevation effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Shadow for depth */
+}
+
+button:active {
+    background-color: #555555;
+    transform: translateY(0);
+    /* Reset elevation on click */
+    box-shadow: none;
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(51, 51, 51, 0.5);
+    /* Focus ring for accessibility */
+}
+
+/* Accessibility improvements */
+button,
+.premium-button {
+    transition: all 0.3s ease;
+}
+
+button:disabled,
+.premium-button:disabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Typography */
+h1,
+h2,
+h3 {
+    color: #ffffff;
+    /* Maintain white text for contrast */
+    font-weight: 600;
+    /* Slightly lighter than bold for sophistication */
+    letter-spacing: -0.5px;
+    /* Adds a subtle space between letters for a more refined look */
+    text-transform: uppercase;
+    /* Adds a sense of grandeur, especially for headings */
+    font-family: montserrat, serif;
+    /* Modern and stylish font for headings */
+    line-height: 1.2;
+    /* Gives space between lines for better readability */
+}
+
+/* Optional: Adding a soft text-shadow for subtle depth */
+h1,
+h2,
+h3 {
+    text-shadow: var(--soft-text-shadow);
+    /* Adds depth to the text */
+}
+
+/* Styling for h1 for a more prominent look */
+h1 {
+    font-size: 3rem;
+    /* Larger size for the main heading */
+    letter-spacing: -1px;
+    /* Slightly more compact letter-spacing */
+}
+
+/* Styling for h2 for a balanced appearance */
+h2 {
+    font-size: 2.25rem;
+    /* Medium size for sub-headings */
+    letter-spacing: -0.75px;
+    /* Subtle tightness */
+}
+
+/* Styling for h3 for clear hierarchy */
+h3 {
+    font-size: 1.75rem;
+    /* Smaller size for tertiary headings */
+    letter-spacing: -0.5px;
+    /* Less spacing for tighter text */
+}
+
+
+/* Paragraphs */
+p {
+    color: #d1d1d1;
+    /* Slightly lighter grey for a softer text color */
+    font-family: 'Century Gothic', sans-serif;
+    /* Clean and highly readable font */
+    line-height: 1.8;
+    /* Increased line height for better readability */
+    font-size: 1.1rem;
+    /* Slightly larger font size for a more refined reading experience */
+    margin-bottom: 1.5em;
+    /* Adds space between paragraphs for better readability */
+}
+
+/* Links */
+a {
+    color: #bb86fc;
+    /* Soft purple for a sophisticated link color */
+    text-decoration: none;
+    /* Remove underline by default */
+    font-weight: 500;
+    /* Medium weight for links to make them stand out but not too bold */
+    transition: color 0.3s ease-in-out, text-decoration 0.3s ease-in-out;
+    /* Smooth transition for color and underline on hover */
+}
+
+a:hover {
+    color: #6200ee;
+    /* Darker shade of purple on hover for contrast */
+    text-decoration: underline;
+    /* Adds underline on hover for interaction clarity */
+}
+
+/* Optional: Subtle focus effect for accessibility */
+a:focus {
+    outline: 2px solid #bb86fc;
+    /* Focus outline with the same purple for accessibility */
+    outline-offset: 2px;
+    /* Slightly offset for visual clarity */
+}
+
+
+/* Sidebar styling */
+.sidebar {
+    width: 250px;
+    background-color: #1b1b1b;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sidebar .logo h1 {
+    font-size: 1.5rem;
+    color: #ffffff;
+    margin-top: 0.5rem;
+}
+
+/* Container for the navigation items */
+.nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    /* Space between items */
+    margin-top: 1.5rem;
+}
+
+/* Base style for sidebar buttons */
+.nav-links .nav-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.2rem;
+    border-radius: 12px;
+    /* Slightly more rounded corners */
+    color: #fff;
+    font-size: 1rem;
+    background-color: transparent;
+    /* Transparent background */
+    border: 2px solid transparent;
+    /* Transparent border by default */
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.3s, border 0.3s, box-shadow 0.3s, transform 0.2s;
+    width: 100%;
+    will-change: transform, background-color;
+    /* Hint for browser optimization */
+}
+
+/* Hover effect with smooth transition, subtle shadow, and scaling */
+.nav-links .nav-item:hover {
+    background-color: var(--hover-bg-color);
+    /* Soft white hover */
+    border-color: rgba(255, 255, 255, 0.3);
+    /* Lighter border on hover */
+    box-shadow: 0 2px 10px rgba(255, 255, 255, 0.2);
+    /* Soft, elevated shadow */
+    transform: translateX(5px);
+    /* Slight horizontal movement for interactivity */
+}
+
+/* Active state styling with depth and emphasis */
+.nav-links .nav-item.active {
+    background-color: var(--active-bg-color);
+    /* Slightly stronger background */
+    border-color: #fff;
+    /* White border for active state */
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.4);
+    /* Deeper shadow for active state */
+    transform: scale(1.05);
+    /* Slight scale effect for emphasis */
+}
+
+/* Focus state for accessibility (subtle styling) */
+.nav-links .nav-item:focus {
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.12);
+    /* Slightly darker on focus */
+    border-color: #fff;
+}
+
+/* Icon styling inside nav items */
+.nav-links .nav-item i {
+    margin-right: 0.8rem;
+    /* Slightly more space between icon and text */
+}
+
+/* Remove default button styling (especially for links or buttons) */
+.nav-links .nav-item {
+    outline: none;
+    border: none;
+    background: none;
+    text-decoration: none;
+    /* Ensure no underline for links */
+}
+
+/* Optional: Add focus visible for accessibility */
+.nav-links .nav-item:focus-visible {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+    /* Light outline for focused item */
+}
+
+/* Profile section at top-right */
+.profile {
+    position: absolute;
+    top: 1rem;
+    right: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+}
+
+.profile-icon {
+    background-color: #6a0dad;
+    color: #ffffff;
+    font-weight: bold;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+

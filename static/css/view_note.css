@@ -1,0 +1,30 @@
+h1 {
+    text-align: center;
+    margin: 30px;
+    align-self: center;
+    margin-top: 10px;
+}
+
+#note {
+font-size: large;
+}
+ 
+#note_transcript {
+    font-size: small;
+    margin-bottom: 0px;
+}
+
+#note_source_file {
+font-size: small;
+margin-bottom: 0px;
+}
+
+#notes_file_type {
+    font-size: small;
+    margin-bottom: 0px;
+}
+
+#note_created_at {
+    font-size: small;
+    margin-bottom: 0px;
+}
