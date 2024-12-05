@@ -5,8 +5,8 @@ Flashcards - MentorMatrix
 {% endblock %}
 
 {% block other_head_stuff %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='popup.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='flashcards.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/popup.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/flashcards.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -52,4 +52,6 @@ Flashcards - MentorMatrix
       <button id="closeModalBtn" class="premium-button">Cancel</button>
     </div>
   </div>
+
+  <script src="{{ url_for('static', filename='js/flashcards.js') }}"></script>
 {% endblock %}

@@ -72,9 +72,36 @@ from .answer_open import generate_answer
 #     Returns:
 #     - str: The generated answer.
 #   ChatGPT, this can be used to get the answer to a question
-import random
+
+# TODO: import random cuz you want to be improving the functionality
 
 class Quiz:
+
+    """
+    A class to generate and evaluate quizzes based on a given text context.
+
+    The Quiz class provides functionality to create open-ended and multiple-choice 
+    questions from a provided text and evaluate answers against the generated questions.
+
+    Attributes:
+    ----------
+    context : str
+        The text from which the quiz questions are generated.
+    multiple_choice : list
+        A list to store multiple-choice questions and their options.
+    open_ended : list
+        A list to store open-ended questions and their answers.
+
+    Methods:
+    -------
+    generate_all_questions(ratio: float = 0.9):
+        Generates open-ended and fill-in-the-blank questions from the context based on 
+        a specified ratio.
+        
+    evaluate(question: str, answer: str) -> bool:
+        Evaluates a provided answer against the correct answer for a given question.
+    """
+
     def __init__(self, context: str):
         """
         Initializes a Quiz instance with the given context.

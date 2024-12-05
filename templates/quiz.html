@@ -12,10 +12,10 @@
 {% block content %}
     <div class="container">
         <div class="main-content">
-            <h1>Quiz Questions & Hints</h1>
+            <h1>Quiz Time!</h1>
 
         <!-- Quiz session controls with status message -->
-            <div class="quiz-controls">
+            <div class="quiz-controls"> 
                 {% if session_active %}
                     <p class="session-status">You have an active quiz session.</p>
                     <button class="resume-btn" onclick="resumeSession()">Resume Session</button>
@@ -34,7 +34,7 @@
                         <li class="question-item">
                             <h2>Q{{ loop.index }}: {{ question.title }}</h2>
                             <p>{{ question.content }}</p>
-                            <button class="hint-btn" onclick="toggleHint({{ loop.index }}, 'completed')">Show Hint</button>
+                            <button class="hint-btn" data-index="{{ loop.index }}" onclick="toggleHint(this.dataset.index, 'completed')">Show Hint</button>
                             <p class="hint-content" id="completed-hint-{{ loop.index }}" style="display: none;">Hint: {{ question.hint }}</p>
                             <p class="answer-content">Your Answer: {{ question.user_answer }}</p>
                             <small>Completed on: {{ question.completed_at }}</small>
@@ -52,7 +52,7 @@
                     <li class="question-item">
                         <h2>Q{{ loop.index }}: {{ question.title }}</h2>
                         <p>{{ question.content }}</p>
-                        <button class="hint-btn" onclick="toggleHint({{ loop.index }})">Show Hint</button>
+                        <button class="hint-btn" data-index="{{ loop.index }}">Show Hint</button>
                         <p class="hint-content" id="hint-{{ loop.index }}" style="display: none;">Hint: {{ question.hint }}</p>
                         <form action="/submit_answer" method="POST" class="answer-form">
                             <input type="hidden" name="question_id" value="{{ question.id }}">
@@ -89,5 +89,5 @@
         </div>
     </div>
 
-    <script src="{{ url_for('static', filename='quiz.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
 {% endblock %}
