@@ -1,4 +1,166 @@
 <!--TODO-->
 <!--This is the page where people choose their premium plan-->
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   MentorMatrix Pricing
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+ </head>
+ <body class="bg-gray-900 text-white">
+  <header class="flex justify-between items-center p-6 bg-gray-900">
+   <div class="flex items-center">
+    <img alt="MentorMatrix Logo" class="h-10 w-10" height="40" src="{{ url_for('static', filename='images/MentorMatrix_logo.png') }}" width="40"/>
+    <span class="ml-2 text-xl font-bold">
+     mentormatrix
+    </span>
+   </div>
+   <button class="bg-purple-600 text-white px-4 py-2 rounded">
+    Dashboard
+   </button>
+  </header>
+  <main class="text-center py-12">
+   <h1 class="text-3xl font-bold mb-4">
+    Affordable for all students.
+   </h1>
+   <div class="flex justify-center mb-8">
+    <button class="bg-purple-600 text-white px-6 py-2 rounded-l">
+     Yearly
+    </button>
+    <button class="bg-gray-800 text-white px-6 py-2 rounded-r">
+     Monthly
+    </button>
+   </div>
+   <div class="flex flex-col md:flex-row justify-center items-center space-y-6 md:space-y-0 md:space-x-6">
+    <div class="bg-gray-800 p-6 rounded-lg w-80">
+     <h2 class="text-2xl font-bold mb-2">
+      Starter
+     </h2>
+     <p class="text-4xl font-bold mb-2">
+      Free
+     </p>
+     <p class="text-gray-400 mb-4">
+      Billed Yearly
+     </p>
+     <ul class="text-left space-y-2">
+      <li>
+       <i class="fas fa-check-circle text-green-500">
+       </i>
+       2 Hours of lecture time per month
+      </li>
+      <li>
+       <i class="fas fa-check-circle text-green-500">
+       </i>
+       5 Quiz questions per month
+      </li>
+      <li>
+       <i class="fas fa-check-circle text-green-500">
+       </i>
+       1 PDF upload per month
+      </li>
+      <li>
+       <i class="fas fa-check-circle text-green-500">
+       </i>
+       Limited flashcard generation
+      </li>
+      <li>
+       <i class="fas fa-times-circle text-red-500">
+       </i>
+       No access to your school's community
+      </li>
+     </ul>
+    </div>
+    <div class="bg-purple-600 p-6 rounded-lg w-80">
+     <h2 class="text-2xl font-bold mb-2">
+      Unlimited
+     </h2>
+     <p class="text-4xl font-bold mb-2">
+      $8.99
+      <span class="text-lg">
+       per month
+      </span>
+     </p>
+     <p class="text-gray-200 mb-4">
+      Billed Yearly
+     </p>
+     <ul class="text-left space-y-2">
+      <li>
+       <i class="fas fa-check-circle text-green-500">
+       </i>
+       Unlimited hours lecture time per month
+      </li>
+      <li>
+       <i class="fas fa-check-circle text-green-500">
+       </i>
+       Unlimited quiz questions per month
+      </li>
+      <li>
+       <i class="fas fa-check-circle text-green-500">
+       </i>
+       Unlimited PDF uploads per month
+      </li>
+      <li>
+       <i class="fas fa-check-circle text-green-500">
+       </i>
+       Unlimited flashcards
+      </li>
+      <li>
+       <i class="fas fa-check-circle text-green-500">
+       </i>
+       Access your school's community
+      </li>
+     </ul>
+    </div>
+    <div class="bg-gray-800 p-6 rounded-lg w-80">
+     <h2 class="text-2xl font-bold mb-2">
+      Pro
+     </h2>
+     <p class="text-4xl font-bold mb-2">
+      $5.99
+      <span class="text-lg">
+       per month
+      </span>
+     </p>
+     <p class="text-gray-400 mb-4">
+      Billed Yearly
+     </p>
+     <ul class="text-left space-y-2">
+      <li>
+       <i class="fas fa-check-circle text-green-500">
+       </i>
+       15 Hours lecture time per month
+      </li>
+      <li>
+       <i class="fas fa-check-circle text-green-500">
+       </i>
+       50 Quiz questions per month
+      </li>
+      <li>
+       <i class="fas fa-check-circle text-green-500">
+       </i>
+       10 PDF uploads per month
+      </li>
+      <li>
+       <i class="fas fa-check-circle text-green-500">
+       </i>
+       Unlimited flashcards
+      </li>
+      <li>
+       <i class="fas fa-check-circle text-green-500">
+       </i>
+       Access your school's community
+      </li>
+     </ul>
+    </div>
+   </div>
+  </main>
+ </body>
+</html>
 
 <!-- Not {% extends "layout.html" %} as this page would not have a sidebar -->
+
