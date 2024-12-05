@@ -27,7 +27,7 @@
             </div>
 
         <!-- Completed questions section with accordion display -->
-            <h2>Completed Questions</h2>
+            <h2 id="completed_questions">Completed Questions</h2>
             <ul class="quiz-list completed-list">
                 {% if completed_questions %}
                     {% for question in completed_questions %}
@@ -46,7 +46,7 @@
             </ul>
 
         <!-- Quiz questions in progress with collapsible answers -->
-            <h2>Quiz in Progress</h2>
+            <h2 id="quiz_in_progress">Quiz in Progress</h2>
             <ul class="quiz-list">
                 {% for question in questions %}
                     <li class="question-item">

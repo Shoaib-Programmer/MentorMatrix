@@ -49,6 +49,24 @@
   margin-bottom: 20px;
 }
 
+.container {
+  max-width: 1200px; /* Adjust to your desired width */
+  margin: 0 auto;    /* Centers the container */
+  padding: 20px;     /* Inner spacing */
+}
+
+
+.main-content {
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 800px;
+}
+
+.quiz-controls, .quiz-list {
+  margin-bottom: 20px;
+}
+
+
 .hint-content, .answer-content {
   margin-top: 10px;
   color: #f0e68c;
@@ -63,3 +81,20 @@
   margin-top: 10px;
   cursor: pointer;
 }
+
+#quiz_in_progress {
+  margin-top: 30px;
+}
+
+h1, h2 {
+  margin: 20px 0;
+}
+
+p {
+  margin: 10px 0;
+}
+
+.hint-btn {
+  margin-top: 10px;
+}
+

@@ -2,11 +2,15 @@
 
 {% block title %}View Transcript - {{ transcript_name }}{% endblock %}
 
+{% block other_head_stuff %}
+<link rel="stylesheet" href="{{ url_for('static', filename='view_transcript.css') }}">
+{% endblock %}
+
 {% block content %}
 <section class="view-transcript">
     <h2>{{ transcript_name }}</h2>
     <div class="transcript-content">
-        <pre>{{ content }}</pre>
+        {{ content }}
     </div>
     <div class="navigation">
         <a href="{{ url_for('transcribe.transcript') }}" class="btn btn-primary">Back to Transcripts</a>

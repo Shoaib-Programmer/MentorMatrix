@@ -138,3 +138,25 @@ audio {
         font-size: 0.9rem;
     }
 }
+
+/* Subtle and Elegant Fade-In Animation */
+@keyframes fadeInElegant {
+    0% {
+        opacity: 0;
+        transform: scale(0.98); /* Slightly smaller */
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1.02); /* Slight expansion */
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1); /* Final stable state */
+    }
+}
+
+.element {
+    animation: fadeInElegant 1.2s ease-out forwards;
+}
