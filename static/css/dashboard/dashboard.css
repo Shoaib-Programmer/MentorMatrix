@@ -1,0 +1,115 @@
+/* dashboard.css */
+
+/* Main content styles */
+.main-content {
+    flex-grow: 1;
+    padding: 2rem;
+    position: relative;
+}
+
+/* Dashboard header */
+.dashboard-header h2 {
+    font-size: 2rem;
+}
+
+.dashboard-header p {
+    color: #cccccc;
+    margin-bottom: 1.5rem;
+}
+
+/* Upload options */
+.upload-options {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.upload-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #333333;
+    color: #ffffff;
+    padding: 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    flex: 1;
+    justify-content: center;
+}
+
+.upload-option i {
+    font-size: 1.5rem;
+}
+
+/* Notes section */
+.notes-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.create-folder {
+    float: right;
+    background-color: #333333;
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.note-item {
+    display: flex;
+    align-items: center;
+    background-color: #2b2b2b;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.note-item i {
+    font-size: 2rem;
+    color: #ff0000;
+    margin-right: 1rem;
+}
+
+.note-info h4 {
+    font-size: 1.2rem;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.note-info p {
+    font-size: 0.9rem;
+    color: #bbbbbb;
+}
+
+.note-options .options-button {
+    background: none;
+    color: #ffffff;
+    font-size: 1.5rem;
+    margin-left: auto;
+}
+
+.upload-options {
+    display: flex;
+    gap: 20px;
+}
+
+.upload-option {
+    display: flex;
+    align-items: center;
+    color: white;
+    background-color: #333;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.upload-option:hover {
+    background-color: #555;
+}
+
+.icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}

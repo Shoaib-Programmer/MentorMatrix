@@ -1,0 +1,132 @@
+/* General overlay styles */
+#pdf-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7); /* Match the dark overlay style */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Popup container */
+#pdf-popup-container {
+    background: #1e1e1e; /* Match dark theme */
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    padding: 20px;
+    color: #ffffff; /* Text color */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+    position: relative;
+    text-align: center;
+    animation: fadeInElegant 0.3s ease-out;
+}
+
+/* Title */
+#pdf-popup-container h3 {
+    font-family: 'Arial', sans-serif;
+    font-size: 1.5rem;
+    color: #ffffff; /* Match text color */
+    margin-bottom: 20px;
+    border-bottom: 1px solid #444; /* Subtle border */
+    padding-bottom: 10px;
+}
+
+/* File input styling */
+#pdf-popup-container input[type="file"] {
+    display: block;
+    margin: 20px auto;
+    font-family: 'Arial', sans-serif;
+    font-size: 1rem;
+    color: #ccc; /* Light text color for dark background */
+    background: #2c2c2c; /* Match input background */
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+#pdf-popup-container input[type="file"]:focus {
+    border-color: #008cba; /* Blue focus color */
+    outline: none;
+}
+
+/* Buttons styling */
+#pdf-popup-container button {
+    display: block;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: 'Arial', sans-serif;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#pdf-popup-container button:hover {
+    background-color: #0056b3;
+    transform: scale(1.02); /* Hover effect */
+}
+
+#pdf-popup-container button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Success or error messages */
+#pdf-popup-container p {
+    margin-top: 20px;
+    font-family: 'Arial', sans-serif;
+    font-size: 0.9rem;
+    color: #ccc; /* Match text color */
+    line-height: 1.5;
+}
+
+/* Close button */
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 1.5rem;
+    color: #fff;
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: transform 0.2s ease, color 0.3s ease;
+}
+
+.close-btn:hover {
+    color: #ff5757; /* Highlighted red */
+    transform: scale(1.2);
+}
+
+/* Subtle and Elegant Fade-In Animation */
+@keyframes fadeInElegant {
+    0% {
+        opacity: 0;
+        transform: scale(0.98); /* Slightly smaller */
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1.02); /* Slight expansion */
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1); /* Final stable state */
+    }
+}
+
+.element {
+    animation: fadeInElegant 1.2s ease-out forwards;
+}
