@@ -21,16 +21,11 @@ flashcards_storage = []
 
 @flashcards_blueprint.route('/flashcards')
 def flashcards():
-    """
-    Display the list of flashcards.
-    """
-    return render_template('flashcards.html', flashcards=flashcards_storage)
+    flashcards = db.execute("SELECT * FROM flashcards ORDER BY created_at DESC")
+    return render_template('flashcards.html', flashcards=flashcards)
 
 @flashcards_blueprint.route('/add_flashcard', methods=['POST'])
 def add_flashcard():
-    """
-    Add a new flashcard manually.
-    """
     question = request.form.get('question')
     answer = request.form.get('answer')
     
@@ -38,14 +33,13 @@ def add_flashcard():
         flash("Both question and answer fields are required!", "error")
         return redirect(url_for('flashcards.flashcards'))
     
-    flashcard = {
-        "question": question,
-        "answer": answer,
-        "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    }
-    flashcards_storage.append(flashcard)
+    db.execute(
+        "INSERT INTO flashcards (transcript_id, question, answer) VALUES (?, ?, ?)",
+        None, question, answer
+    )
     flash("Flashcard added successfully!", "success")
     return redirect(url_for('flashcards.flashcards'))
+
 
 @flashcards_blueprint.route('/generate_flashcards', methods=['POST'])
 def generate_flashcards_route():

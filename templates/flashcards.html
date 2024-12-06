@@ -14,6 +14,15 @@ Flashcards - MentorMatrix
     <div class="main-content">
       <h1>Flashcards</h1>
 
+      <!-- Flashcard creation button -->
+      <button id="openModalBtn" class="premium-button">Create New Flashcard</button>
+
+      <!-- Search feature -->
+      <form action="/search_flashcards" method="GET" class="search-bar">
+        <input type="text" name="query" placeholder="Search flashcards..." />
+        <button type="submit" class="premium-button">Search</button>
+      </form>
+
       <!-- Display flashcard list -->
       <ul class="flashcard-list">
         {% for flashcard in flashcards %}
@@ -27,9 +36,19 @@ Flashcards - MentorMatrix
               </div>
             </div>
             <small>Created on: {{ flashcard.created_at }}</small>
+
+            <!-- Edit and Delete buttons -->
+            <div class="flashcard-actions">
+              <form action="/edit_flashcard/{{ flashcard.id }}" method="GET" style="display: inline;">
+                <button type="submit" class="edit-button">Edit</button>
+              </form>
+              <form action="/delete_flashcard/{{ flashcard.id }}" method="POST" style="display: inline;">
+                <button type="submit" class="delete-button">Delete</button>
+              </form>
+            </div>
           </li>
         {% else %}
-          <li>No flashcards were created. Want to make some?</li><!--temp text-->
+          <li>No flashcards were created. Want to make some?</li>
         {% endfor %}
       </ul>
     </div>
@@ -53,5 +72,6 @@ Flashcards - MentorMatrix
     </div>
   </div>
 
+  <!-- Include custom JavaScript -->
   <script src="{{ url_for('static', filename='js/flashcards.js') }}"></script>
 {% endblock %}
