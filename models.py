@@ -81,3 +81,6 @@ def init_db():
     db.execute('CREATE INDEX IF NOT EXISTS idx_deck_title ON decks (title);')  # Index for decks table
     # db.execute('CREATE INDEX IF NOT EXISTS idx_flashcard_deck_id ON flashcards (deck_id);')  # Index for deck-based flashcards
 
+if __name__ == "__main__":
+    init_db() # This is just a debugging step
+

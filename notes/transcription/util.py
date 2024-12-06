@@ -5,6 +5,8 @@ import time
 import os
 import json
 
+from icecream import ic
+
 
 # Hardcoded cookies in JSON format
 HARDCODED_COOKIES_JSON = [
@@ -157,14 +159,14 @@ def download_media(youtube_url, media_type='audio'):
 
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            print("Using hardcoded cookies")  # Debug log
+            ic("Using hardcoded cookies")  # Debug log
             info_dict = ydl.extract_info(youtube_url, download=True)  # Download the media
             if media_type == 'audio':
                 return 'downloaded_audio.wav'
             elif media_type == 'video':
                 return 'downloaded_video.mp4'
     except Exception as e:
-        print(f"Error downloading {media_type}: {e}")
+        ic(f"Error downloading {media_type}: {e}")
         return None
 
 def transcribe_audio(audio_file):

@@ -1,6 +1,7 @@
 import os
 from .audio import *
 from .video import *
+from icecream import ic
 
 
 def extract_audio_from_video(video_path, audio_path="extracted_audio.wav"):
@@ -37,11 +38,11 @@ def transcribe_video(video_path):
     # Step 2: Check if the audio is usable
     if is_audio_usable(audio_file):
         # If the audio is usable, transcribe using Whisper
-        print("Audio is clear. Transcribing audio...")
+        ic("Audio is clear. Transcribing audio...")
         transcript = transcribe_audio(audio_file)
     else:
         # If the audio is not usable, proceed with visual transcription
-        print("Audio is not usable. Transcribing video visually...")
+        ic("Audio is not usable. Transcribing video visually...")
         transcript = transcribe_video_without_audio(video_path)
 
     # Clean up the extracted audio file after use

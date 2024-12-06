@@ -1,6 +1,7 @@
 from pydub import AudioSegment
 import librosa
 import numpy as np
+from icecream import ic
 
 def is_audio_usable(audio_file, silence_threshold=-50.0, noise_threshold=0.2) -> bool:
     """
@@ -42,5 +43,5 @@ def is_audio_usable(audio_file, silence_threshold=-50.0, noise_threshold=0.2) ->
         return True
 
     except Exception as e:
-        print(f"Error analyzing audio file {audio_file}: {e}")
+        ic(f"Error analyzing audio file {audio_file}: {e}")
         return False

@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from notes import generate_flashcards
 from datetime import datetime
 from models import db
+from icecream import ic
 
 flashcards_blueprint = Blueprint('flashcards', __name__)
 
@@ -51,6 +52,7 @@ def add_flashcard():
         )
         flash("Flashcard added successfully!", "success")
     except Exception as e:
+        ic(f"Error adding flashcard: {e}", "error")
         flash(f"Error adding flashcard: {e}", "error")
     return redirect(url_for('flashcards.flashcards'))
 
