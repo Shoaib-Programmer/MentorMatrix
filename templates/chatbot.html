@@ -5,7 +5,7 @@
 {% block other_head_stuff %}
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
-    <link rel="stylesheet" href="{{ url_for('static', filename='chatbot.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chatbot.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -51,5 +51,5 @@
     </div>
 </div>
 
-<script src="{{ url_for('static', filename='chatbot.js') }}"></script>
+<script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
 {% endblock %}

@@ -57,15 +57,14 @@ def init_db():
     # Flashcards Table
     db.execute('''CREATE TABLE IF NOT EXISTS flashcards (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    transcript_id INTEGER NOT NULL,
+                    note_id INTEGER NOT NULL,
                     question TEXT NOT NULL,
                     answer TEXT NOT NULL,
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    FOREIGN KEY (transcript_id) REFERENCES transcripts(id) ON DELETE CASCADE);''')
+                    FOREIGN KEY (note_id) REFERENCES notes(id) ON DELETE CASCADE);''')
 
     # Create indexes for faster lookups
     db.execute('CREATE INDEX IF NOT EXISTS idx_transcript_id ON notes (transcript_id);')
     db.execute('CREATE INDEX IF NOT EXISTS idx_file_transcript_id ON files (transcript_id);')
     # db.execute('CREATE INDEX IF NOT EXISTS idx_quiz_transcript_id ON quizzes (transcript_id);')
-    db.execute('CREATE INDEX IF NOT EXISTS idx_flashcard_transcript_id ON flashcards (transcript_id);')

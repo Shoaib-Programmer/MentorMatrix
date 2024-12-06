@@ -5,8 +5,9 @@
 {% endblock %}
 
 {% block other_head_stuff %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='quiz.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='popup.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/quiz.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/popup.css') }}">
+    <script src="{{ url_for('static', filename='js/quiz.js') }}" defer></script>
 {% endblock %}
 
 {% block content %}
@@ -14,7 +15,7 @@
         <div class="main-content">
             <h1>Quiz Time!</h1>
 
-        <!-- Quiz session controls with status message -->
+            <!-- Quiz session controls with status message -->
             <div class="quiz-controls"> 
                 {% if session_active %}
                     <p class="session-status">You have an active quiz session.</p>
@@ -26,8 +27,8 @@
                 {% endif %}
             </div>
 
-        <!-- Completed questions section with accordion display -->
-            <h2 id="completed_questions">Completed Questions</h2>
+            <!-- Completed questions section with accordion display -->
+            <h2 class="completed_questions">Completed Questions</h2>
             <ul class="quiz-list completed-list">
                 {% if completed_questions %}
                     {% for question in completed_questions %}
@@ -41,20 +42,20 @@
                         </li>
                     {% endfor %}
                 {% else %}
-                    No completed questions yet. Try completing a few from your active session!
+                    <li>No completed questions yet. Try completing a few from your active session!</li>
                 {% endif %}
             </ul>
 
-        <!-- Quiz questions in progress with collapsible answers -->
-            <h2 id="quiz_in_progress">Quiz in Progress</h2>
+            <!-- Quiz questions in progress with collapsible answers -->
+            <h2 class="quiz_in_progress">Quiz in Progress</h2>
             <ul class="quiz-list">
                 {% for question in questions %}
                     <li class="question-item">
                         <h2>Q{{ loop.index }}: {{ question.title }}</h2>
                         <p>{{ question.content }}</p>
-                        <button class="hint-btn" data-index="{{ loop.index }}">Show Hint</button>
+                        <button class="hint-btn" data-index="{{ loop.index }}" onclick="toggleHint(this.dataset.index)">Show Hint</button>
                         <p class="hint-content" id="hint-{{ loop.index }}" style="display: none;">Hint: {{ question.hint }}</p>
-                        <form action="/submit_answer" method="POST" class="answer-form">
+                        <form action="/submit_answer" method="POST" class="answer-form" onsubmit="return handleSubmit(event)">
                             <input type="hidden" name="question_id" value="{{ question.id }}">
                             <textarea name="answer" placeholder="Type your answer here" required></textarea>
                             <button type="submit" class="submit-answer-btn">Submit Answer</button>
@@ -62,17 +63,17 @@
                         <small>Created on: {{ question.created_at }}</small>
                     </li>
                 {% else %}
-                    <li>No questions available. Start a session to view questions.</li>
+                    <li>No active quiz sessions.</li>
                 {% endfor %}
             </ul>
         </div>
     </div>
 
-<!-- Modal for creating a new question -->
-    <div id="myModal" class="modal">
+    <!-- Modal for creating a new question -->
+    <div id="myModal" class="modal" role="dialog" aria-labelledby="modal-title" aria-modal="true">
         <div class="modal-content">
-            <span class="close-btn" aria-label="Close Modal">&times;</span>
-            <h2>Add a New Question</h2>
+            <span class="close-btn" aria-label="Close Modal" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title">Add a New Question</h2>
             <form action="/add_question" method="POST">
                 <label for="title">Question:</label>
                 <input type="text" id="title" name="title" required>
@@ -85,9 +86,7 @@
 
                 <button type="submit" class="premium-button">Save Question</button>
             </form>
-            <button id="closeModalBtn" class="premium-button">Cancel</button>
+            <button id="closeModalBtn" class="premium-button" onclick="closeModal()">Cancel</button>
         </div>
     </div>
-
-    <script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
 {% endblock %}
