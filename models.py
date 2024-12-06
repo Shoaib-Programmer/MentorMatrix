@@ -67,5 +67,5 @@ def init_db():
     # Create indexes for faster lookups
     db.execute('CREATE INDEX IF NOT EXISTS idx_transcript_id ON notes (transcript_id);')
     db.execute('CREATE INDEX IF NOT EXISTS idx_file_transcript_id ON files (transcript_id);')
-    db.execute('CREATE INDEX IF NOT EXISTS idx_quiz_transcript_id ON quizzes (transcript_id);')
+    # db.execute('CREATE INDEX IF NOT EXISTS idx_quiz_transcript_id ON quizzes (transcript_id);')
     db.execute('CREATE INDEX IF NOT EXISTS idx_flashcard_transcript_id ON flashcards (transcript_id);')

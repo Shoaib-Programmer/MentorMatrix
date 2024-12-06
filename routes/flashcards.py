@@ -1,11 +1,23 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from notes import generate_flashcards
 from datetime import datetime
+from models import db
+# db is the database, a cs50 SQL object
 
 flashcards_blueprint = Blueprint('flashcards', __name__)
 
-# In-memory storage for flashcards (replace with a database in production)
+# In-memory storage for flashcards
 flashcards_storage = []
+# TODO: replace with a database
+# Here's the part of the database code for your reference
+# CREATE TABLE IF NOT EXISTS flashcards (
+#                     id INTEGER PRIMARY KEY AUTOINCREMENT,
+#                     transcript_id INTEGER NOT NULL,
+#                     question TEXT NOT NULL,
+#                     answer TEXT NOT NULL,
+#                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+#                     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+#                     FOREIGN KEY (transcript_id) REFERENCES transcripts(id) ON DELETE CASCADE);
 
 @flashcards_blueprint.route('/flashcards')
 def flashcards():

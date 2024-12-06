@@ -1,97 +1,57 @@
-/* General overlay styles */
-#pdf-popup-overlay {
+/* Import global popup styles */
+@import url('/static/popup.css');
+
+
+/* Specific Modal Styling for #audio-popup */
+#audio-popup {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.7); /* Match the dark overlay style */
+    background-color: rgba(0, 0, 0, 0.7); /* Background overlay */
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     z-index: 1000;
+    opacity: 1; /* Fully visible when active */
+    visibility: visible;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-/* Popup container */
-#pdf-popup-container {
-    background: #1e1e1e; /* Match dark theme */
-    border-radius: 12px;
+/* When #audio-popup is hidden */
+#audio-popup.hidden {
+    display: none; /* Completely hides the modal */
+    opacity: 0; /* Fade effect */
+    visibility: hidden; /* Keeps out of visual flow */
+}
+
+/* Content inside the #audio-popup */
+#audio-popup .modal-content {
+    background-color: #1e1e1e; /* Modal content background */
+    color: #ffffff;           /* Text color */
     width: 90%;
     max-width: 500px;
     padding: 20px;
-    color: #ffffff; /* Text color */
+    border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Shadow for depth */
-    position: relative;
-    text-align: center;
-    animation: fadeInElegant 0.3s ease-out;
+    transform: scale(0.9);    /* Slightly shrunk by default */
+    transition: transform 0.3s ease-in-out; /* Smooth animation */
 }
 
-/* Title */
-#pdf-popup-container h3 {
-    font-family: 'Arial', sans-serif;
-    font-size: 1.5rem;
-    color: #ffffff; /* Match text color */
-    margin-bottom: 20px;
-    border-bottom: 1px solid #444; /* Subtle border */
-    padding-bottom: 10px;
+/* When #audio-popup is visible */
+#audio-popup:not(.hidden) .modal-content {
+    transform: scale(1); /* Expands to full size */
 }
 
-/* File input styling */
-#pdf-popup-container input[type="file"] {
-    display: block;
-    margin: 20px auto;
-    font-family: 'Arial', sans-serif;
-    font-size: 1rem;
-    color: #ccc; /* Light text color for dark background */
-    background: #2c2c2c; /* Match input background */
-    border: 1px solid #444;
-    border-radius: 8px;
-    padding: 10px;
-    width: 100%;
-    box-sizing: border-box;
-    transition: all 0.3s ease;
+
+/* Hide Modal by Default */
+.hidden {
+    display: none;
 }
 
-#pdf-popup-container input[type="file"]:focus {
-    border-color: #008cba; /* Blue focus color */
-    outline: none;
-}
 
-/* Buttons styling */
-#pdf-popup-container button {
-    display: block;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-family: 'Arial', sans-serif;
-    cursor: pointer;
-    margin-top: 15px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-#pdf-popup-container button:hover {
-    background-color: #0056b3;
-    transform: scale(1.02); /* Hover effect */
-}
-
-#pdf-popup-container button:disabled {
-    background-color: #6c757d;
-    cursor: not-allowed;
-}
-
-/* Success or error messages */
-#pdf-popup-container p {
-    margin-top: 20px;
-    font-family: 'Arial', sans-serif;
-    font-size: 0.9rem;
-    color: #ccc; /* Match text color */
-    line-height: 1.5;
-}
-
-/* Close button */
+/* Close Button */
 .close-btn {
     position: absolute;
     top: 15px;
@@ -107,6 +67,76 @@
 .close-btn:hover {
     color: #ff5757; /* Highlighted red */
     transform: scale(1.2);
+}
+
+
+/* Buttons */
+#record-button,
+#upload-button {
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+
+#record-button {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+#record-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.02);
+}
+
+#upload-button {
+    background-color: #28a745;
+    color: #ffffff;
+}
+
+#upload-button:hover {
+    background-color: #218838;
+    transform: scale(1.02);
+}
+
+#upload-button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Audio Player */
+audio {
+    width: 100%;
+    margin-top: 15px;
+    outline: none;
+    border: none;
+    border-radius: 8px;
+    background-color: #2c2c2c;
+    color: #fff;
+}
+
+/* Progress Message */
+#progress-message {
+    margin-top: 10px;
+    color: #fff;
+    text-align: center;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .modal-content {
+        padding: 15px;
+    }
+
+    input[type="file"],
+    #record-button,
+    #upload-button {
+        font-size: 0.9rem;
+    }
 }
 
 /* Subtle and Elegant Fade-In Animation */
