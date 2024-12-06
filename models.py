@@ -31,7 +31,7 @@ def init_db():
                     transcript_id INTEGER NOT NULL,
                     file_type TEXT CHECK(file_type IN ('audio', 'youtube', 'pdf')) NOT NULL,
                     name TEXT NOT NULL,
-                    metadata TEXT,  -- JSON or additional metadata
+                    metadata TEXT,  -- JSON or additional metadata as text
                     uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (transcript_id) REFERENCES transcripts(id) ON DELETE CASCADE);''')
 
@@ -50,21 +50,34 @@ def init_db():
                     question TEXT NOT NULL,
                     answer TEXT NOT NULL,
                     question_type TEXT CHECK(question_type IN ('open_ended', 'multiple_choice')) NOT NULL,
-                    options TEXT,  -- JSON array for multiple-choice options
+                    options TEXT,  -- Store multiple-choice options as a JSON string
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE);''')
 
-    # Flashcards Table
+    # Flashcards Table with a reference to Decks
+    db.execute('''CREATE TABLE IF NOT EXISTS decks (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    title TEXT NOT NULL,
+                    description TEXT,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP);''')
+
     db.execute('''CREATE TABLE IF NOT EXISTS flashcards (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    deck_id INTEGER NOT NULL,
                     note_id INTEGER NOT NULL,
                     question TEXT NOT NULL,
                     answer TEXT NOT NULL,
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (deck_id) REFERENCES decks(id) ON DELETE CASCADE,
                     FOREIGN KEY (note_id) REFERENCES notes(id) ON DELETE CASCADE);''')
 
     # Create indexes for faster lookups
     db.execute('CREATE INDEX IF NOT EXISTS idx_transcript_id ON notes (transcript_id);')
     db.execute('CREATE INDEX IF NOT EXISTS idx_file_transcript_id ON files (transcript_id);')
     # db.execute('CREATE INDEX IF NOT EXISTS idx_quiz_transcript_id ON quizzes (transcript_id);')
+    db.execute('CREATE INDEX IF NOT EXISTS idx_quiz_question_quiz_id ON quiz_questions (quiz_id);')
+    db.execute('CREATE INDEX IF NOT EXISTS idx_deck_title ON decks (title);')  # Index for decks table
+    # db.execute('CREATE INDEX IF NOT EXISTS idx_flashcard_deck_id ON flashcards (deck_id);')  # Index for deck-based flashcards
+

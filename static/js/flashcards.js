@@ -41,6 +41,15 @@ document.addEventListener("DOMContentLoaded", () => {
   function closeModal() {
     modal.style.display = "none";
   }
+
+  // Handle deck selection change (Form submit)
+  const deckSelect = document.getElementById("deck-select");
+  if (deckSelect) {
+    deckSelect.addEventListener("change", () => {
+      // Submit the form automatically when deck is changed
+      deckSelect.closest("form").submit();
+    });
+  }
 });
 
 // Keyboard accessibility for modal (ESC to close)
