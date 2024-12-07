@@ -6,6 +6,9 @@ from icecream import ic
 
 flashcards_blueprint = Blueprint('flashcards', __name__)
 
+# In-memory storage for flashcards (replace with a database in production)
+flashcards_storage = []
+
 @flashcards_blueprint.route('/flashcards')
 def flashcards():
     """
