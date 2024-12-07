@@ -26,10 +26,13 @@ def chat(user_message, chat_history=None):
 
     return bot_response, chat_history
 
-# import openai
-
+# # import openai
+# import os
+# from dotenv import load_dotenv
 # # Set up your OpenAI API key
-# openai.api_key = "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"
+# api_key = os.getenv("OPENAI_API_KEY")
+
+# openai.api_key = api_key
 
 # # Function to chat with OpenAI's ChatCompletion endpoint
 # def chat(user_message, chat_history=None):
