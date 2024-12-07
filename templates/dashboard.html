@@ -18,15 +18,6 @@
     <!-- Dashboard HTML -->
         <section class="dashboard-header">
             <h2>Dashboard</h2>
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    <ul class="flashes">
-                        {% for category, message in messages %}
-                            <li class="flash {{ category }}">{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            {% endwith %}
             <p>Create new notes</p>
             <div class="upload-options">
                 <button class="audio_upload-option-btn" onclick="toggleAudioPopup(true)">

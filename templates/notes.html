@@ -13,16 +13,6 @@
         <div class="main-content">
             <h1>My Notes</h1>
 
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    <ul class="flashes">
-                        {% for category, message in messages %}
-                            <li class="flash {{ category }}">{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            {% endwith %}
-
         <!-- Display notes list -->
             <ul class="notes-list">
                 {% for note in notes %}

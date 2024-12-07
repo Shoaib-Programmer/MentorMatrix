@@ -30,21 +30,19 @@ def add_flashcard():
     """
     question = request.form.get('question')
     answer = request.form.get('answer')
-    note_id = request.form.get('note_id')  # Assuming note_id is passed in the form
     deck_id = request.form.get('deck_id')  # Deck ID to associate the flashcard with
     
-    if not question or not answer or not note_id or not deck_id:
+    if not question or not answer or not deck_id:
         flash("Question, answer, note ID, and deck ID are required!", "error")
         return redirect(url_for('flashcards.flashcards'))
     
     try:
         db.execute(
             """
-            INSERT INTO flashcards (deck_id, note_id, question, answer, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO flashcards (deck_id, question, answer, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?)
             """,
             deck_id,
-            note_id,
             question,
             answer,
             datetime.now().strftime("%Y-%m-%d %H:%M:%S"),

@@ -13,6 +13,24 @@
 
     <body>
         <div class="container">
+            <!-- Display flashed messages -->
+            <div id="flash-messages" class="mt-4">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <ul>
+                            {% for category, message in messages %}
+                                <li class="mb-4 p-4 rounded-md text-white 
+                                    {% if category == 'success' %}bg-green-500{% endif %}
+                                    {% if category == 'error' %}bg-red-500{% endif %}
+                                    {% if category == 'info' %}bg-blue-500{% endif %}
+                                    {% if category == 'warning' %}bg-yellow-500{% endif %}">
+                                    {{ message }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+            </div>
             <!-- Sidebar -->
             <aside class="sidebar">
                 <div class="logo">

@@ -5,8 +5,20 @@ db = SQL("sqlite:///dev.db")
 
 def init_db():
     """
-    Initializes the database by creating necessary tables.
+    Initializes the database by creating the necessary tables and indexes.
+
+    This function sets up the following tables in the database:
+        - `transcripts`: Stores the main transcript data with title, content, and timestamps.
+        - `notes`: Stores notes related to transcripts, with a foreign key reference to the `transcripts` table.
+        - `files`: Stores associated files (e.g., audio, YouTube, PDFs) linked to transcripts, with metadata.
+        - `quizzes`: Stores quizzes related to transcripts.
+        - `quiz_questions`: Stores questions for each quiz, with options for multiple-choice questions.
+        - `decks`: Stores flashcard decks.
+        - `flashcards`: Stores individual flashcards, linked to both decks and notes.
+
+    Additionally, the function creates indexes on key columns (e.g., transcript ID, quiz ID, deck title) to improve query performance.
     """
+    
     global db  # Declare db as global to modify the global object
 
     # Create the necessary tables
@@ -65,7 +77,7 @@ def init_db():
     db.execute('''CREATE TABLE IF NOT EXISTS flashcards (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     deck_id INTEGER NOT NULL,
-                    note_id INTEGER NOT NULL,
+                    note_id INTEGER,
                     question TEXT NOT NULL,
                     answer TEXT NOT NULL,
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -76,11 +88,11 @@ def init_db():
     # Create indexes for faster lookups
     db.execute('CREATE INDEX IF NOT EXISTS idx_transcript_id ON notes (transcript_id);')
     db.execute('CREATE INDEX IF NOT EXISTS idx_file_transcript_id ON files (transcript_id);')
-    # db.execute('CREATE INDEX IF NOT EXISTS idx_quiz_transcript_id ON quizzes (transcript_id);')
+    db.execute('CREATE INDEX IF NOT EXISTS idx_quiz_transcript_id ON quizzes (transcript_id);')
     db.execute('CREATE INDEX IF NOT EXISTS idx_quiz_question_quiz_id ON quiz_questions (quiz_id);')
     db.execute('CREATE INDEX IF NOT EXISTS idx_deck_title ON decks (title);')  # Index for decks table
-    # db.execute('CREATE INDEX IF NOT EXISTS idx_flashcard_deck_id ON flashcards (deck_id);')  # Index for deck-based flashcards
+    db.execute('CREATE INDEX IF NOT EXISTS idx_flashcard_deck_id ON flashcards (deck_id);')  # Index for deck-based flashcards
+
 
 if __name__ == "__main__":
     init_db() # This is just a debugging step
-
