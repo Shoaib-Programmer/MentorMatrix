@@ -1,13 +1,11 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from notes import generate_flashcards
+from notes import generate_flashcards, get_title, generate_description
 from datetime import datetime
 from models import db
 from icecream import ic
 
 flashcards_blueprint = Blueprint('flashcards', __name__)
 
-# In-memory storage for flashcards (replace with a database in production)
-flashcards_storage = []
 
 @flashcards_blueprint.route('/flashcards')
 def flashcards():
@@ -25,6 +23,7 @@ def flashcards():
     decks = db.execute("SELECT * FROM decks ORDER BY created_at DESC")  # Get available decks
     
     return render_template('flashcards.html', flashcards=flashcards, decks=decks, selected_deck_id=deck_id)
+
 
 @flashcards_blueprint.route('/add_flashcard', methods=['POST'])
 def add_flashcard():
@@ -57,45 +56,6 @@ def add_flashcard():
         flash(f"Error adding flashcard: {e}", "error")
     return redirect(url_for('flashcards.flashcards'))
 
-@flashcards_blueprint.route('/generate_flashcards', methods=['POST'])
-def generate_flashcards_route():
-    """
-    Generate flashcards using the provided text input and number of clusters.
-    """
-    input_text = request.form.get('input_text')
-    num_clusters = request.form.get('num_clusters', type=int, default=5)
-    deck_id = request.form.get('deck_id')  # Deck ID to associate the generated flashcards with
-    
-    if not input_text or not deck_id:
-        flash("Please provide text input and select a deck to generate flashcards.", "error")
-        return redirect(url_for('flashcards.flashcards'))
-    
-    try:
-        # Assume `generate_flashcards` takes a list of sentences
-        sentences = input_text.split(".")
-        generated_flashcards = generate_flashcards(sentences, num_clusters)
-        
-        # Add generated flashcards to the database, associated with the selected deck
-        for cluster in generated_flashcards:
-            question = f"Cluster summary: {cluster[0]}"  # Simplify this as needed
-            answer = " ".join(cluster)
-            db.execute(
-                """
-                INSERT INTO flashcards (deck_id, note_id, question, answer, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?)
-                """,
-                deck_id,
-                None,  # Replace with a valid note_id if needed
-                question,
-                answer,
-                datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            )
-        flash(f"{len(generated_flashcards)} flashcards generated successfully!", "success")
-    except Exception as e:
-        flash(f"Error generating flashcards: {e}", "error")
-    
-    return redirect(url_for('flashcards.flashcards'))
 
 @flashcards_blueprint.route('/delete_flashcard/<int:flashcard_id>', methods=['POST'])
 def delete_flashcard(flashcard_id):
@@ -108,6 +68,7 @@ def delete_flashcard(flashcard_id):
     except Exception as e:
         flash(f"Error deleting flashcard: {e}", "error")
     return redirect(url_for('flashcards.flashcards'))
+
 
 @flashcards_blueprint.route('/edit_flashcard/<int:flashcard_id>', methods=['GET', 'POST'])
 def edit_flashcard(flashcard_id):
@@ -150,37 +111,6 @@ def edit_flashcard(flashcard_id):
     decks = db.execute("SELECT * FROM decks ORDER BY created_at DESC")  # Get available decks for selection
     return render_template('edit_flashcard.html', flashcard=flashcard[0], decks=decks)
 
-@flashcards_blueprint.route('/create_deck', methods=['GET', 'POST'])
-def create_deck():
-    """
-    Create a new deck for organizing flashcards.
-    """
-    if request.method == 'POST':
-        title = request.form.get('title')
-        description = request.form.get('description')
-
-        if not title:
-            flash("Deck title is required!", "error")
-            return redirect(url_for('flashcards.create_deck'))
-
-        try:
-            db.execute(
-                """
-                INSERT INTO decks (title, description, created_at, updated_at)
-                VALUES (?, ?, ?, ?)
-                """,
-                title,
-                description,
-                datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            )
-            flash("Deck created successfully!", "success")
-        except Exception as e:
-            flash(f"Error creating deck: {e}", "error")
-
-        return redirect(url_for('flashcards.flashcards'))
-
-    return render_template('create_deck.html')
     
 @flashcards_blueprint.route('/search_flashcards')
 def search_flashcards():
@@ -207,3 +137,160 @@ def search_flashcards():
     except Exception as e:
         flash(f"Error during search: {e}", "error")
         return redirect(url_for('flashcards.flashcards'))
+    
+
+@flashcards_blueprint.route('/create_deck', methods=['GET'])
+def create_deck():
+    # Fetch available notes for the "Generate Deck from Notes" option
+    notes = db.execute("SELECT id, title FROM notes ORDER BY created_at DESC")
+    flash(notes, 'success')
+    return render_template('create_deck.html', notes=notes)
+
+
+@flashcards_blueprint.route('/create_deck_plain', methods=['POST'])
+def create_deck_plain():
+    """
+    Handle creation of a plain deck (no text or note-based generation).
+    """
+    title = request.form.get('title')
+    description = request.form.get('description')
+    
+    if not title:
+        flash("Deck title is required!", "error")
+        return redirect(url_for('flashcards.create_deck'))
+    
+    try:
+        db.execute(
+            """
+            INSERT INTO decks (title, description, created_at, updated_at)
+            VALUES (?, ?, ?, ?)
+            """,
+            title,
+            description,
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        )
+        flash("Plain deck created successfully!", "success")
+    except Exception as e:
+        flash(f"Error creating plain deck: {e}", "error")
+    
+    return redirect(url_for('flashcards.flashcards'))
+
+
+@flashcards_blueprint.route('/generate_deck', methods=['POST'])
+def generate_deck():
+    input_text = request.form.get('input_text')
+
+    if not input_text:
+        flash("Text input field is required.", "error")
+        return redirect(url_for('flashcards.create_deck'))
+    
+    num_clusters = request.form.get('num_clusters', type=int, default=5)
+    title = get_title(input_text)
+    ic(title)
+
+    # Use the AI function to generate a description from the input text
+    description = generate_description(input_text)
+
+    try:
+        # Create a new deck
+        db.execute("""
+            INSERT INTO decks (title, description, created_at, updated_at)
+            VALUES (?, ?, ?, ?)
+        """, title, description, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
+        result_deck_id = db.execute("SELECT last_insert_rowid()")
+        deck_id = result_deck_id[0]["last_insert_rowid()"]
+
+        ic(deck_id)
+
+
+        # Generate flashcards from the input text
+        sentences = input_text.split(".")
+        generated_flashcards = generate_flashcards(sentences, num_clusters)
+
+        # Add generated flashcards to the deck
+        for cluster in generated_flashcards:
+            question = f"{cluster[0]}"
+            answer = " ".join(cluster)
+            db.execute("""
+                INSERT INTO flashcards (deck_id, note_id, question, answer, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, deck_id, None, question, answer, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
+        flash(f"Deck '{title}' created successfully with {len(generated_flashcards)} flashcards.", "success")
+        return redirect(url_for('flashcards.flashcards'))
+    except Exception as e:
+        flash(f"Error generating deck: {e}", "error")
+        return redirect(url_for('flashcards.create_deck'))
+
+
+@flashcards_blueprint.route('/generate_deck_automatic', methods=['POST'])
+def generate_deck_automatic():
+    """
+    Automatically generate flashcards for a deck using the content of selected notes (by note_ids).
+    """
+    note_ids = request.form.getlist('note_ids')  # Get the list of note IDs
+    
+    if not note_ids:
+        flash("Please select at least one note.", "error")
+        return redirect(url_for('flashcards.flashcards'))
+    
+    try:
+        # Create a new deck for the selected notes
+        # Combine the content of all selected notes into a single text input for title/description generation
+        combined_content = ""
+        for note_id in note_ids:
+            note = db.execute("SELECT content FROM notes WHERE id = ?", note_id)
+            if not note:
+                flash(f"Note with ID {note_id} not found.", "error")
+                continue
+            combined_content += note[0]['content'] + "\n"  # Append note content
+        
+        # Automatically generate the title and description using the AI functions
+        title = get_title(combined_content)  # Generate the title from the combined note content
+        description = generate_description(combined_content)  # Generate the description from the combined note content
+        
+        db.execute("""
+            INSERT INTO decks (title, description, created_at, updated_at)
+            VALUES (?, ?, ?, ?)
+        """, title, description, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        
+        # Retrieve the deck ID
+        result_deck_id = db.execute("SELECT last_insert_rowid()")
+        deck_id = result_deck_id[0]["last_insert_rowid()"]
+        
+        # Loop over each note_id and generate flashcards
+        for note_id in note_ids:
+            # Retrieve the note content by note_id
+            note = db.execute("SELECT content FROM notes WHERE id = ?", note_id)
+            if not note:
+                flash(f"Note with ID {note_id} not found.", "error")
+                continue  # Skip this note and proceed with others
+            
+            input_text = note[0]['content']  # Assume note content is in the 'content' field
+            sentences = input_text.split(".")  # Split the content into sentences
+            generated_flashcards = generate_flashcards(sentences, num_clusters=5)
+            
+            # Insert generated flashcards into the database, all linked to the same deck
+            for cluster in generated_flashcards:
+                question = f"Cluster summary: {cluster[0]}"  # Simplified question
+                answer = " ".join(cluster)  # Concatenate cluster details as the answer
+                db.execute(
+                    """
+                    INSERT INTO flashcards (deck_id, note_id, question, answer, created_at, updated_at)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                    """,
+                    deck_id,  # Link to the newly created deck
+                    note_id,  # Link to the specific note
+                    question,
+                    answer,
+                    datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                )
+        
+        flash(f"Flashcards generated successfully and all linked to deck {deck_id}.", "success")
+    except Exception as e:
+        flash(f"Error generating flashcards: {e}", "error")
+    
+    return redirect(url_for('flashcards.flashcards'))
