@@ -27,6 +27,7 @@ def quiz():
     session_active = 'active_session' in session and session['active_session']
     return render_template(
         'quiz.html',
+        current_route='quiz',
         session_active=session_active,
         questions=active_session_questions,
         completed_questions=completed_questions

@@ -22,7 +22,7 @@ def flashcards():
     
     decks = db.execute("SELECT * FROM decks ORDER BY created_at DESC")  # Get available decks
     
-    return render_template('flashcards.html', flashcards=flashcards, decks=decks, selected_deck_id=deck_id)
+    return render_template('flashcards.html', current_route='flashcards', flashcards=flashcards, decks=decks, selected_deck_id=deck_id)
 
 
 @flashcards_blueprint.route('/add_flashcard', methods=['POST'])
@@ -144,7 +144,7 @@ def create_deck():
     # Fetch available notes for the "Generate Deck from Notes" option
     notes = db.execute("SELECT id, title FROM notes ORDER BY created_at DESC")
     flash(notes, 'success')
-    return render_template('create_deck.html', notes=notes)
+    return render_template('create_deck.html', current_route='flashcards', notes=notes)
 
 
 @flashcards_blueprint.route('/create_deck_plain', methods=['POST'])

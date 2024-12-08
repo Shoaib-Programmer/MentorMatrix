@@ -126,4 +126,4 @@ def view_note(note_id):
         return redirect(url_for('notes.notes'))
 
     # Render the note details page
-    return render_template('view_note.html', note=note)
+    return render_template('view_note.html', current_route='notes', note=note)
