@@ -143,7 +143,6 @@ def search_flashcards():
 def create_deck():
     # Fetch available notes for the "Generate Deck from Notes" option
     notes = db.execute("SELECT id, title FROM notes ORDER BY created_at DESC")
-    flash(notes, 'success')
     return render_template('create_deck.html', current_route='flashcards', notes=notes)
 
 
@@ -188,8 +187,6 @@ def generate_deck():
     num_clusters = request.form.get('num_clusters', type=int, default=5)
     title = get_title(input_text)
     ic(title)
-
-    # Use the AI function to generate a description from the input text
     description = generate_description(input_text)
 
     try:
@@ -231,66 +228,70 @@ def generate_deck_automatic():
     Automatically generate flashcards for a deck using the content of selected notes (by note_ids).
     """
     note_ids = request.form.getlist('note_ids')  # Get the list of note IDs
-    
+
     if not note_ids:
         flash("Please select at least one note.", "error")
         return redirect(url_for('flashcards.flashcards'))
-    
+
     try:
         # Create a new deck for the selected notes
-        # Combine the content of all selected notes into a single text input for title/description generation
+        # Combine the content of all selected notes into a single text input for description generation
         combined_content = ""
         for note_id in note_ids:
-            note = db.execute("SELECT content FROM notes WHERE id = ?", note_id)
+            note = db.execute("SELECT title, content FROM notes WHERE id = ?", note_id)
             if not note:
                 flash(f"Note with ID {note_id} not found.", "error")
                 continue
-            combined_content += note[0]['content'] + "\n"  # Append note content
-        
-        # Automatically generate the title and description using the AI functions
-        title = get_title(combined_content)  # Generate the title from the combined note content
-        description = generate_description(combined_content)  # Generate the description from the combined note content
-        
+            note_title = note[0]['title']  # Fetch the title from the note
+            note_content = note[0]['content']
+            combined_content += note_content + "\n"  # Append note content
+
+        # Use the first note's title as the deck title (or modify logic as needed)
+        deck_title = note[0]['title'] if note else "Untitled Deck"
+        deck_description = generate_description(combined_content)  # Generate description using combined content
+
         db.execute("""
             INSERT INTO decks (title, description, created_at, updated_at)
             VALUES (?, ?, ?, ?)
-        """, title, description, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-        
+        """, deck_title, deck_description, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
         # Retrieve the deck ID
         result_deck_id = db.execute("SELECT last_insert_rowid()")
         deck_id = result_deck_id[0]["last_insert_rowid()"]
-        
+
         # Loop over each note_id and generate flashcards
         for note_id in note_ids:
-            # Retrieve the note content by note_id
-            note = db.execute("SELECT content FROM notes WHERE id = ?", note_id)
+            note = db.execute("SELECT title, content FROM notes WHERE id = ?", note_id)
             if not note:
                 flash(f"Note with ID {note_id} not found.", "error")
-                continue  # Skip this note and proceed with others
+                continue
             
-            input_text = note[0]['content']  # Assume note content is in the 'content' field
-            sentences = input_text.split(".")  # Split the content into sentences
+            note_title = note[0]['title']  # Fetch the title
+            note_content = note[0]['content']  # Fetch the content
+            
+            # Generate flashcards based on note content
+            sentences = note_content.split(".")
             generated_flashcards = generate_flashcards(sentences, num_clusters=5)
             
-            # Insert generated flashcards into the database, all linked to the same deck
             for cluster in generated_flashcards:
                 question = f"Cluster summary: {cluster[0]}"  # Simplified question
                 answer = " ".join(cluster)  # Concatenate cluster details as the answer
                 db.execute(
                     """
-                    INSERT INTO flashcards (deck_id, note_id, question, answer, created_at, updated_at)
-                    VALUES (?, ?, ?, ?, ?, ?)
+                    INSERT INTO flashcards (deck_id, note_id, question, answer, title, created_at, updated_at)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
                     """,
                     deck_id,  # Link to the newly created deck
                     note_id,  # Link to the specific note
                     question,
                     answer,
+                    note_title,  # Assign the note's title to the flashcard
                     datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 )
-        
+
         flash(f"Flashcards generated successfully and all linked to deck {deck_id}.", "success")
     except Exception as e:
         flash(f"Error generating flashcards: {e}", "error")
-    
+
     return redirect(url_for('flashcards.flashcards'))

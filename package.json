@@ -1,23 +1,37 @@
 {
   "name": "hackathon",
   "version": "1.0.0",
+  "description": "A hackathon project for creating notes, flashcards, and interactive quizzes.",
   "main": "index.js",
-  "directories": {
-    "test": "tests"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tailwindcss build src/styles/tailwind.css -o static/css/tailwind.css"
+    "build": "tailwindcss -i src/styles/tailwind.css -o static/css/tailwind.css",
+    "dev": "tailwindcss -i src/styles/tailwind.css -o static/css/tailwind.css --watch"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "keywords": [
+    "hackathon",
+    "MentorMatrix",
+    "notes",
+    "quizzes"
+  ],
+  "author": "MentorMatrix Team",
+  "license": "MIT",
   "devDependencies": {
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
     "postcss-cli": "^11.0.0",
     "sass": "^1.82.0",
     "tailwindcss": "^3.4.16"
+  },
+  "dependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/container-queries": "^0.1.1",
+    "@tailwindcss/forms": "^0.5.9",
+    "@tailwindcss/line-clamp": "^0.4.4",
+    "@tailwindcss/typography": "^0.5.15",
+    "tailwind": "^4.0.0",
+    "tailwind-scrollbar": "^3.1.0",
+    "tailwindcss-animate": "^1.0.7",
+    "tailwindcss-debug-screens": "^2.2.1"
   }
 }

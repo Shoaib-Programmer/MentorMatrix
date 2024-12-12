@@ -12,9 +12,15 @@ Flashcards - MentorMatrix
   <div class="container text-white">
     <div class="main-content">
       <h1 class="text-center text-4xl mb-5">Flashcards</h1> <!-- Center-aligned heading -->
-      <a href="{{ url_for('flashcards.create_deck') }}" class="px-6 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-300">
-        Create New Deck
-      </a>
+
+      <div class="absolute top-2 right-2">
+        <a id="create_new_deck" 
+           href="{{ url_for('flashcards.create_deck') }}" 
+           class="px-6 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-300">
+            Create New Deck
+        </a>
+    </div>
+    
       
       <!-- Deck selection -->
       <form action="{{ url_for('flashcards.flashcards') }}" method="GET" class="mb-5">

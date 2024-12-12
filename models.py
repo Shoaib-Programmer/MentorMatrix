@@ -1,6 +1,6 @@
 from cs50 import SQL
 
-# Declare db without setting it to None
+
 db = SQL("sqlite:///dev.db")
 
 def init_db():
@@ -13,11 +13,13 @@ def init_db():
         - `files`: Stores associated files (e.g., audio, YouTube, PDFs) linked to transcripts, with metadata.
         - `quizzes`: Stores quizzes related to transcripts.
         - `quiz_questions`: Stores questions for each quiz, with options for multiple-choice questions.
+        - `quiz_results`: Stores quiz results, including the quiz ID, user ID (if applicable), score, and timestamp.
         - `decks`: Stores flashcard decks.
         - `flashcards`: Stores individual flashcards, linked to both decks and notes.
 
     Additionally, the function creates indexes on key columns (e.g., transcript ID, quiz ID, deck title) to improve query performance.
     """
+
     
     global db  # Declare db as global to modify the global object
 
@@ -47,7 +49,7 @@ def init_db():
                     uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (transcript_id) REFERENCES transcripts(id) ON DELETE CASCADE);''')
 
-    # Quizzes Table
+
     db.execute('''CREATE TABLE IF NOT EXISTS quizzes (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     transcript_id INTEGER NOT NULL,
@@ -84,6 +86,16 @@ def init_db():
                     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (deck_id) REFERENCES decks(id) ON DELETE CASCADE,
                     FOREIGN KEY (note_id) REFERENCES notes(id) ON DELETE CASCADE);''')
+    
+    db.execute('''CREATE TABLE IF NOT EXISTS quiz_results (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                quiz_id INTEGER NOT NULL,
+                -- user_id INTEGER, Optional, if multi-user functionality exists
+                score INTEGER NOT NULL,
+                total_questions INTEGER NOT NULL,
+                attempted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE);''')
+
 
     # Create indexes for faster lookups
     db.execute('CREATE INDEX IF NOT EXISTS idx_transcript_id ON notes (transcript_id);')

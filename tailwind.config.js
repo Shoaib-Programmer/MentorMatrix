@@ -1,11 +1,21 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './src/**/*.{html,js,jsx,ts,tsx}',  // Paths to all HTML and JS files where Tailwind classes are used
-    './templates/**/*.html',               // Add this if you're using an HTML structure in a "templates" directory
-  ],
+    './src/**/*.{html,js,jsx,ts,tsx}',
+    './templates/**/*.html',
+    './static/js/**/*.js',
+    './static/css/base.css',
+    './static/css/**/*.css', // This should include base.css
+  ],  
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/aspect-ratio'),
+    require('@tailwindcss/line-clamp'),
+    require('tailwind-scrollbar'),
+    require('tailwindcss-animate'),
+  ],
 }

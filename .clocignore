@@ -1,0 +1,20 @@
+# Ignore Python compiled files
+**/*.pyc
+
+# Ignore static and build directories
+static/css/tailwind.css
+node_modules
+node_modules/
+node_modules/*
+node_modules/**
+./node_modules
+./node_modules/
+./node_modules/*
+./node_modules/**
+
+# Ignore Flask-specific cache and Python-specific directories
+__pycache__/
+
+# Ignore Docker and CI/CD files
+.env
+*.log
