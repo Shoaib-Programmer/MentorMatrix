@@ -264,9 +264,9 @@ def generate_deck_automatic():
             note = db.execute("SELECT title, content FROM notes WHERE id = ?", note_id)
             if not note:
                 flash(f"Note with ID {note_id} not found.", "error")
+                ic(f"Note with ID {note_id} not found.", "error")
                 continue
             
-            note_title = note[0]['title']  # Fetch the title
             note_content = note[0]['content']  # Fetch the content
             
             # Generate flashcards based on note content
@@ -274,24 +274,60 @@ def generate_deck_automatic():
             generated_flashcards = generate_flashcards(sentences, num_clusters=5)
             
             for cluster in generated_flashcards:
-                question = f"Cluster summary: {cluster[0]}"  # Simplified question
+                question = f"{cluster[0]}"  # Simplified question
                 answer = " ".join(cluster)  # Concatenate cluster details as the answer
                 db.execute(
                     """
-                    INSERT INTO flashcards (deck_id, note_id, question, answer, title, created_at, updated_at)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO flashcards (deck_id, note_id, question, answer, created_at, updated_at)
+                    VALUES (?, ?, ?, ?, ?, ?)
                     """,
                     deck_id,  # Link to the newly created deck
                     note_id,  # Link to the specific note
                     question,
                     answer,
-                    note_title,  # Assign the note's title to the flashcard
                     datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 )
 
         flash(f"Flashcards generated successfully and all linked to deck {deck_id}.", "success")
+        ic(f"Flashcards generated successfully and all linked to deck {deck_id}.", "success")
     except Exception as e:
         flash(f"Error generating flashcards: {e}", "error")
+        ic(f"Error generating flashcards: {e}", "error")
 
     return redirect(url_for('flashcards.flashcards'))
+
+@flashcards_blueprint.route('/review', methods=['GET', 'POST'])
+def review():
+    """
+    Review mode for students: flashcards are displayed one by one, 
+    with an option to choose a specific deck or review all decks.
+    """
+    if request.method == 'POST':
+        selected_deck_id = request.form.get('deck_id')
+        current_index = int(request.form.get('current_index', 0))
+        
+        # Fetch the next flashcard
+        if selected_deck_id == "all":
+            flashcards = db.execute("SELECT * FROM flashcards ORDER BY created_at DESC")
+        else:
+            flashcards = db.execute(
+                "SELECT * FROM flashcards WHERE deck_id = ? ORDER BY created_at DESC", 
+                selected_deck_id
+            )
+        
+        if not flashcards or current_index >= len(flashcards):
+            flash("Review complete! No more flashcards to review.", "success")
+            return redirect(url_for('flashcards.flashcards'))
+        
+        flashcard = flashcards[current_index]
+        return render_template(
+            'review.html', flashcard=flashcard, 
+            current_index=current_index + 1, 
+            deck_id=selected_deck_id, 
+            total_flashcards=len(flashcards)
+        )
+
+    # Initial GET request: display deck selection
+    decks = db.execute("SELECT * FROM decks ORDER BY created_at DESC")
+    return render_template('review_deck.html', decks=decks)

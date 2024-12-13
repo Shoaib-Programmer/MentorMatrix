@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+
+{% block title %}Review Deck - MentorMatrix{% endblock %}
+
+{% block other_head_stuff %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/review.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container text-white">
+  <h1 class="text-center text-4xl mb-5">Review Deck</h1>
+
+  {% if flashcards %}
+  <div id="flashcard-container" class="flex justify-center items-center">
+    <div class="flashcard bg-gray-800 p-6 rounded-md text-center">
+      <div class="flashcard-content">
+        <div id="flashcard-front" class="">
+          <h2 class="text-2xl text-blue-400">Q: {{ flashcards[0].question }}</h2>
+        </div>
+        <div id="flashcard-back" class="hidden">
+          <h2 class="text-2xl text-green-400">A: {{ flashcards[0].answer }}</h2>
+        </div>
+      </div>
+      <button id="flipCardBtn" class="mt-4 px-4 py-2 bg-purple-700 text-white rounded-md hover:bg-purple-800">Flip</button>
+    </div>
+  </div>
+
+  <div class="controls mt-5 flex justify-center gap-4">
+    <form method="POST" action="{{ url_for('flashcards.previous_card', deck_id=deck_id) }}">
+      <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Previous</button>
+    </form>
+    <form method="POST" action="{{ url_for('flashcards.next_card', deck_id=deck_id) }}">
+      <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Next</button>
+    </form>
+  </div>
+  {% else %}
+  <p class="text-center text-gray-400">No flashcards available in this deck. Add some to start reviewing!</p>
+  {% endif %}
+</div>
+
+<script>
+  const flipCardBtn = document.getElementById('flipCardBtn');
+  const flashcardFront = document.getElementById('flashcard-front');
+  const flashcardBack = document.getElementById('flashcard-back');
+
+  flipCardBtn.addEventListener('click', () => {
+    flashcardFront.classList.toggle('hidden');
+    flashcardBack.classList.toggle('hidden');
+  });
+</script>
+{% endblock %}

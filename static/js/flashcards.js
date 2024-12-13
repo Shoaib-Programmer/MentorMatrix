@@ -61,3 +61,16 @@ document.addEventListener("keydown", (event) => {
     }
   }
 });
+
+const reviewDeckBtn = document.getElementById('reviewDeckBtn');
+const deckDropdown = document.getElementById('deckDropdown');
+
+reviewDeckBtn.addEventListener('click', () => {
+  deckDropdown.classList.toggle('hidden');
+});
+
+document.addEventListener('click', (e) => {
+  if (!reviewDeckBtn.contains(e.target) && !deckDropdown.contains(e.target)) {
+    deckDropdown.classList.add('hidden');
+  }
+});
