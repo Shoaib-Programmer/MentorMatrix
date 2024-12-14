@@ -11,27 +11,25 @@
   <h1 class="text-center text-4xl mb-5">Review Deck</h1>
 
   {% if flashcards %}
-  <div id="flashcard-container" class="flex justify-center items-center">
-    <div class="flashcard bg-gray-800 p-6 rounded-md text-center">
+  <div id="flashcard-container" class="flex justify-center items-center relative h-screen">
+    {% for flashcard in flashcards %}
+    <div class="flashcard bg-gray-800 p-6 rounded-md text-center absolute w-11/12 h-5/6 flex flex-col justify-center {{ 'hidden' if not loop.first else '' }}" data-index="{{ loop.index0 }}">
       <div class="flashcard-content">
-        <div id="flashcard-front" class="">
-          <h2 class="text-2xl text-blue-400">Q: {{ flashcards[0].question }}</h2>
+        <div class="flashcard-front">
+          <h2 class="text-4xl text-blue-400">Q: {{ flashcard.question }}</h2>
         </div>
-        <div id="flashcard-back" class="hidden">
-          <h2 class="text-2xl text-green-400">A: {{ flashcards[0].answer }}</h2>
+        <div class="flashcard-back hidden">
+          <h2 class="text-4xl text-green-400">A: {{ flashcard.answer }}</h2>
         </div>
       </div>
-      <button id="flipCardBtn" class="mt-4 px-4 py-2 bg-purple-700 text-white rounded-md hover:bg-purple-800">Flip</button>
+      <button class="flipCardBtn mt-4 px-4 py-2 bg-purple-700 text-white rounded-md hover:bg-purple-800">Flip</button>
     </div>
+    {% endfor %}
   </div>
 
-  <div class="controls mt-5 flex justify-center gap-4">
-    <form method="POST" action="{{ url_for('flashcards.previous_card', deck_id=deck_id) }}">
-      <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Previous</button>
-    </form>
-    <form method="POST" action="{{ url_for('flashcards.next_card', deck_id=deck_id) }}">
-      <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Next</button>
-    </form>
+  <div class="controls mt-5 flex justify-between absolute bottom-5 w-full px-10">
+    <button id="prevCardBtn" class="px-3 py-1 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">&#8592;</button>
+    <button id="nextCardBtn" class="px-3 py-1 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">&#8594;</button>
   </div>
   {% else %}
   <p class="text-center text-gray-400">No flashcards available in this deck. Add some to start reviewing!</p>
@@ -39,13 +37,39 @@
 </div>
 
 <script>
-  const flipCardBtn = document.getElementById('flipCardBtn');
-  const flashcardFront = document.getElementById('flashcard-front');
-  const flashcardBack = document.getElementById('flashcard-back');
+  const cards = document.querySelectorAll('.flashcard');
+  let currentIndex = 0;
 
-  flipCardBtn.addEventListener('click', () => {
-    flashcardFront.classList.toggle('hidden');
-    flashcardBack.classList.toggle('hidden');
+  function showCard(index) {
+    cards.forEach((card, i) => {
+      card.classList.toggle('hidden', i !== index);
+    });
+  }
+
+  document.getElementById('prevCardBtn').addEventListener('click', () => {
+    if (currentIndex > 0) {
+      currentIndex--;
+      showCard(currentIndex);
+    }
   });
+
+  document.getElementById('nextCardBtn').addEventListener('click', () => {
+    if (currentIndex < cards.length - 1) {
+      currentIndex++;
+      showCard(currentIndex);
+    }
+  });
+
+  document.querySelectorAll('.flipCardBtn').forEach((button, i) => {
+    button.addEventListener('click', () => {
+      const front = cards[i].querySelector('.flashcard-front');
+      const back = cards[i].querySelector('.flashcard-back');
+      front.classList.toggle('hidden');
+      back.classList.toggle('hidden');
+    });
+  });
+
+  // Initialize by showing the first card
+  showCard(currentIndex);
 </script>
 {% endblock %}

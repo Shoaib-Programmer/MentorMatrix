@@ -297,37 +297,30 @@ def generate_deck_automatic():
 
     return redirect(url_for('flashcards.flashcards'))
 
-@flashcards_blueprint.route('/review', methods=['GET', 'POST'])
+@flashcards_blueprint.route('/review', methods=['GET'])
 def review():
     """
-    Review mode for students: flashcards are displayed one by one, 
-    with an option to choose a specific deck or review all decks.
+    Review mode for students: fetch all flashcards for the selected deck 
+    and let the frontend handle navigation and display.
     """
-    if request.method == 'POST':
-        selected_deck_id = request.form.get('deck_id')
-        current_index = int(request.form.get('current_index', 0))
-        
-        # Fetch the next flashcard
-        if selected_deck_id == "all":
-            flashcards = db.execute("SELECT * FROM flashcards ORDER BY created_at DESC")
-        else:
-            flashcards = db.execute(
-                "SELECT * FROM flashcards WHERE deck_id = ? ORDER BY created_at DESC", 
-                selected_deck_id
-            )
-        
-        if not flashcards or current_index >= len(flashcards):
-            flash("Review complete! No more flashcards to review.", "success")
-            return redirect(url_for('flashcards.flashcards'))
-        
-        flashcard = flashcards[current_index]
-        return render_template(
-            'review.html', flashcard=flashcard, 
-            current_index=current_index + 1, 
-            deck_id=selected_deck_id, 
-            total_flashcards=len(flashcards)
+    selected_deck_id = request.args.get('deck_id', 'all')
+
+    # Fetch flashcards from the database
+    if selected_deck_id == "all":
+        flashcards = db.execute("SELECT * FROM flashcards ORDER BY created_at DESC")
+    else:
+        flashcards = db.execute(
+            "SELECT * FROM flashcards WHERE deck_id = ? ORDER BY created_at DESC", 
+            selected_deck_id
         )
 
-    # Initial GET request: display deck selection
-    decks = db.execute("SELECT * FROM decks ORDER BY created_at DESC")
-    return render_template('review_deck.html', decks=decks)
+    if not flashcards:
+        flash("No flashcards available for review.", "info")
+        return redirect(url_for('flashcards.flashcards'))
+
+    # Render the review deck template with all flashcards
+    return render_template(
+        'review_deck.html', 
+        flashcards=flashcards, 
+        deck_id=selected_deck_id
+    )
