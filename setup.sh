@@ -3,7 +3,9 @@
 # Function to check and create .env file if it doesn't exist
 create_env_file() {
   if [ ! -f .env ]; then
+    echo -e "\n==============================="
     echo "Creating .env file..."
+    echo "===============================\n"
 
     # Prompt the user for the sensitive information
     read -p "Enter your SECRET_KEY (this will be used for Flask sessions and cookies): " SECRET_KEY
@@ -25,6 +27,7 @@ create_env_file() {
     TEST_DATABASE_URI=${TEST_DATABASE_URI:-"sqlite:///test.db"}
 
     # Write the values to the .env file
+    echo -e "\nWriting values to .env file..."
     echo "SECRET_KEY=$SECRET_KEY" > .env
     echo "UPLOAD_FOLDER=$UPLOAD_FOLDER" >> .env
     echo "DATABASE_URI=$DATABASE_URI" >> .env
@@ -32,18 +35,26 @@ create_env_file() {
     echo "TEST_DATABASE_URI=$TEST_DATABASE_URI" >> .env
     echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> .env
 
+    echo -e "\n==============================="
     echo ".env file created successfully!"
+    echo "===============================\n"
   else
+    echo -e "\n==============================="
     echo ".env file already exists. Please ensure it contains the correct values."
+    echo "===============================\n"
   fi
 }
 
 # Install Python dependencies
+echo -e "\n==============================="
 echo "Installing Python dependencies..."
+echo "===============================\n"
 pip install -r requirements.txt
 
 # Install JavaScript dependencies
+echo -e "\n==============================="
 echo "Installing JS dependencies from package.json..."
+echo "===============================\n"
 npm install
 npm audit fix
 
@@ -51,5 +62,7 @@ npm audit fix
 create_env_file
 
 # Start the Flask development server
+echo -e "\n==============================="
 echo "Starting the development server..."
+echo "===============================\n"
 flask run
