@@ -121,6 +121,13 @@ echo "Installing JS dependencies from package.json..."
 echo "==============================="
 echo ""
 npm install
+
+# Fixing errors
+echo ""
+echo "==============================="
+echo "Fixing potential errors..."
+echo "==============================="
+echo ""
 npm audit fix
 
 # Create .env file if it doesn't exist
