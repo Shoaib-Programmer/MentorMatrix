@@ -46,3 +46,5 @@ google-api-python-client
 flasgger
 accelerate
 sentencepiece
+markdown
+ollama

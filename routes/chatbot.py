@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, jsonify
 from notes import chat
-
 from icecream import ic
+import markdown
 
 # Define the chatbot blueprint
 chatbot_blueprint = Blueprint('chatbot', __name__)
@@ -26,12 +26,12 @@ def chat_route():
     # Process the message and get the bot's response
     response_message, chat_history = chat(user_message, chat_history)
 
-    ic(user_message)
 
-    ic(response_message)
+    # Convert the bot's Markdown response to HTML
+    response_html = markdown.markdown(response_message)
 
-    # Return the response as JSON, including the user's message
+    # Return the response as JSON, including the user's message and the rendered HTML
     return jsonify({
         "user_message": user_message,
-        "response": response_message
+        "response": response_html  # Send the HTML version of the response
     })

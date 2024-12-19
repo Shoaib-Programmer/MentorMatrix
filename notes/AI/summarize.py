@@ -72,11 +72,10 @@ from icecream import ic
 
 def summarize_text(text: str) -> str:
     # Prepare the command to run the summarization model in Ollama
-    command = ['ollama', 'run', 'llama3']  # Replace 'llama3' with the appropriate model name for summarization
+    command = ['ollama', 'run', 'llama3']
 
     # Create the prompt for summarization
     prompt = f"Summarize this: {text}"
-    ic(f"Prompt: {prompt}")  # Debugging: print the prompt being sent
 
     # Run the command and pass the prompt for summarization
     process = subprocess.Popen(
@@ -89,15 +88,10 @@ def summarize_text(text: str) -> str:
 
     # Send the prompt to the process and get the output
     output, error = process.communicate(input=prompt)
-    ic(output)
 
     # Check for errors
     if error:
         ic(f"Error: {error}")
-        return ""
-
-    # Print the raw output for debugging
-    ic(f"Raw Output: {output}")  # Debugging: print the raw output from the model
 
     # Return the output (summary)
     return output

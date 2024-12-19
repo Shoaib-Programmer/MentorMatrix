@@ -26,31 +26,23 @@ document.getElementById("submit-youtube-button").addEventListener("click", funct
         return;
     }
 
-    const progressBar = document.getElementById("progress-bar");
-    const progressContainer = document.getElementById("progress-container");
     const transcriptContainer = document.getElementById("transcript-container");
     const transcriptText = document.getElementById("transcript-text");
 
-    // Reset previous progress and transcript UI
-    progressBar.value = 0;
+    // Reset previous transcript UI
     transcriptContainer.classList.add("hidden");
     transcriptText.textContent = "";
 
-    progressContainer.classList.remove("hidden");
+    // Show the transcript container once the URL is processed
+    transcriptContainer.classList.remove("hidden");
 
     const eventSource = new EventSource(`/upload_audio?youtube_url=${encodeURIComponent(youtubeUrl)}`);
 
     eventSource.onmessage = function (event) {
         const data = JSON.parse(event.data);
 
-        // Update progress
-        if (data.progress !== undefined) {
-            progressBar.value = data.progress;
-        }
-
         // Display transcript
         if (data.transcript) {
-            transcriptContainer.classList.remove("hidden");
             transcriptText.textContent = data.transcript;
             eventSource.close();
         }

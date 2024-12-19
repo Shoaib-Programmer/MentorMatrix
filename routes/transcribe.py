@@ -172,4 +172,4 @@ def view_transcript(file_id):
     content = transcript[0]['content']
 
     # Render the view_transcript.html template with the fetched transcript name and content
-    return render_template('view_transcript.html', transcript_name=transcript_name, content=content)
+    return render_template('view_transcript.html', transcript_name=transcript_name, content=content, current_route="transcript")

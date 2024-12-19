@@ -12,41 +12,6 @@ check_git_installed() {
   fi
 }
 
-# Function to check if there are uncommitted changes
-check_git_status() {
-  local status
-  status=$(git status --porcelain)  # Get the git status in a clean format
-  if [ -n "$status" ]; then
-    echo ""
-    echo "==============================="
-    echo "You have uncommitted changes. Please commit or stash them before pulling."
-    echo "==============================="
-    echo ""
-    exit 1  # Exit the script if there are uncommitted changes
-  fi
-}
-
-# Function to perform git pull and handle errors
-git_pull() {
-  echo ""
-  echo "==============================="
-  echo "Getting the latest version of MentorMatrix's code from GitHub..."
-  echo "==============================="
-  echo ""
-
-  check_git_status  # Ensure there are no uncommitted changes
-
-  git pull origin main  # Pull from the 'main' branch (or specify the relevant branch)
-
-  if [ $? -ne 0 ]; then
-    echo ""
-    echo "==============================="
-    echo "Git pull failed. Please check for errors."
-    echo "==============================="
-    echo ""
-    exit 1  # Exit if the git pull fails
-  fi
-}
 
 # Function to check and create .env file if it doesn't exist
 create_env_file() {
@@ -103,8 +68,6 @@ create_env_file() {
 # Check if git is installed
 check_git_installed
 
-# Execute git pull with error handling
-git_pull
 
 # Install Python dependencies
 echo ""

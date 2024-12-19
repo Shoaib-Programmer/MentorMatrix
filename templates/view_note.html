@@ -6,17 +6,24 @@
 
 {% block other_head_stuff %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/view_note.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 {% endblock %}
 
 {% block content %}
 <div class="container">
     <div class="main-content">
         <h1>{{ note.note_title }}</h1>
-        <p id="note">{{ note.note_content }}</p>
-        <p id="note_created_at"><strong>Created on: </strong> {{ note.created_at }}</p>
+        
+        <!-- Render Markdown content using marked.js -->
+        <div id="note"></div>
+        
+        <p id="note_created_at"><strong>Created on:</strong> {{ note.created_at }}</p>
+        
         {% if note.transcript_title %}
-            <p id="note_transcript"><strong>Associated Transcript:</strong> {{ note.transcript_title }}</p>
+            <p id="note_transcript"><strong>Associated Transcript:</strong> 
+            <a href="/view_transcript/">{{ note.transcript_title }}</a></p>
         {% endif %}
+        
         {% if note.file_name %}
             <p id="note_source_file"><strong>Source File:</strong> {{ note.file_name }}</p>
             <p id="notes_file_type"><strong>File Type:</strong> {{ note.file_type }}</p>
@@ -24,7 +31,13 @@
                 <p><strong>Metadata:</strong> {{ note.metadata }}</p>
             {% endif %}
         {% endif %}
+        
         <a href="{{ url_for('notes.notes') }}" class="premium-button">Back to Notes</a>
     </div>
 </div>
+
+<!-- Markdown rendering script -->
+<script>
+    document.getElementById('note').innerHTML = marked(`{{ note.note_content | e }}`);
+</script>
 {% endblock %}

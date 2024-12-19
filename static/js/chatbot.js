@@ -43,10 +43,11 @@ document.addEventListener('DOMContentLoaded', function () {
             })
                 .then(response => response.json())
                 .then(data => {
-                    // Display the bot's response
+                    // Display the bot's response (use innerHTML to render HTML properly)
                     const botMessageDiv = document.createElement('div');
                     botMessageDiv.className = 'message bot';
-                    botMessageDiv.textContent = data.response;
+                    botMessageDiv.innerHTML = data.response; // Use innerHTML to render HTML
+
                     messages.appendChild(botMessageDiv);
 
                     messages.scrollTop = messages.scrollHeight; // Scroll to the latest message
