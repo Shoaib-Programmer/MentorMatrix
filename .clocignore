@@ -12,6 +12,14 @@ node_modules/**
 ./node_modules/*
 ./node_modules/**
 
+package-lock.json
+./package-lock.json
+
+# Exlclude text files
+*.md
+*.pdf
+*.docx
+
 # Ignore Flask-specific cache and Python-specific directories
 __pycache__/
 

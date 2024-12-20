@@ -1,10 +1,13 @@
 from flask import Flask, render_template
+
+
 from config import Config, DevelopmentConfig  # Import the config dictionary
 from routes import dashboard_blueprint, notes_blueprint, transcribe_blueprint, chatbot_blueprint, quiz_blueprint, flashcards_blueprint, podcast_blueprint
 from models import init_db
 
 # Initialize the Flask app
 app = Flask(__name__)
+
 
 # Load the appropriate configuration based on the environment
 app.config.from_object(DevelopmentConfig)

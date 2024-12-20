@@ -2,6 +2,8 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models import db
 from datetime import datetime
 from notes import summarize_text
+import markdown
+from icecream import ic
 
 notes_blueprint = Blueprint('notes', __name__)
 
@@ -49,6 +51,8 @@ def generate_notes(transcript_id):
     transcript_title = transcript_data[0]['transcript_title']
     transcript_content = transcript_data[0]['transcript_content']
 
+    ic(transcript_content)
+
     # For later
     file_type = transcript_data[0]['file_type']
     metadata = transcript_data[0].get('metadata', '')
@@ -63,6 +67,8 @@ def generate_notes(transcript_id):
     except Exception as e:
         flash(f"Error summarizing the transcript: {e}", "error")
         return redirect(url_for('notes.notes'))
+
+    ic(note_content)
 
     # Save the summarized note in the database
     try:
@@ -124,6 +130,9 @@ def view_note(note_id):
     if not note:
         flash("Note not found.", "error")
         return redirect(url_for('notes.notes'))
+    
+    # Convert note content to HTML
+    note['note_content'] = markdown.markdown(note['note_content'])
 
     # Render the note details page
     return render_template('view_note.html', current_route='notes', note=note)

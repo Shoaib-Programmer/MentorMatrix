@@ -1,6 +1,3 @@
-/* Import global popup styles */
-@import url('/static/popup.css');
-
 
 /* Specific Modal Styling for #audio-popup */
 #audio-popup {

@@ -29,6 +29,7 @@
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/typography": "^0.5.15",
+    "marked": "^15.0.4",
     "tailwind": "^4.0.0",
     "tailwind-scrollbar": "^3.1.0",
     "tailwindcss-animate": "^1.0.7",

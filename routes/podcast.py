@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash
+from notes.AI import podcast
 
 podcast_blueprint = Blueprint('podcast', __name__)
 

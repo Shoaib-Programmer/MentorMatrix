@@ -55,18 +55,6 @@
 #     return summary
 
 
-
-# Just for testing! But this is preferably what you should be using when developing the project when you want to save time.
-# def summarize_text(text: str) -> str:
-#     summary = """
-#     This is the summarized text.
-
-#     AI summarizing models are not loaded to save time in starting the server. This is only for testing during prototyping.
-
-#     If this issue persists, contact Mr. Sarthak.
-#     """
-#     return summary
-
 import subprocess
 from icecream import ic
 
@@ -75,7 +63,7 @@ def summarize_text(text: str) -> str:
     command = ['ollama', 'run', 'llama3']
 
     # Create the prompt for summarization
-    prompt = f"Summarize this: {text}"
+    prompt = f"Make digestible notes from this: {text}"
 
     # Run the command and pass the prompt for summarization
     process = subprocess.Popen(
@@ -96,18 +84,3 @@ def summarize_text(text: str) -> str:
     # Return the output (summary)
     return output
 
-if __name__ == "__main__":
-    # Example usage
-    text_to_summarize = (
-        "Autodesk is a multinational software company that provides design, engineering, and entertainment software "
-        "for various industries, including architecture, engineering, construction, manufacturing, and media. "
-        "Founded in 1982, Autodesk is known for its flagship product, AutoCAD, which revolutionized the design "
-        "and engineering fields."
-    )
-    
-    summary = summarize_text(text_to_summarize)
-    print("Summary:", summary)
-
-# if __name__ == "__main__":
-#     text_to_summarize = 'Artificial Intelligence (AI) is intelligence demonstrated by machines, in contrast to the natural intelligence displayed by humans and animals. Leading AI textbooks define the field as the study of "intelligent agents": any device that perceives its environment and takes actions that maximize its chance of successfully achieving its goals. Colloquially, the term "artificial intelligence" is often used to describe machines (or computers) that mimic "cognitive" functions that humans associate with the human mind, such as "learning" and "problem-solving".'
-#     print(summarize_text(text_to_summarize))
