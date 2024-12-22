@@ -96,14 +96,23 @@ def init_db():
                 attempted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE);''')
 
+    db.execute('''CREATE TABLE IF NOT EXISTS podcasts (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                note_id INTEGER,
+                content TEXT NOT NULL,
+                path TEXT NOT NULL,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (note_id) REFERENCES notes(id) ON DELETE CASCADE);''')
+
 
     # Create indexes for faster lookups
     db.execute('CREATE INDEX IF NOT EXISTS idx_transcript_id ON notes (transcript_id);')
     db.execute('CREATE INDEX IF NOT EXISTS idx_file_transcript_id ON files (transcript_id);')
     db.execute('CREATE INDEX IF NOT EXISTS idx_quiz_transcript_id ON quizzes (transcript_id);')
     db.execute('CREATE INDEX IF NOT EXISTS idx_quiz_question_quiz_id ON quiz_questions (quiz_id);')
-    db.execute('CREATE INDEX IF NOT EXISTS idx_deck_title ON decks (title);')  # Index for decks table
-    db.execute('CREATE INDEX IF NOT EXISTS idx_flashcard_deck_id ON flashcards (deck_id);')  # Index for deck-based flashcards
+    db.execute('CREATE INDEX IF NOT EXISTS idx_deck_title ON decks (title);')
+    db.execute('CREATE INDEX IF NOT EXISTS idx_flashcard_deck_id ON flashcards (deck_id);')
 
 
 if __name__ == "__main__":

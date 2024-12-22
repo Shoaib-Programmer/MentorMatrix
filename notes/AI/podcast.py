@@ -2,47 +2,99 @@ import subprocess
 from icecream import ic
 from typing import Union
 from pathlib import Path
-from elevenlabs import generate, save
+import os
+import pyttsx3
 
 def podcast(text: str, speaker1: str, speaker2: str) -> str:
+    """Generate a podcast-style dialogue using a summarization model."""
     # Prepare the command to run the summarization model in Ollama
     command = ['ollama', 'run', 'llama3']
 
     # Create the prompt for summarization
     prompt = f"Make a 2 speaker, fun, digestible podcast from: {text} \n\n\n The speakers are: {speaker1} and {speaker2}"
 
-    # Run the command and pass the prompt for summarization
-    process = subprocess.Popen(
-        command,
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True
-    )
+    try:
+        # Run the command and pass the prompt for summarization
+        process = subprocess.Popen(
+            command,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
 
-    # Send the prompt to the process and get the output
-    output, error = process.communicate(input=prompt)
+        # Send the prompt to the process and get the output
+        output, error = process.communicate(input=prompt)
 
-    # Check for errors
-    if error:
-        ic(f"Error: {error}")
+        # Check for errors
+        if error:
+            ic(f"Error: {error}")
+            return ""
+        return output
 
-    # Return the output (summary)
-    return output
+    except Exception as e:
+        ic(f"Error running subprocess: {str(e)}")
+        return ""
+
+def get_voice_by_name(engine, name: str):
+    """Returns the voice ID matching the given name."""
+    voices = engine.getProperty('voices')
+    for voice in voices:
+        if name.lower() in voice.name.lower():
+            return voice.id
+    return voices[0].id  # Default to the first available voice if not found
 
 def text_to_podcast(text: str, save_file_at: Union[str, Path], speaker1: str = "Adam", speaker2: str = "Bella") -> None:
-    """Converts the provided text to a human-like audio podcast using multiple speakers."""
+    """Converts the provided text to an audio podcast using two speakers."""
+    
+    # Initialize the pyttsx3 engine
+    engine = pyttsx3.init()
+
+    # Get available voices
+    voices = engine.getProperty('voices')
+
+    # Get the voice IDs based on the speaker names
+    voice1_id = get_voice_by_name(engine, speaker1)
+    voice2_id = get_voice_by_name(engine, speaker2)
 
     # Split the text by speakers for dialog-like output
     lines = text.splitlines()
-    podcast_audio = b''
 
+    # Initialize a list to hold the generated file names
+    temp_files = []
+
+    # Iterate through each line and assign speakers
     for i, line in enumerate(lines):
-        speaker = speaker1 if i % 2 == 0 else speaker2
-        audio = generate(text=line, voice=speaker, model="eleven_multilingual_v1")
-        podcast_audio += audio
+        # Choose speaker based on the line number
+        speaker_id = voice1_id if i % 2 == 0 else voice2_id
 
-    # Save the podcast to a file
-    save(podcast_audio, str(save_file_at))
+        # Set the speaker's voice
+        engine.setProperty('voice', speaker_id)
+
+        # Store speech to a temporary audio file
+        temp_file = f"temp_{i}.mp3"
+        engine.save_to_file(line, temp_file)
+
+        # Add the temporary file name to the list
+        temp_files.append(temp_file)
+
+    # Final step: Combine all audio files into a single podcast file
+    combine_audio_files_ffmpeg(temp_files, save_file_at)
+
+    # Clean up the temporary files after combining them
+    for file in temp_files:
+        os.remove(file)
 
     print(f"Podcast saved at: {save_file_at}")
+    engine.runAndWait()
+
+
+def combine_audio_files_ffmpeg(file_list: list, output_file: str) -> None:
+    """Combines the provided audio files into one and saves it to the specified output file using ffmpeg."""
+    # Create the file string in ffmpeg compatible format
+    file_string = "|".join(file_list)
+    
+    # Run the ffmpeg command to combine the files
+    command = ['ffmpeg', '-i', f"concat:{file_string}", '-acodec', 'copy', output_file]
+    subprocess.run(command, check=True)
+
