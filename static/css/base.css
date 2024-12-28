@@ -229,6 +229,14 @@ p {
     /* Adds space between paragraphs for better readability */
 }
 
+/* Main content styles */
+.main-content {
+    flex-grow: 1;
+    padding: 2rem;
+    position: relative;
+}
+
+
 /* Links */
 a {
     color: #bb86fc;

@@ -136,3 +136,48 @@ def view_note(note_id):
 
     # Render the note details page
     return render_template('view_note.html', current_route='notes', note=note)
+
+@notes_blueprint.route('/delete_note/<int:note_id>', methods=['POST'])
+def delete_note(note_id):
+    # Attempt to delete the note by ID
+    try:
+        # Delete the note from the database
+        rows_deleted = db.execute('''
+            DELETE FROM notes
+            WHERE id = ?
+        ''', note_id)
+
+        if rows_deleted == 0:
+            flash("Note not found or already deleted.", "error")
+        else:
+            flash("Note deleted successfully.", "success")
+    except Exception as e:
+        flash(f"Error deleting the note: {e}", "error")
+    
+    return redirect(url_for('notes.notes'))
+
+@notes_blueprint.route('/edit_title', methods=['POST'])
+def edit_title():
+    """
+    Route to update the title of a note.
+    """
+    try:
+        note_id = request.form.get('note_id')
+        new_title = request.form.get('title')
+
+        if not note_id or not new_title:
+            flash("Note ID and title are required.", "error")
+            return redirect(url_for('notes.notes'))
+
+        # Update the note's title in the database
+        db.execute('''
+            UPDATE notes
+            SET title = ?, updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+        ''', new_title, note_id)
+
+        flash("Note title updated successfully.", "success")
+    except Exception as e:
+        flash(f"An error occurred: {str(e)}", "error")
+
+    return redirect(url_for('notes.notes'))

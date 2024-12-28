@@ -24,13 +24,6 @@
     font-size: 1rem;
 }
 
-/* Main content styles */
-.main-content {
-    flex-grow: 1;
-    padding: 2rem;
-    position: relative;
-}
-
 /* Dashboard header */
 .dashboard-header h2 {
     font-size: 2rem;
