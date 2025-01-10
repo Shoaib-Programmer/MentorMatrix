@@ -1,8 +1,16 @@
-from flask import Flask, render_template
-
+from flask import Flask, render_template  # type: ignore
 
 from config import Config, DevelopmentConfig  # Import the config dictionary
-from routes import dashboard_blueprint, notes_blueprint, transcribe_blueprint, chatbot_blueprint, quiz_blueprint, flashcards_blueprint, podcast_blueprint
+from routes import (
+    dashboard_blueprint,
+    notes_blueprint,
+    transcribe_blueprint,
+    chatbot_blueprint,
+    quiz_blueprint,
+    flashcards_blueprint,
+    podcast_blueprint,
+    auth_blueprint,
+)
 from models import init_db
 
 # Initialize the Flask app
@@ -17,7 +25,7 @@ Config.init_app(app)
 
 
 # Initialize SQLite database (this will create the tables)
-init_db()  # Pass the app instance to initialize db
+init_db()
 
 # Register blueprints for different routes
 app.register_blueprint(dashboard_blueprint)
@@ -27,17 +35,20 @@ app.register_blueprint(transcribe_blueprint)
 app.register_blueprint(chatbot_blueprint)
 app.register_blueprint(quiz_blueprint)
 app.register_blueprint(flashcards_blueprint)
-
+app.register_blueprint(auth_blueprint)
 
 # Miscellaneous routes for now
 
-@app.route('/settings')
+
+@app.route("/settings")
 def settings():
-    return render_template('settings.html', current_route='settings')
+    return render_template("settings.html", current_route="settings")
 
-@app.route('/pricing')
+
+@app.route("/pricing")
 def pricing():
-    return render_template('pricing.html')
+    return render_template("pricing.html")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run(debug=True)

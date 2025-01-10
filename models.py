@@ -22,6 +22,17 @@ def init_db():
 
     
     global db  # Declare db as global to modify the global object
+    # Create the users table
+    db.execute('''CREATE TABLE IF NOT EXISTS users (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username TEXT,
+                    email TEXT UNIQUE NOT NULL,
+                    salt TEXT,
+                    password TEXT,
+                    confirmed BOOLEAN DEFAULT 0,
+                    oauth_provider TEXT,
+                    oauth_id TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);''')
 
     # Create the necessary tables
     db.execute('''CREATE TABLE IF NOT EXISTS transcripts (
