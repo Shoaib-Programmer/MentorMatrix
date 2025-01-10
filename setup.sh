@@ -2,16 +2,15 @@
 
 # Function to check if git is installed
 check_git_installed() {
-  if ! command -v git &> /dev/null; then
+  if ! command -v git &>/dev/null; then
     echo ""
     echo "==============================="
     echo "Git is not installed. Please install Git and try again."
     echo "==============================="
     echo ""
-    exit 1  # Exit the script if git is not installed
+    exit 1 # Exit the script if git is not installed
   fi
 }
-
 
 # Function to check and create .env file if it doesn't exist
 create_env_file() {
@@ -29,9 +28,17 @@ create_env_file() {
     read -p "Enter your DEV_DATABASE_URI (default is sqlite:///dev.db): " DEV_DATABASE_URI
     read -p "Enter your TEST_DATABASE_URI (default is sqlite:///test.db): " TEST_DATABASE_URI
 
-    # Force user to provide a valid OpenAI API key
-    while [ -z "$OPENAI_API_KEY" ]; do
-      read -p "Enter your OPENAI_API_KEY (cannot be empty): " OPENAI_API_KEY
+    # Prompt the user for Google OAuth credentials
+    while [ -z "$GOOGLE_CLIENT_ID" ]; do
+      read -p "Enter your GOOGLE_CLIENT_ID (cannot be empty): " GOOGLE_CLIENT_ID
+    done
+
+    while [ -z "$GOOGLE_CLIENT_SECRET" ]; do
+      read -p "Enter your GOOGLE_CLIENT_SECRET (cannot be empty): " GOOGLE_CLIENT_SECRET
+    done
+
+    while [ -z "$GOOGLE_DISCOVERY_URL" ]; do
+      read -p "Enter your GOOGLE_DISCOVERY_URL (cannot be empty): " GOOGLE_DISCOVERY_URL
     done
 
     # Default values if the user doesn't provide any
@@ -44,12 +51,15 @@ create_env_file() {
     # Write the values to .env file
     echo ""
     echo "Writing values to .env file..."
-    echo "SECRET_KEY=$SECRET_KEY" > .env
-    echo "UPLOAD_FOLDER=$UPLOAD_FOLDER" >> .env
-    echo "DATABASE_URI=$DATABASE_URI" >> .env
-    echo "DEV_DATABASE_URI=$DEV_DATABASE_URI" >> .env
-    echo "TEST_DATABASE_URI=$TEST_DATABASE_URI" >> .env
-    echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> .env
+    echo "SECRET_KEY=$SECRET_KEY" >.env
+    echo "UPLOAD_FOLDER=$UPLOAD_FOLDER" >>.env
+    echo "DATABASE_URI=$DATABASE_URI" >>.env
+    echo "DEV_DATABASE_URI=$DEV_DATABASE_URI" >>.env
+    echo "TEST_DATABASE_URI=$TEST_DATABASE_URI" >>.env
+    echo "OPENAI_API_KEY=$OPENAI_API_KEY" >>.env
+    echo "GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID" >>.env
+    echo "GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET" >>.env
+    echo "GOOGLE_DISCOVERY_URL=$GOOGLE_DISCOVERY_URL" >>.env
 
     echo ""
     echo "==============================="
@@ -67,7 +77,6 @@ create_env_file() {
 
 # Check if git is installed
 check_git_installed
-
 
 # Install Python dependencies
 echo ""

@@ -1,4 +1,4 @@
-from cs50 import SQL
+from cs50 import SQL  # type: ignore
 
 
 db = SQL("sqlite:///dev.db")
