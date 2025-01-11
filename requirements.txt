@@ -48,3 +48,6 @@ accelerate
 sentencepiece
 markdown
 ollama
+flask-mail
+itsdangerous
+authlib

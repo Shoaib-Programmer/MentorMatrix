@@ -8,8 +8,7 @@ from flask import (  # type: ignore
     request,
     current_app,
 )
-from flask_session import Session  # type: ignore
-from flask_mail import Mail, Message  # type: ignore
+from flask_mail import Message  # type: ignore
 
 from dotenv import load_dotenv  # type: ignore
 
@@ -37,11 +36,10 @@ GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET")
 GOOGLE_DISCOVERY_URL = os.environ.get("GOOGLE_DISCOVERY_URL")
 
+SECRET_KEY = os.environ.get('SECRET_KEY')
+
 auth_blueprint = Blueprint("auth", __name__)
 
-
-# Load configuration
-current_app.secret_key = "your-secret-key"
 
 # Configure OAuth
 oauth = OAuth(current_app)
@@ -64,36 +62,17 @@ google = oauth.register(
     issuer="https://accounts.google.com",
 )
 
-# Flask-Session Configuration
-current_app.config["SESSION_TYPE"] = (
-    "filesystem"  # Stores session data in the server file system
-)
-current_app.config["SESSION_PERMANENT"] = True  # Make sessions permanent
-current_app.config["PERMANENT_SESSION_LIFETIME"] = (
-    3600  # Session lifetime in seconds (1 hour)
-)
-Session(current_app)  # Initialize Flask-Session
 
-current_app.config["MAIL_SERVER"] = "smtp.gmail.com"
-current_app.config["MAIL_PORT"] = 587
-current_app.config["MAIL_USE_TLS"] = True
-current_app.config["MAIL_USE_SSL"] = False
-current_app.config["MAIL_USERNAME"] = "authsimple.eshaan@gmail.com"
-current_app.config["MAIL_PASSWORD"] = "kuqb lgto jtod lfjm"
-current_app.config["MAIL_DEFAULT_SENDER"] = "authsimple.eshaan@gmail.com"
-
-mail = Mail(current_app)
-
-s = URLSafeTimedSerializer(current_app.secret_key)
+s = URLSafeTimedSerializer(SECRET_KEY)
 
 
 def generate_confirmation_token(email):
-    return s.dumps(email, salt=current_app.secret_key)
+    return s.dumps(email, salt=SECRET_KEY)
 
 
 def confirm_token(token, expiration=3600):
     try:
-        email = s.loads(token, salt=current_app.secret_key, max_age=expiration)
+        email = s.loads(token, salt=SECRET_KEY, max_age=expiration)
     except Exception:
         return False
     return email
@@ -120,6 +99,8 @@ def register():
         create_standard_user(
             username, email, hashed_password, confirmed=False, salt=salt
         )  # Store salt
+
+        mail = current_app.extensions["mail"]
 
         # Generate the token for email confirmation
         token = generate_confirmation_token(email)
