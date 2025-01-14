@@ -1,7 +1,6 @@
-from pydub import AudioSegment
-import librosa
-import numpy as np
-from icecream import ic
+import librosa # type: ignore
+import numpy as np # type: ignore
+from icecream import ic # type: ignore
 
 def is_audio_usable(audio_file, silence_threshold=-50.0, noise_threshold=0.2) -> bool:
     """

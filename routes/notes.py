@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash  # type: ignore
 from models import db
 from datetime import datetime
 from notes import summarize_text
-import markdown
-from icecream import ic
+import markdown  # type: ignore
+from icecream import ic  # type: ignore
 
 notes_blueprint = Blueprint("notes", __name__)
 
@@ -57,8 +57,8 @@ def generate_notes(transcript_id):
     ic(transcript_content)
 
     # For later
-    file_type = transcript_data[0]["file_type"]
-    metadata = transcript_data[0].get("metadata", "")
+    # file_type = transcript_data[0]["file_type"]
+    # metadata = transcript_data[0].get("metadata", "")
 
     if not transcript_content:
         flash("Transcript content is empty.", "error")

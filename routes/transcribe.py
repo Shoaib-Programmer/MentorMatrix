@@ -1,5 +1,4 @@
 import os
-import json
 from flask import (  # type: ignore
     Blueprint,
     request,
@@ -9,14 +8,30 @@ from flask import (  # type: ignore
     url_for,
     render_template,
     current_app,
-    Response,
 )
 from werkzeug.utils import secure_filename  # type: ignore
 from models import db
-from notes import transcribe_audio, convert_pdf_to_text, get_transcript_from_youtube
+from notes import (
+    transcribe_audio,
+    convert_pdf_to_text,
+    get_video_id_from_url,
+    get_transcript_from_youtube,
+)
 import logging
+from typing import Optional
+from dotenv import load_dotenv  # type: ignore
 from icecream import ic  # type: ignore
-from pytube import YouTube  # type: ignore
+
+from googleapiclient.discovery import (  # type: ignore
+    build,
+)  # Import YouTube Data API client
+
+import googleapiclient.discovery_cache  # type: ignore
+
+googleapiclient.discovery_cache.DISABLE_CACHE = True
+
+load_dotenv()
+
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -122,53 +137,79 @@ def upload_pdf():
     return redirect(url_for("notes.generate_notes", transcript_id=transcript_id))
 
 
+# Helper function to fetch the video title
+def fetch_youtube_video_title(video_id: str) -> Optional[str]:
+    """
+    Fetches the title of a YouTube video using the YouTube Data API.
+    :param video_id: YouTube video ID.
+    :return: Video title, or None if an error occurs.
+    """
+    try:
+        youtube = build("youtube", "v3", developerKey=os.environ.get("YOUTUBE_API_KEY"), cache_discovery=False)
+        response = youtube.videos().list(part="snippet", id=video_id).execute()
+        if "items" in response and len(response["items"]) > 0:
+            return response["items"][0]["snippet"]["title"]
+        return None
+    except Exception as e:
+        logging.error(f"Failed to fetch video title: {e}")
+        return None
+
+
 @transcribe_blueprint.route("/upload_youtube", methods=["POST"])
 def upload_youtube():
-    youtube_url = request.form.get("youtube_url")
+    logging.debug("Upload_youtube route called.")
+
+    youtube_url = request.json.get(
+        "youtube_url"
+    )  # Expecting JSON body with `youtube_url`
     if not youtube_url:
-        flash("Missing YouTube URL.", "error")
-        return redirect(url_for("dashboard.dashboard"))
+        flash("No YouTube URL provided.", "error")
+        return redirect(url_for("notes.notes"))
 
     try:
-        # Fetch video title using pytube
-        yt = YouTube(youtube_url)
-        title = yt.title
+        # Step 1: Extract video ID from URL
+        video_id = get_video_id_from_url(youtube_url)
+        if not video_id:
+            flash("Invalid YouTube URL.", "error")
+            return redirect(url_for("notes.notes"))
 
-        def generate_transcription():
-            try:
-                for partial_transcript, progress in get_transcript_from_youtube(
-                    youtube_url
-                ):
-                    yield f"data: {json.dumps({'progress': progress, 'transcript': partial_transcript})}\n\n"
+        # Step 2: Fetch the video title
+        title = fetch_youtube_video_title(video_id)
+        if not title:
+            flash("Could not fetch video title.", "error")
+            return redirect(url_for("notes.notes"))
 
-                # Save transcript to the database after processing
-                final_transcript = partial_transcript
-                db.execute(
-                    "INSERT INTO transcripts (title, content) VALUES (?, ?)",
-                    title,
-                    final_transcript,
-                )
-                transcript_id = db.execute(
-                    "SELECT id FROM transcripts WHERE content = ?", final_transcript
-                )[0]["id"]
-                db.execute(
-                    """
-                    INSERT INTO files (transcript_id, file_type, name, metadata, uploaded_at)
-                    VALUES (?, 'youtube', ?, ?, CURRENT_TIMESTAMP)
-                    """,
-                    transcript_id,
-                    title,
-                    f'{{"url": "{youtube_url}", "video_id": "{yt.video_id}"}}',
-                )
+        # Step 3: Get the transcript
+        transcript = get_transcript_from_youtube(youtube_url)
+        ic(transcript)
+        if not transcript.strip():
+            flash(
+                "Failed to generate transcript from the provided YouTube URL.", "error"
+            )
+            return redirect(url_for("notes.notes"))
 
-            except Exception as e:
-                yield f"data: {json.dumps({'error': str(e)})}\n\n"
+        # Step 4: Save the transcript and file metadata to the database
+        db.execute(
+            "INSERT INTO transcripts (title, content) VALUES (?, ?)", title, transcript
+        )
+        transcript_id = db.execute(
+            "SELECT id FROM transcripts WHERE content = ?", transcript
+        )[0]["id"]
+        db.execute(
+            """
+            INSERT INTO files (transcript_id, file_type, name, uploaded_at)
+            VALUES (?, 'youtube', ?, CURRENT_TIMESTAMP)
+            """,
+            transcript_id,
+            youtube_url,
+        )
 
-        return Response(generate_transcription(), mimetype="text/event-stream")
-
+        # Redirect to notes.generate_notes with the transcript_id
+        return redirect(url_for("notes.generate_notes", transcript_id=transcript_id))
     except Exception as e:
-        flash(f"Error processing YouTube URL: {e}", "error")
-        return redirect(url_for("notes.generate_notes"))
+        logging.error(f"Error processing YouTube URL: {e}")
+        flash(f"An error occurred: {e}", "error")
+        return redirect(url_for("notes.notes"))
 
 
 @transcribe_blueprint.route("/transcript")

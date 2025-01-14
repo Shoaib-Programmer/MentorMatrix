@@ -56,11 +56,12 @@
 
 
 import subprocess
-from icecream import ic
+from icecream import ic  # type: ignore
+
 
 def summarize_text(text: str) -> str:
     # Command to run the summarization model in Ollama
-    command = ['fabric', '-sp', 'extract_wisdom']
+    command = ["ollama", "run", "llama3"]
 
     # Create the prompt for summarization
     prompt = f"Make digestible notes from this: {text}"
@@ -71,7 +72,7 @@ def summarize_text(text: str) -> str:
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-        text=True  # Use text mode for handling strings
+        text=True,  # Use text mode for handling strings
     )
 
     # Send the prompt to the process and get the output
@@ -85,7 +86,7 @@ def summarize_text(text: str) -> str:
     return output.strip()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     text = (
         "Artificial Intelligence (AI) is a rapidly growing field of technology "
         "that is transforming industries across the globe. By enabling machines "
@@ -98,4 +99,3 @@ if __name__ == '__main__':
     summary = summarize_text(text)
     print("Summary:")
     print(summary)
-

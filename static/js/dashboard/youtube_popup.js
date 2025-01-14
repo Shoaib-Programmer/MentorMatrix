@@ -54,7 +54,10 @@ document.addEventListener("DOMContentLoaded", () => {
           body: JSON.stringify({ youtube_url: youtubeUrl }),
         });
 
-        if (response.ok) {
+        if (response.redirected) {
+          // Redirect to the URL provided by the server
+          window.location.href = response.url;
+        } else if (response.ok) {
           alert("YouTube video submitted successfully.");
           toggleYoutubePopup(false);
         } else {
