@@ -16,21 +16,6 @@
     --gray-darker: #666666;
     --dark-gray: #f5f5f5;
 
-    /* Font Sizes (Optional, can keep the same) */
-    --font-size-h1: 3rem;
-    --font-size-h2: 2.25rem;
-    --font-size-h3: 1.75rem;
-    --font-size-body: 1.1rem;
-    --font-size-button: 1rem;
-
-    /* Border Radius (same) */
-    --border-radius-small: 8px;
-    --border-radius-medium: 12px;
-
-    /* Spacing (Padding/Margins) */
-    --spacing-small: 0.75rem;
-    --spacing-medium: 1rem;
-    --spacing-large: 1.5rem;
 
     /* Box Shadow (Optional adjustments for lighter background) */
     --box-shadow-light: 0 4px 10px rgba(0, 0, 0, 0.1);
