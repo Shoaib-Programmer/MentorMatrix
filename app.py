@@ -73,4 +73,4 @@ def pricing():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host='::', port=5000)

@@ -1,61 +1,74 @@
 // Function to toggle the YouTube modal
 function toggleYoutubePopup(show) {
-    const youtubePopup = document.getElementById("youtube-popup");
-    if (show) {
-        youtubePopup.classList.add("active"); // Use 'active' instead of 'hidden'
-    } else {
-        youtubePopup.classList.remove("active");
-    }
+  const youtubePopup = document.getElementById("youtube-popup");
+  if (!youtubePopup) {
+    console.error("YouTube popup element not found!");
+    return;
+  }
+
+  if (show) {
+    youtubePopup.classList.remove("hidden");
+  } else {
+    youtubePopup.classList.add("hidden");
+  }
 }
 
 // Add event listener to the YouTube button
-document.querySelector(".youtube_upload-option-btn").addEventListener("click", function () {
-    toggleYoutubePopup(true);
-});
+document.addEventListener("DOMContentLoaded", () => {
+  const youtubeButton = document.querySelector(".youtube_upload-option-btn");
+  if (youtubeButton) {
+    youtubeButton.addEventListener("click", () => toggleYoutubePopup(true));
+  } else {
+    console.error("YouTube button not found!");
+  }
 
-// Close button logic
-document.querySelector("#youtube-popup .close-btn").addEventListener("click", function () {
-    toggleYoutubePopup(false);
-});
+  // Close button logic
+  const closeButton = document.querySelector("#youtube-popup .close-btn");
+  if (closeButton) {
+    closeButton.addEventListener("click", () => toggleYoutubePopup(false));
+  } else {
+    console.error("Close button in YouTube popup not found!");
+  }
 
-// Submit YouTube URL for transcription
-document.getElementById("submit-youtube-button").addEventListener("click", function () {
-    const youtubeUrl = document.getElementById("youtube-url").value.trim();
-    if (!youtubeUrl) {
+  // Submit YouTube URL for processing
+  const submitButton = document.getElementById("submit-youtube-button");
+  if (submitButton) {
+    submitButton.addEventListener("click", async () => {
+      const youtubeUrlInput = document.getElementById("youtube-url");
+      const youtubeUrl = youtubeUrlInput ? youtubeUrlInput.value.trim() : "";
+
+      if (!youtubeUrl) {
         alert("Please enter a valid YouTube URL.");
         return;
-    }
+      }
 
-    const transcriptContainer = document.getElementById("transcript-container");
-    const transcriptText = document.getElementById("transcript-text");
+      try {
+        console.log("Submitting YouTube URL:", youtubeUrl);
 
-    // Reset previous transcript UI
-    transcriptContainer.classList.add("hidden");
-    transcriptText.textContent = "";
+        // Make a POST request to the server with the YouTube URL
+        const response = await fetch("/upload_youtube", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ youtube_url: youtubeUrl }),
+        });
 
-    // Show the transcript container once the URL is processed
-    transcriptContainer.classList.remove("hidden");
-
-    const eventSource = new EventSource(`/upload_audio?youtube_url=${encodeURIComponent(youtubeUrl)}`);
-
-    eventSource.onmessage = function (event) {
-        const data = JSON.parse(event.data);
-
-        // Display transcript
-        if (data.transcript) {
-            transcriptText.textContent = data.transcript;
-            eventSource.close();
+        if (response.ok) {
+          alert("YouTube video submitted successfully.");
+          toggleYoutubePopup(false);
+        } else {
+          console.error("Server error:", response.statusText);
+          alert(
+            "An error occurred while processing the YouTube video. Please try again."
+          );
         }
-
-        // Handle errors
-        if (data.error) {
-            alert(`Error: ${data.error}`);
-            eventSource.close();
-        }
-    };
-
-    eventSource.onerror = function () {
-        alert("An error occurred during transcription.");
-        eventSource.close();
-    };
+      } catch (error) {
+        console.error("Error submitting YouTube URL:", error);
+        alert("An error occurred. Please check your connection and try again.");
+      }
+    });
+  } else {
+    console.error("Submit button in YouTube popup not found!");
+  }
 });

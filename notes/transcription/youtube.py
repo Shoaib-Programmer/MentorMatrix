@@ -1,13 +1,14 @@
 import os
-import time
-import random
+
+# import time
+# import random
 from typing import Optional
-from youtube_transcript_api import YouTubeTranscriptApi
-from youtube_transcript_api._errors import NoTranscriptFound, VideoUnavailable
+from youtube_transcript_api import YouTubeTranscriptApi  # type: ignore
+from youtube_transcript_api._errors import NoTranscriptFound, VideoUnavailable  # type: ignore
 from .audio import download_audio, is_audio_usable
 from .video import download_video, transcribe_video_without_audio
 from .youtube_id import get_video_id_from_url
-from icecream import ic
+from icecream import ic  # type: ignore
 
 
 def clean_up_file(file_path: str) -> None:
@@ -29,13 +30,13 @@ def fetch_subtitles(video_id: str, lang: str) -> Optional[str]:
     """
     try:
         subtitles = YouTubeTranscriptApi.get_transcript(video_id, languages=[lang])
-        return "\n".join([sub['text'] for sub in subtitles])
+        return "\n".join([sub["text"] for sub in subtitles])
     except (NoTranscriptFound, VideoUnavailable) as e:
         ic(f"Subtitles not available: {e}")
         return None
 
 
-def get_transcript_from_youtube(youtube_url: str, lang: str = 'en') -> str:
+def get_transcript_from_youtube(youtube_url: str, lang: str = "en") -> str:
     """
     Transcribes a YouTube video, prioritizing subtitles if available.
     Falls back to audio transcription or visual analysis.
