@@ -80,7 +80,9 @@ def summarize_text(text: str) -> str:
 
     # Check for errors
     if error:
-        ic(f"Error: {error}")
+        if process.returncode != 0:
+            ic(f"Error: {error}")
+            return ""
 
     # Return the output (summary)
     return output.strip()

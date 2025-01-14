@@ -29,8 +29,9 @@ def generate_podcast(text: str, speaker1: str, speaker2: str) -> str:
 
         # Check for errors
         if error:
-            ic(f"Error: {error}")
-            return ""
+            if process.returncode != 0:
+                ic(f"Error: {error or 'Subprocess failed unexpectedly'}")
+                return ""
         return output
 
     except Exception as e:
