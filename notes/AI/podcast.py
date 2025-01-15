@@ -12,7 +12,7 @@ def generate_podcast(text: str, speaker1: str, speaker2: str) -> str:
     command = ["ollama", "run", "llama3"]
 
     # Create the prompt for summarization
-    prompt = f"Make a 2 speaker, fun, digestible podcast from: {text} \n\n\n The speakers are: {speaker1} and {speaker2}"
+    prompt = f"Make a 2 speaker, fun, digestible podcast, no more than 300 words, from: {text} \n\n\n The speakers are: {speaker1} and {speaker2}"
 
     try:
         # Run the command and pass the prompt for summarization
@@ -85,13 +85,17 @@ def text_to_podcast(
         temp_files.append(temp_file)
 
     # Final step: Combine all audio files into a single podcast file
-    combine_audio_files_ffmpeg(temp_files, save_file_at)
+    try:
+        combine_audio_files_ffmpeg(temp_files, save_file_at)
+    finally:
+        for file in temp_files:
+            os.remove(file)
 
     # Clean up the temporary files after combining them
     for file in temp_files:
         os.remove(file)
 
-    print(f"Podcast saved at: {save_file_at}")
+    ic(f"Podcast saved at: {save_file_at}")
     engine.runAndWait()
 
 
