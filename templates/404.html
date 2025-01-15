@@ -14,6 +14,11 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/base.css') }}"
     />
+    <style>
+        body {
+            padding: 20px;
+        }
+    </style>
   </head>
   <body>
     <!--[if lt IE 7]>
@@ -22,16 +27,21 @@
         <a href="#">upgrade your browser</a> to improve your experience.
       </p>
     <![endif]-->
-    <h1>404 - Oops! 🛑</h1>
+    <h1 style="text-align: center; margin: 30px">404 - Oops! 🛑</h1>
     <p>
       We looked everywhere, but the page you're searching for must have gone on
       vacation. 🏖️
     </p>
 
-    <img
-      src="{{ url_for('static', filename='images/mr_grumpy.png') }}"
-      alt="grumpy cat"
-    />
-    Wanna automate your note-making? Visit the <a href="/">homepage</a>!
+    <center>
+      <img
+        src="{{ url_for('static', filename='images/mr_grumpy.png') }}"
+        alt="grumpy cat"
+      />
+    </center>
+    <br /><br />
+    <p style="text-align: center">
+      Wanna automate your note-making? Visit the <a href="/">homepage</a>!
+    </p>
   </body>
 </html>
