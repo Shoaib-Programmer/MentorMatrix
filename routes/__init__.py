@@ -6,4 +6,4 @@ from .quiz import quiz_blueprint
 from .flashcards import flashcards_blueprint
 from .podcast import podcast_blueprint
 from .auth import auth_blueprint
-from .errors import errors_blueprint
+from .errors import error_blueprint

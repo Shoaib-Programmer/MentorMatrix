@@ -12,7 +12,7 @@ from routes import (
     flashcards_blueprint,
     podcast_blueprint,
     auth_blueprint,
-    errors_blueprint
+    error_blueprint
 )
 from models import init_db
 
@@ -59,7 +59,7 @@ with app.app_context():
     app.register_blueprint(quiz_blueprint)
     app.register_blueprint(flashcards_blueprint)
     app.register_blueprint(auth_blueprint)
-    app.register_blueprint(errors_blueprint)
+    app.register_blueprint(error_blueprint)
 
 # Miscellaneous routes for now
 
