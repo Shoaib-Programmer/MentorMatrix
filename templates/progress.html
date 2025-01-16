@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title %}Upload Progress - MentorMatrix{% endblock %}
+
+{% block content %}
+    <div class="progress-container" style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f7fafc;">
+        <div class="w-full bg-gray-200 rounded-full dark:bg-gray-700">
+            <div id="progress-bar" class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <script>
+        let progressBar = document.getElementById('progress-bar');
+        let progress = 0;
+
+        // Simulate the progress (slowly until 90%, then speed up)
+        function simulateProgress() {
+            let interval = setInterval(() => {
+                if (progress < 90) {  // Simulate slow progress until 90%
+                    let increment = Math.max(0.1, (90 - progress) / 50);
+                    progress += increment;
+                    progressBar.style.width = progress + '%';
+                    progressBar.textContent = Math.floor(progress) + '%';
+                } else {
+                    clearInterval(interval);
+                    onServerResponse();  // Simulate the final 100% progress when server responds
+                }
+            }, 100); // Slow progress
+        }
+
+        function onServerResponse() {
+            setTimeout(() => {
+                progressBar.style.width = '100%';
+                progressBar.textContent = '100%';
+            }, 1000); // Complete the progress after 1 second
+        }
+
+        // Start the progress simulation when the page loads
+        document.addEventListener("DOMContentLoaded", () => {
+            simulateProgress();
+        });
+    </script>
+{% endblock %}

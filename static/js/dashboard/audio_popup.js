@@ -24,7 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const audioInput = document.getElementById("audio-input");
     const recordButton = document.getElementById("record-button");
     const uploadButton = document.getElementById("upload-button");
-    const progressMessage = document.getElementById("progress-message");
+    // const progressMessage = document.getElementById("progress-message");
+    const progressContainer = document.getElementById('progress-container');
     const audioPlayer = document.getElementById("audio-player");
 
     let recording = false;
@@ -88,6 +89,11 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        // Reset the UI or give feedback if necessary
+        uploadButton.disabled = true; // Disable the upload button to avoid multiple submissions
+
+        progressContainer.classList.remove('hidden');
+
         const formData = new FormData();
         formData.append("audio", uploadedAudioBlob);
 
@@ -106,8 +112,8 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Upload error:", error);
             alert("An error occurred during upload. Please try again.");
         } finally {
-            // Reset the UI or give feedback if necessary
-            uploadButton.disabled = true; // Disable the upload button to avoid multiple submissions
+            // This is when the server has 'responded'
+            onServerResponse()
         }
     });
 });

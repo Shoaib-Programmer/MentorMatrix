@@ -12,7 +12,7 @@ from routes import (
     flashcards_blueprint,
     podcast_blueprint,
     auth_blueprint,
-    error_blueprint
+    error_blueprint,
 )
 from models import init_db
 

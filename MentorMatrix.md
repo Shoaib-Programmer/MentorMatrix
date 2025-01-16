@@ -14,7 +14,7 @@ MentorMatrix enables users to upload different types of content, such as audio f
 - **PDFs**: Text is extracted from PDFs using **PyMuPDF**, ensuring accurate parsing and summarization.
 
 ### 2. **AI-Powered Summarization**
-Once the content is processed, MentorMatrix employs **BART** (Bidirectional and Auto-Regressive Transformers) for generating high-quality summaries. The tool tailors these summaries to emphasize key points that are most useful to students, making it easier for them to understand and recall information.
+Once the content is processed, MentorMatrix employs **LLaMA3.3** (Large Language Model Meta AI) for generating high-quality summaries. The tool tailors these summaries to emphasize key points that are most useful to students, making it easier for them to understand and recall information.
 
 ### 3. **Interactive Chatbot**
 MentorMatrix comes equipped with a chatbot powered by **OpenAI GPT-4o Mini**, which serves as a study assistant. The chatbot can help clarify doubts, provide hints, and guide users through difficult concepts, fostering active learning. It encourages critical thinking by offering step-by-step explanations and interactive problem-solving techniques.
@@ -35,16 +35,16 @@ MentorMatrix supports various types of files, making it versatile for different 
 
 MentorMatrix uses a range of powerful technologies to offer an efficient, AI-driven learning experience:
 
-- **Backend**: Developed using **Python** and **Flask**, a lightweight web framework that powers the app.
+- **Backend**: Developed using **Python** and **Flask**, a lightweight and modern web framework that powers the app.
 - **Database**: **SQLite** is used to store user data, notes, and progress.
 - **AI Tools**:
   - **Librosa**: For audio processing.
   - **Tesseract**: For extracting text from images and videos.
   - **PyMuPDF**: For PDF parsing.
-  - **BART**: For text summarization.
+  - **LLaMA**: For text summarization.
   - **OpenAI GPT-4o Mini**: For AI-driven chatbot functionality.
-- **Frontend**: The user interface is built using **HTML**, **CSS**, and **JavaScript**, ensuring a seamless and interactive experience for users.
-  
+- **Frontend**: The user interface is built using **HTML**, **Tailwind**, and **JavaScript**, ensuring a seamless and interactive experience for users.
+
 ## How MentorMatrix Helps
 
 ### For Students:

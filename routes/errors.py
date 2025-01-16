@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template # type: ignore
+from flask import Blueprint, render_template  # type: ignore
 
 error_blueprint = Blueprint("errors", __name__)
 
