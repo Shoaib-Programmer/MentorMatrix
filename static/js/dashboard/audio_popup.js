@@ -24,9 +24,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const audioInput = document.getElementById("audio-input");
     const recordButton = document.getElementById("record-button");
     const uploadButton = document.getElementById("upload-button");
-    // const progressMessage = document.getElementById("progress-message");
+    const mainContent = document.getElementById("main-content");
     const progressContainer = document.getElementById('progress-container');
     const audioPlayer = document.getElementById("audio-player");
+    const btn = document.getElementById('audio_upload-option-btn');
+
+    btn.onclick = () => {
+        
+    }
 
     let recording = false;
     let mediaRecorder;
@@ -91,6 +96,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Reset the UI or give feedback if necessary
         uploadButton.disabled = true; // Disable the upload button to avoid multiple submissions
+
+        mainContent.classList.add('hidden');
 
         progressContainer.classList.remove('hidden');
 

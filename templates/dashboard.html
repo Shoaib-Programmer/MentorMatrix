@@ -10,6 +10,7 @@
     {% endblock %}
 
     {% block content %}
+    <div id="main-content">
     <div class="profile">
         <span class="profile-icon">S</span> 
         <span class="profile-name">Shoaib Shaik</span>
@@ -19,7 +20,7 @@
             <h2>Dashboard</h2>
             <p>Create new notes</p>
             <div class="upload-options">
-                <button class="audio_upload-option-btn" onclick="toggleAudioPopup(true)">
+                <button class="audio_upload-option-btn" onclick="toggleModal('audio-popup')">
                     <i class="fas fa-microphone"></i> Record or Upload Audio
                 </button>
                 <button class="youtube_upload-option-btn">
@@ -56,6 +57,7 @@
                 <button id="submit-youtube-button">Submit</button>
             </div>
         </div>
+    </div>
 
         <!-- Progress Bar Container -->
         <div id="progress-container" class="hidden">
