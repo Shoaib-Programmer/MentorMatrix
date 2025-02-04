@@ -1,0 +1,32 @@
+name: CI/CD Pipeline
+
+on: [push, pull_request]
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install Prettier and Python plugin
+        run: npm install --global prettier prettier-plugin-python
+
+      - name: Auto-format files
+        run: prettier --write "**/*.{py,js,ts,jsx,tsx}" --ignore-path .prettierignore
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit --amend --no-edit || echo "No changes to commit"
+          git push --force-with-lease
