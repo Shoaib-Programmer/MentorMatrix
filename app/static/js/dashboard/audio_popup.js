@@ -24,22 +24,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const audioInput = document.getElementById("audio-input");
     const recordButton = document.getElementById("record-button");
     const uploadButton = document.getElementById("upload-button");
-<<<<<<< HEAD
     const mainContent = document.getElementById("main-content");
-=======
->>>>>>> 8269edb7fbe2188b1418a8c11ac7b833613a7a30
     const progressContainer = document.getElementById('progress-container');
     const progressBar = document.getElementById('progress-bar');
     const audioPlayer = document.getElementById("audio-player");
-<<<<<<< HEAD
-    const btn = document.getElementById('audio_upload-option-btn');
-
-    btn.onclick = () => {
-        
-    }
-=======
-    const mainContent = document.getElementById('main-content');
->>>>>>> 8269edb7fbe2188b1418a8c11ac7b833613a7a30
 
     let recording = false;
     let mediaRecorder;
@@ -106,14 +94,6 @@ document.addEventListener("DOMContentLoaded", () => {
         progressBar.style.width = "0%";
         progressBar.textContent = "0%";
         mainContent.style.display = "none";
-
-<<<<<<< HEAD
-        mainContent.classList.add('hidden');
-
-        progressContainer.classList.remove('hidden');
-=======
-        uploadButton.disabled = true;
->>>>>>> 8269edb7fbe2188b1418a8c11ac7b833613a7a30
 
         const formData = new FormData();
         formData.append("audio", uploadedAudioBlob);

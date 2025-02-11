@@ -6,8 +6,8 @@ from flask import (  # type: ignore
     url_for,
     flash,
 )
-from notes.AI import generate_podcast, text_to_podcast
-from models import db
+from app.notes.AI import generate_podcast, text_to_podcast
+from app.models import db
 from pathlib import Path
 
 podcast_blueprint = Blueprint("podcast", __name__)

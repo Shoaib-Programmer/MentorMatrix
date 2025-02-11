@@ -1,7 +1,7 @@
 from cs50 import SQL  # type: ignore
 
 
-db = SQL("sqlite:///dev.db")
+db = SQL("sqlite:///instance/dev.db")
 
 
 def init_db():

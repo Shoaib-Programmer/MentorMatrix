@@ -18,8 +18,8 @@ from icecream import ic  # type: ignore
 import uuid
 import os
 
-from utils.password import hash_password, verify_password
-from models import (
+from app.utils.password import hash_password, verify_password
+from app.models import (
     get_user_by_email,
     create_standard_user,
     get_user_by_username,
@@ -28,7 +28,7 @@ from models import (
     update_user_confirmation_status,
 )
 
-from forms import LoginForm, RegisterForm
+from app.forms import LoginForm, RegisterForm
 
 load_dotenv()
 
