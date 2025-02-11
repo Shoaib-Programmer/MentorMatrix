@@ -1,0 +1,115 @@
+/* General reset for button and layout */
+.transcript-category {
+    margin-bottom: 20px;
+}
+
+/* Button container styles */
+.btn {
+    display: block;
+    width: 100%;
+    padding: 20px;
+    margin: 10px 0;
+    background-color: #333333;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: left;
+    border: 2px solid transparent; /* Transparent border for focus visibility */
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #444444;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Added shadow and slight hover transformation */
+}
+
+.btn:active {
+    background-color: #555555;
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(51, 51, 51, 0.5);
+}
+
+/* Details inside the button */
+.transcript-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.transcript-details h4 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: bold;
+    letter-spacing: -0.5px;
+    /* Make title more prominent */
+}
+
+.transcript-details p {
+    margin: 5px 0 0;
+    font-size: 1rem;
+    color: #d1d1d1; /* Light gray for the date */
+}
+
+/* Accessibility and focus styles for buttons */
+button,
+.btn {
+    cursor: pointer;
+    background-color: #333333;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+button:hover,
+.btn:hover {
+    background-color: #444444;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button:active,
+.btn:active {
+    background-color: #555555;
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+button:focus,
+.btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(51, 51, 51, 0.5);
+}
+
+/* Optional: Adding a soft text-shadow for subtle depth in headings */
+h2,
+h3 {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Consistent heading styles */
+h2,
+h3 {
+    font-family: Montserrat, serif;
+    color: #ffffff;
+    letter-spacing: -0.75px;
+    font-weight: 600;
+}
+
+/* Add spacing between sections */
+.transcript-category {
+    margin-bottom: 2em;
+}

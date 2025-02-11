@@ -1,0 +1,159 @@
+
+/* Specific Modal Styling for #audio-popup */
+#audio-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7); /* Background overlay */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 1; /* Fully visible when active */
+    visibility: visible;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* When #audio-popup is hidden */
+#audio-popup.hidden {
+    display: none; /* Completely hides the modal */
+    opacity: 0; /* Fade effect */
+    visibility: hidden; /* Keeps out of visual flow */
+}
+
+/* Content inside the #audio-popup */
+#audio-popup .modal-content {
+    background-color: #1e1e1e; /* Modal content background */
+    color: #ffffff;           /* Text color */
+    width: 90%;
+    max-width: 500px;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+    transform: scale(0.9);    /* Slightly shrunk by default */
+    transition: transform 0.3s ease-in-out; /* Smooth animation */
+}
+
+/* When #audio-popup is visible */
+#audio-popup:not(.hidden) .modal-content {
+    transform: scale(1); /* Expands to full size */
+}
+
+
+/* Hide Modal by Default */
+.hidden {
+    display: none;
+}
+
+
+/* Close Button */
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 1.5rem;
+    color: #fff;
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: transform 0.2s ease, color 0.3s ease;
+}
+
+.close-btn:hover {
+    color: #ff5757; /* Highlighted red */
+    transform: scale(1.2);
+}
+
+
+/* Buttons */
+#record-button,
+#upload-button {
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+
+#record-button {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+#record-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.02);
+}
+
+#upload-button {
+    background-color: #28a745;
+    color: #ffffff;
+}
+
+#upload-button:hover {
+    background-color: #218838;
+    transform: scale(1.02);
+}
+
+#upload-button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Audio Player */
+audio {
+    width: 100%;
+    margin-top: 15px;
+    outline: none;
+    border: none;
+    border-radius: 8px;
+    background-color: #2c2c2c;
+    color: #fff;
+}
+
+/* Progress Message */
+#progress-message {
+    margin-top: 10px;
+    color: #fff;
+    text-align: center;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .modal-content {
+        padding: 15px;
+    }
+
+    input[type="file"],
+    #record-button,
+    #upload-button {
+        font-size: 0.9rem;
+    }
+}
+
+/* Subtle and Elegant Fade-In Animation */
+@keyframes fadeInElegant {
+    0% {
+        opacity: 0;
+        transform: scale(0.98); /* Slightly smaller */
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1.02); /* Slight expansion */
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1); /* Final stable state */
+    }
+}
+
+.element {
+    animation: fadeInElegant 1.2s ease-out forwards;
+}

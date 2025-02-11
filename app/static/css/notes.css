@@ -1,0 +1,171 @@
+/* Modal background styling */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Dark background with some transparency */
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s ease, visibility 0.3s ease; /* Smooth transition for visibility and opacity */
+}
+
+/* Modal content styling */
+.modal-content {
+  background-color: #2c2c2c;
+  color: #fff;
+  border-radius: 12px;
+  padding: 30px;
+  width: 90%;
+  max-width: 550px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth entry transition */
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.modal.show .modal-content {
+  opacity: 1;
+transform: translateY(0); /* Modal slide-in effect */
+}
+
+.modal-content h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Modal close button */
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 1.75rem;
+  color: #bbb;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+  color: #fff; /* Change close button color on hover */
+}
+
+/* Styling for form inputs */
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  background-color: #444;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.modal-content input:focus,
+.modal-content textarea:focus {
+  background-color: #555;
+  outline: none;
+}
+
+/* Save button styling */
+.modal-content button[type="submit"] {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-content button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+.modal-content button[type="button"] {
+  background-color: #bbb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-content button[type="button"]:hover {
+  background-color: #999;
+}
+
+/* Notes list styling */
+.notes-list {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.note-item {
+  background-color: #1b1b1b;
+  padding: 1.5rem;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.note-item:hover {
+  transform: scale(1.02); /* Subtle hover effect for note items */
+}
+
+.note-item h2 {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.note-item p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.note-item small {
+  display: block;
+  font-size: 0.9rem;
+  margin-top: 10px;
+  color: #888;
+}
+
+/* Open modal button */
+#openModalBtn {
+  position: fixed;
+  bottom: 20px;  /* Distance from the bottom of the viewport */
+  right: 20px;   /* Distance from the right side of the viewport */
+  padding: 12px 24px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: bold;
+  z-index: 1000;  /* Ensure it's on top of other content */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#openModalBtn:hover {
+  background-color: #0056b3;
+  transform: scale(1.05); /* Slightly enlarge the button on hover */
+}
+
+#openModalBtn:focus {
+  outline: none;
+  background-color: #003d7a; /* Focus color */
+}

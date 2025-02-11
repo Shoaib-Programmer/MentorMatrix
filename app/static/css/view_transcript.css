@@ -1,0 +1,10 @@
+h2 {
+    text-align: center;
+    margin: 30px;
+    align-self: center;
+    margin-top: 20px;
+}
+
+.transcript-content {
+    line-height: 30px;
+}
