@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tailwindcss -i src/styles/tailwind.css -o static/css/tailwind.css",
-    "dev": "tailwindcss -i src/styles/tailwind.css -o static/css/tailwind.css --watch"
+    "build": "tailwindcss -i src/styles/tailwind.css -o static/dist/tailwind.css",
+    "dev": "tailwindcss -i app/src/styles/tailwind.css -o app/static/dist/tailwind.css"
   },
   "keywords": [
     "hackathon",
