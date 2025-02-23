@@ -1,202 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}MentorMatrix{% endblock %}</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/tailwind.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/popup.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/base.css') }}"
-    />
-    {% block other_head_stuff %} {% endblock %}
-  </head>
 
-  <body>
-    <div class="container">
-      <!-- Sidebar -->
-      <aside class="sidebar">
-        <div class="logo">
-          <center>
-            <img
-              src="{{ url_for('static', filename='images/MentorMatrix_logo.png') }}"
-              alt="MentorMatrix Logo"
-              style="
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}MentorMatrix{% endblock %}</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/popup.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
+  {% if csrf_token is defined %}
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  {% endif %}
+
+  {% block other_head_stuff %} {% endblock %}
+</head>
+
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <center>
+          <img src="{{ url_for('static', filename='images/MentorMatrix_logo.png') }}" alt="MentorMatrix Logo" style="
                 width: 120px;
                 height: 120px;
                 border-radius: 50%; /* Makes it a circle */
                 overflow: hidden; /* Ensures contents stay within the circle */
-              "
-            />
-            <h1>MentorMatrix</h1>
-          </center>
-        </div>
-        <nav class="nav-links">
-          <!-- Buttons with redirect functionality -->
-          <button
-            class="nav-item {% if current_route == 'dashboard' %}active{% endif %}"
-            onclick="redirectToPage('/dashboard')"
-          >
-            <i class="fas fa-home nav-icon"></i> Dashboard
-          </button>
-
-          <button
-            class="nav-item {% if current_route == 'notes' %}active{% endif %}"
-            onclick="redirectToPage('/notes')"
-          >
-            <i class="fas fa-book nav-icon"></i> Notes
-          </button>
-
-          <button
-            class="nav-item {% if current_route == 'chatbot' %}active{% endif %}"
-            onclick="redirectToPage('/chatbot')"
-          >
-            <i class="fas fa-comments nav-icon"></i> Chat Bot
-          </button>
-
-          <button
-            class="nav-item {% if current_route == 'podcast' %}active{% endif %}"
-            onclick="redirectToPage('/podcast')"
-          >
-            <i class="fas fa-podcast nav-icon"></i> Podcast
-          </button>
-
-          <button
-            class="nav-item {% if current_route == 'flashcards' %}active{% endif %}"
-            onclick="redirectToPage('/flashcards')"
-          >
-            <i class="fas fa-chalkboard-teacher nav-icon"></i> Flashcards
-          </button>
-
-          <button
-            class="nav-item {% if current_route == 'quiz' %}active{% endif %}"
-            onclick="redirectToPage('/quiz')"
-          >
-            <i class="fas fa-question-circle nav-icon"></i> Quiz
-          </button>
-
-          <button
-            class="nav-item {% if current_route == 'transcript' %}active{% endif %}"
-            onclick="redirectToPage('/transcript')"
-          >
-            <i class="fas fa-file-alt nav-icon"></i> Transcript
-          </button>
-
-          <button
-            class="nav-item {% if current_route == 'settings' %}active{% endif %}"
-            onclick="redirectToPage('/settings')"
-          >
-            <i class="fas fa-cogs nav-icon"></i> Settings
-          </button>
-        </nav>
-
-        <button class="premium-button" onclick="redirectToPage('/pricing')">
-          <i class="fas fa-star nav-icon"></i> ✨ Upgrade to Premium
+              " />
+          <h1>MentorMatrix</h1>
+        </center>
+      </div>
+      <nav class="nav-links">
+        <!-- Buttons with redirect functionality -->
+        <button class="nav-item {% if current_route == 'dashboard' %}active{% endif %}"
+          onclick="redirectToPage('/dashboard')">
+          <i class="fas fa-home nav-icon"></i> Dashboard
         </button>
-      </aside>
 
-      <!-- Main content area where other templates can inject content -->
-      <main class="main-content">
-        <!-- Display flashed messages -->
-        <div id="flash-messages" class="mt-4">
-          {% with messages = get_flashed_messages(with_categories=true) %} {% if
-          messages %}
-          <div class="space-y-4">
-            {% for category, message in messages %}
-            <div
-              class="p-5 rounded-lg shadow-lg flash-message {% if category == 'success' %}bg-gradient-to-r from-green-400 via-green-500 to-green-600{% endif %} {% if category == 'error' %}bg-gradient-to-r from-red-400 via-red-500 to-red-600{% endif %} {% if category == 'info' %}bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600{% endif %} {% if category == 'warning' %}bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600{% endif %} text-white flex items-center space-x-3 transform transition-transform duration-500 hover:scale-105"
-            >
-              <!-- Icon -->
-              <div class="flex-shrink-0">
-                {% if category == 'success' %}
-                <svg
-                  class="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 13l4 4L19 7"
-                  ></path>
-                </svg>
-                {% elif category == 'error' %}
-                <svg
-                  class="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  ></path>
-                </svg>
-                {% elif category == 'info' %}
-                <svg
-                  class="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 6v6M12 18v.01M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"
-                  ></path>
-                </svg>
-                {% elif category == 'warning' %}
-                <svg
-                  class="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 8v4M12 16h.01M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"
-                  ></path>
-                </svg>
-                {% endif %}
-              </div>
-              <!-- Message text -->
-              <div class="flex-1">{{ message }}</div>
+        <button class="nav-item {% if current_route == 'notes' %}active{% endif %}" onclick="redirectToPage('/notes')">
+          <i class="fas fa-book nav-icon"></i> Notes
+        </button>
+
+        <button class="nav-item {% if current_route == 'chatbot' %}active{% endif %}"
+          onclick="redirectToPage('/chatbot')">
+          <i class="fas fa-comments nav-icon"></i> Chat Bot
+        </button>
+
+        <button class="nav-item {% if current_route == 'podcast' %}active{% endif %}"
+          onclick="redirectToPage('/podcast')">
+          <i class="fas fa-podcast nav-icon"></i> Podcast
+        </button>
+
+        <button class="nav-item {% if current_route == 'flashcards' %}active{% endif %}"
+          onclick="redirectToPage('/flashcards')">
+          <i class="fas fa-chalkboard-teacher nav-icon"></i> Flashcards
+        </button>
+
+        <button class="nav-item {% if current_route == 'quiz' %}active{% endif %}" onclick="redirectToPage('/quiz')">
+          <i class="fas fa-question-circle nav-icon"></i> Quiz
+        </button>
+
+        <button class="nav-item {% if current_route == 'transcript' %}active{% endif %}"
+          onclick="redirectToPage('/transcript')">
+          <i class="fas fa-file-alt nav-icon"></i> Transcript
+        </button>
+
+        <button class="nav-item {% if current_route == 'settings' %}active{% endif %}"
+          onclick="redirectToPage('/settings')">
+          <i class="fas fa-cogs nav-icon"></i> Settings
+        </button>
+      </nav>
+
+      <button class="premium-button" onclick="redirectToPage('/pricing')">
+        <i class="fas fa-star nav-icon"></i> ✨ Upgrade to Premium
+      </button>
+    </aside>
+
+    <!-- Main content area where other templates can inject content -->
+    <main class="main-content">
+      <!-- Display flashed messages -->
+      <div id="flash-messages" class="mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+        messages %}
+        <div class="space-y-4">
+          {% for category, message in messages %}
+          <div
+            class="p-5 rounded-lg shadow-lg flash-message {% if category == 'success' %}bg-gradient-to-r from-green-400 via-green-500 to-green-600{% endif %} {% if category == 'error' %}bg-gradient-to-r from-red-400 via-red-500 to-red-600{% endif %} {% if category == 'info' %}bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600{% endif %} {% if category == 'warning' %}bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600{% endif %} text-white flex items-center space-x-3 transform transition-transform duration-500 hover:scale-105">
+            <!-- Icon -->
+            <div class="flex-shrink-0">
+              {% if category == 'success' %}
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              {% elif category == 'error' %}
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+              {% elif category == 'info' %}
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 6v6M12 18v.01M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"></path>
+              </svg>
+              {% elif category == 'warning' %}
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 8v4M12 16h.01M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"></path>
+              </svg>
+              {% endif %}
             </div>
-            {% endfor %}
+            <!-- Message text -->
+            <div class="flex-1">{{ message }}</div>
           </div>
-          {% endif %} {% endwith %}
+          {% endfor %}
         </div>
+        {% endif %} {% endwith %}
+      </div>
 
-        <!-- Block for page-specific content -->
-        {% block content %} {% endblock %}
-      </main>
-    </div>
+      <!-- Block for page-specific content -->
+      {% block content %} {% endblock %}
+    </main>
+  </div>
 
-    <script src="{{ url_for('static', filename='js/util.js') }}"></script>
-  </body>
+  <script src="{{ url_for('static', filename='js/util.js') }}"></script>
+</body>
+
 </html>

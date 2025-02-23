@@ -1,6 +1,7 @@
 from flask import Flask, render_template  # type: ignore
 from flask_session import Session  # type: ignore
 from flask_mail import Mail  # type: ignore
+from flask_wtf.csrf import CSRFProtect, generate_csrf  # type: ignore
 
 from app.config import Config, DevelopmentConfig  # Import the config dictionary
 from app.routes import (
@@ -23,6 +24,13 @@ app = Flask(__name__)
 # Load the appropriate configuration based on the environment
 app.config.from_object(DevelopmentConfig)
 
+# Enable CSRF protection
+csrf = CSRFProtect(app)
+
+# Make the CSRF token generator available in all templates
+app.jinja_env.globals["csrf_token"] = generate_csrf
+app.context_processor(lambda: {"csrf_token": generate_csrf})
+
 # Initialize the app's folders (i.e., create the directories if they don't exist)
 Config.init_app(app)
 
@@ -32,6 +40,8 @@ app.config["SESSION_TYPE"] = (
     "filesystem"  # Stores session data in the server file system
 )
 app.config["SESSION_PERMANENT"] = True  # Make sessions permanent
+app.config["SESSION_COOKIE_SECURE"] = False
+
 app.config["PERMANENT_SESSION_LIFETIME"] = 3600  # Session lifetime in seconds (1 hour)
 Session(app)  # Initialize Flask-Session
 

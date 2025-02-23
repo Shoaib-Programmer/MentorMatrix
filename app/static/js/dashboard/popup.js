@@ -50,6 +50,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Progress bar handling
+    function updateProgress(percent) {
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress-bar');
+        
+        progressContainer.classList.remove('hidden');
+        progressBar.style.width = `${percent}%`;
+        progressBar.textContent = `${Math.round(percent)}%`;
+        
+        if (percent >= 100) {
+            setTimeout(() => progressContainer.classList.add('hidden'), 1000);
+        }
+    }
+
+    // Show error message
+    function showError(message) {
+        alert(message); // Replace with a better UI notification system if needed
+    }
+
     // Rest of your existing handlers for audio, YouTube, and PDF functionality
 
     //
@@ -113,13 +132,42 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (uploadButton) {
-        uploadButton.addEventListener("click", () => {
-            if (uploadedAudioBlob) {
-                // Process the audio upload.
-                // For example, you may use fetch or XMLHttpRequest to send the blob.
-                // Here we simulate a successful upload.
-                alert("Audio uploaded successfully!");
-                hideModal('audio');
+        uploadButton.addEventListener("click", async () => {
+            if (!uploadedAudioBlob) {
+                showError("No audio file selected");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('audio', uploadedAudioBlob);
+
+            try {
+                updateProgress(0);
+                const response = await fetch("/upload_audio", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: formData,
+                });
+                
+
+                if (response.redirected) {
+                    window.location.href = response.url;
+                } else if (response.ok) {
+                    const data = await response.json();
+                    if (data.error) {
+                        showError(data.error);
+                    } else {
+                        hideModal('audio');
+                        updateProgress(100);
+                    }
+                } else {
+                    showError("Failed to upload audio");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                showError("An error occurred while uploading");
             }
         });
     }
@@ -134,26 +182,31 @@ document.addEventListener('DOMContentLoaded', function() {
             const youtubeUrl = youtubeUrlInput ? youtubeUrlInput.value.trim() : "";
             
             if (!youtubeUrl) {
-                alert("Please enter a valid YouTube URL.");
+                showError("Please enter a valid YouTube URL");
                 return;
             }
 
             try {
+                updateProgress(20);
                 const response = await fetch("/upload_youtube", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').content 
+                    },
                     body: JSON.stringify({ youtube_url: youtubeUrl })
                 });
 
-                if (response.ok) {
-                    alert("YouTube video submitted successfully!");
-                    hideModal('youtube');
+                updateProgress(60);
+
+                if (response.redirected) {
+                    window.location.href = response.url;
                 } else {
-                    alert("Error processing YouTube URL. Please try again.");
+                    showError("Error processing YouTube URL");
                 }
             } catch (error) {
                 console.error("Error:", error);
-                alert("An error occurred. Please try again.");
+                showError("Failed to process YouTube URL");
             }
         });
     }
@@ -166,29 +219,61 @@ document.addEventListener('DOMContentLoaded', function() {
         submitPdfButton.addEventListener("click", async () => {
             const pdfInput = document.getElementById("pdf-input");
             if (!pdfInput || !pdfInput.files.length) {
-                alert("Please select a PDF file.");
+                showError("Please select a PDF file");
                 return;
             }
 
-            try {
-                const formData = new FormData();
-                formData.append('pdf', pdfInput.files[0]);
+            const formData = new FormData();
+            formData.append('pdf', pdfInput.files[0]);
 
+            try {
+                updateProgress(20);
                 const response = await fetch("/upload_pdf", {
                     method: "POST",
+                    headers: {
+                        "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').content
+                    },
                     body: formData
                 });
 
-                if (response.ok) {
-                    alert("PDF uploaded successfully!");
-                    hideModal('pdf');
+                updateProgress(60);
+
+                if (response.redirected) {
+                    window.location.href = response.url;
                 } else {
-                    alert("Error uploading PDF. Please try again.");
+                    const data = await response.json();
+                    if (data.error) {
+                        showError(data.error);
+                    } else {
+                        hideModal('pdf');
+                        updateProgress(100);
+                    }
                 }
             } catch (error) {
                 console.error("Error:", error);
-                alert("An error occurred. Please try again.");
+                showError("Failed to upload PDF");
             }
+        });
+    }
+
+    // Handle file upload progress
+    function uploadWithProgress(url, formData) {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            
+            xhr.upload.addEventListener("progress", (e) => {
+                if (e.lengthComputable) {
+                    const percentComplete = (e.loaded / e.total) * 100;
+                    updateProgress(percentComplete);
+                }
+            });
+
+            xhr.addEventListener("load", () => resolve(xhr));
+            xhr.addEventListener("error", () => reject(xhr));
+            
+            xhr.open("POST", url);
+            xhr.setRequestHeader("X-CSRFToken", document.querySelector('meta[name="csrf-token"]').content);
+            xhr.send(formData);
         });
     }
 });
