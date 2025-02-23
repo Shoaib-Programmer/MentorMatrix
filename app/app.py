@@ -18,7 +18,7 @@ from app.routes import (
 from app.models import init_db
 
 # Initialize the Flask app
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static', template_folder='templates')
 
 
 # Load the appropriate configuration based on the environment
