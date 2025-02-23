@@ -115,3 +115,115 @@
     border-radius: 8px;
     font-size: 1rem;
 }
+
+/* Generic Overlay for all popups */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-overlay.hidden {
+    display: none;
+}
+
+/* Generic Popup Container */
+.popup-container {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    position: relative;
+    width: 90%;
+    max-width: 500px;
+}
+
+/* Header Title */
+.popup-container h3 {
+    font-family: 'Arial', sans-serif;
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+/* Input Styling (works for file inputs and URL inputs) */
+.popup-container input[type="file"],
+.popup-container input[type="url"] {
+    display: block;
+    margin: 20px auto;
+    font-family: 'Arial', sans-serif;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Button Styling */
+.popup-container button {
+    display: inline-block;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: 'Arial', sans-serif;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.popup-container button:hover {
+    background-color: #0056b3;
+}
+
+.popup-container button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* Messages Styling */
+.popup-container p {
+    margin-top: 20px;
+    font-family: 'Arial', sans-serif;
+    font-size: 0.9rem;
+    color: #333;
+    line-height: 1.5;
+}
+
+/* Unified elegant fade-in animation for all popups */
+@keyframes fadeInElegant {
+    0% {
+        opacity: 0;
+        transform: scale(0.95) rotate(3deg);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(1.05) rotate(-2deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+/* YouTube Popup specific styles (if needed in addition to global ones) */
+/* .youtube-popup .popup-container { */
+    /* Customize further if necessary */
+/* } */
+
+/* Audio Popup specific styles (if needed in addition to global ones) */
+/* .audio-popup .popup-container { */
+    /* Customize further if necessary */
+/* } */
+
+/* PDF Popup specific styles (if needed in addition to global ones) */
+/* .pdf-popup .popup-container { */
+    /* Customize further if necessary */
+/* } */

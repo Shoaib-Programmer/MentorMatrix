@@ -4,9 +4,8 @@
 
 {% block other_head_stuff %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard/dashboard.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard/audio_popup.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard/youtube_popup.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard/alt_pdf_popup.css') }}">
+    <!-- Replace individual popup styles with the merged file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/popup.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -15,27 +14,27 @@
         <span class="profile-icon">S</span> 
         <span class="profile-name">Shoaib Shaik</span>
     </div>
-    <!-- Dashboard HTML -->
+    <!-- Dashboard Header -->
     <section class="dashboard-header">
         <h2>Dashboard</h2>
         <p>Create new notes</p>
         <div class="upload-options">
-            <button class="audio_upload-option-btn" onclick="toggleAudioPopup(true)">
+            <button class="upload-option-btn" data-modal-type="audio">
                 <i class="fas fa-microphone"></i> Record or Upload Audio
             </button>
-            <button class="youtube_upload-option-btn">
+            <button class="upload-option-btn" data-modal-type="youtube">
                 <i class="fab fa-youtube"></i> YouTube Video
             </button>
-            <button class="pdf_upload-option-btn" onclick="togglePdfPopup(true)">
+            <button class="upload-option-btn" data-modal-type="pdf">
                 <i class="fas fa-file-pdf"></i> PDF Upload
             </button>
         </div>
     </section>
 
     <!-- Audio Popup Modal -->
-    <div id="audio-popup" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-btn" onclick="toggleModal('audio-popup')">&times;</span>
+    <div class="popup-overlay audio-popup hidden" data-modal-type="audio">
+        <div class="popup-container">
+            <span class="close-btn">&times;</span>
             <h3>Record or Upload Audio</h3>
             <input id="audio-input" type="file" accept="audio/*" />
             <button id="record-button">Start Recording</button>
@@ -45,13 +44,23 @@
     </div>
 
     <!-- YouTube Popup Modal -->
-    <div id="youtube-popup" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-btn" onclick="toggleYoutubePopup(true)">&times;</span>
+    <div class="popup-overlay youtube-popup hidden" data-modal-type="youtube">
+        <div class="popup-container">
+            <span class="close-btn">&times;</span>
             <h3>Upload YouTube Video</h3>
             <label for="youtube-url">YouTube URL:</label>
             <input id="youtube-url" type="url" placeholder="Enter YouTube URL" required />
             <button id="submit-youtube-button">Submit</button>
+        </div>
+    </div>
+    
+    <!-- PDF Popup Modal -->
+    <div class="popup-overlay pdf-popup hidden" data-modal-type="pdf">
+        <div class="popup-container">
+            <span class="close-btn">&times;</span>
+            <h3>PDF Upload</h3>
+            <input id="pdf-input" type="file" accept="application/pdf" />
+            <button id="submit-pdf-button">Submit</button>
         </div>
     </div>
 </div>
@@ -63,7 +72,6 @@
     </div>
 </div>
 
-<script src="{{ url_for('static', filename='js/dashboard/audio_popup.js') }}"></script>
-<script src="{{ url_for('static', filename='js/dashboard/youtube_popup.js') }}"></script>
-<script src="{{ url_for('static', filename='js/dashboard/pdf_popup.js') }}"></script>
+<!-- Only include the consolidated popup.js - REMOVE ALL OTHER POPUP SCRIPT IMPORTS -->
+<script src="{{ url_for('static', filename='js/dashboard/popup.js') }}"></script>
 {% endblock %}
