@@ -1,9 +1,10 @@
-from flask import Flask, render_template  # type: ignore
-from flask_session import Session  # type: ignore
-from flask_mail import Mail  # type: ignore
-from flask_wtf.csrf import CSRFProtect, generate_csrf  # type: ignore
+from flask import Flask, render_template
+from flask_session import Session
+from flask_mail import Mail
+from flask_wtf.csrf import CSRFProtect, generate_csrf
 
-from app.config import Config, DevelopmentConfig  # Import the config dictionary
+# Import your configuration and blueprints
+from app.config import DevelopmentConfig  # or use config["development"] from the mapping if preferred
 from app.routes import (
     dashboard_blueprint,
     notes_blueprint,
@@ -17,49 +18,28 @@ from app.routes import (
 )
 from app.models import init_db
 
-# Initialize the Flask app
+# Create the Flask application
 app = Flask(__name__, static_folder='static', template_folder='templates')
 
-
-# Load the appropriate configuration based on the environment
+# Load the configuration (using DevelopmentConfig as an example)
 app.config.from_object(DevelopmentConfig)
 
-# Enable CSRF protection
-csrf = CSRFProtect(app)
+# Initialize app-specific settings (e.g. creating folders)
+DevelopmentConfig.init_app(app)
 
-# Make the CSRF token generator available in all templates
+# Set up CSRF protection and make the CSRF token available in templates
+csrf = CSRFProtect(app)
 app.jinja_env.globals["csrf_token"] = generate_csrf
 app.context_processor(lambda: {"csrf_token": generate_csrf})
 
-# Initialize the app's folders (i.e., create the directories if they don't exist)
-Config.init_app(app)
-
-
-# Flask-Session Configuration
-app.config["SESSION_TYPE"] = (
-    "filesystem"  # Stores session data in the server file system
-)
-app.config["SESSION_PERMANENT"] = True  # Make sessions permanent
-app.config["SESSION_COOKIE_SECURE"] = False
-
-app.config["PERMANENT_SESSION_LIFETIME"] = 3600  # Session lifetime in seconds (1 hour)
-Session(app)  # Initialize Flask-Session
-
-# Mail configuration
-app.config["MAIL_SERVER"] = "smtp.gmail.com"
-app.config["MAIL_PORT"] = 587
-app.config["MAIL_USE_TLS"] = True
-app.config["MAIL_USE_SSL"] = False
-app.config["MAIL_USERNAME"] = "authsimple.eshaan@gmail.com"
-app.config["MAIL_PASSWORD"] = "kuqb lgto jtod lfjm"
-app.config["MAIL_DEFAULT_SENDER"] = "authsimple.eshaan@gmail.com"
-
+# Initialize session and mail extensions (their settings are loaded via config)
+Session(app)
 mail = Mail(app)
 
-# Initialize SQLite database (this will create the tables)
+# Initialize the database (this creates the necessary tables)
 init_db()
 
-# Register blueprints for different routes
+# Register blueprints within an application context
 with app.app_context():
     app.register_blueprint(dashboard_blueprint)
     app.register_blueprint(podcast_blueprint)
@@ -71,18 +51,14 @@ with app.app_context():
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(error_blueprint)
 
-# Miscellaneous routes for now
-
-
+# Miscellaneous routes
 @app.route("/settings")
 def settings():
     return render_template("settings.html", current_route="settings")
 
-
 @app.route("/pricing")
 def pricing():
     return render_template("pricing.html")
-
 
 if __name__ == "__main__":
     app.run(debug=True, host="::", port=5000)
