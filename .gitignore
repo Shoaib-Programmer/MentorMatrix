@@ -2,5 +2,7 @@
 node_modules/
 **/__pycache__/
 uploads
+podcasts
 instance/**
 flask_session/**
+
