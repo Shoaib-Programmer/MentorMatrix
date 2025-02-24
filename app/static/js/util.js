@@ -19,3 +19,26 @@ window.addEventListener('DOMContentLoaded', (event) => {
         }, 5000); // Message disappears after 5 seconds
     });
 });
+
+import { Clerk } from '@clerk/clerk-js';
+
+const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+const clerk = new Clerk(clerkPubKey);
+
+clerk.load().then(() => {
+  // Check if the user is signed in
+  if (clerk.user) {
+    // If signed in, you can mount a user button (for account management)
+    const userButtonContainer = document.getElementById('user-button');
+    if (userButtonContainer) {
+      clerk.mountUserButton(userButtonContainer);
+    }
+  } else {
+    // If not signed in, mount a sign-in widget instead
+    const signInContainer = document.getElementById('sign-in');
+    if (signInContainer) {
+      clerk.mountSignIn(signInContainer);
+    }
+  }
+});
+

@@ -1,7 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, render_template # type: ignore
 from flask_session import Session
-from flask_mail import Mail
-from flask_wtf.csrf import CSRFProtect, generate_csrf
+from flask_mail import Mail # type: ignore
+from flask_wtf.csrf import CSRFProtect, generate_csrf # type: ignore
 
 # Import your configuration and blueprints
 from app.config import DevelopmentConfig  # or use config["development"] from the mapping if preferred

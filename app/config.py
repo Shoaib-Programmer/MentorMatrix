@@ -1,6 +1,6 @@
 import os
 from datetime import timedelta
-from dotenv import load_dotenv
+from dotenv import load_dotenv # type: ignore
 
 # Load environment variables from a .env file if available
 load_dotenv()

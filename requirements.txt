@@ -19,11 +19,8 @@ flask-wtf
 flask-login
 python-dotenv
 flask-mail
-celery
-redis
 pytest
 requests
-pandas
 flask-socketio
 flask-dropzone
 python-magic
@@ -42,3 +39,4 @@ google-auth
 google-auth-oauthlib
 google-auth-httplib2
 pyttsx3
+pyjwt
