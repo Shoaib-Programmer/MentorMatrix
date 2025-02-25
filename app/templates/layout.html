@@ -29,14 +29,12 @@
   <div class="container">
     <!-- Sidebar -->
     <aside class="sidebar">
+      <button class="sidebar-toggle" id="sidebar-toggle">
+        <i class="fas fa-chevron-left" id="toggle-icon"></i>
+      </button>
       <div class="logo">
         <center>
-          <img src="{{ url_for('static', filename='images/MentorMatrix_logo.png') }}" alt="MentorMatrix Logo" style="
-                width: 120px;
-                height: 120px;
-                border-radius: 50%; /* Makes it a circle */
-                overflow: hidden; /* Ensures contents stay within the circle */
-              " />
+          <img src="{{ url_for('static', filename='images/MentorMatrix_logo.png') }}" alt="MentorMatrix Logo" />
           <h1>MentorMatrix</h1>
         </center>
       </div>
@@ -44,45 +42,45 @@
         <!-- Buttons with redirect functionality -->
         <button class="nav-item {% if current_route == 'dashboard' %}active{% endif %}"
           onclick="redirectToPage('/dashboard')">
-          <i class="fas fa-home nav-icon"></i> Dashboard
+          <i class="fas fa-home nav-icon"></i> <span>Dashboard</span>
         </button>
 
         <button class="nav-item {% if current_route == 'notes' %}active{% endif %}" onclick="redirectToPage('/notes')">
-          <i class="fas fa-book nav-icon"></i> Notes
+          <i class="fas fa-book nav-icon"></i> <span>Notes</span>
         </button>
 
         <button class="nav-item {% if current_route == 'chatbot' %}active{% endif %}"
           onclick="redirectToPage('/chatbot')">
-          <i class="fas fa-comments nav-icon"></i> Chat Bot
+          <i class="fas fa-comments nav-icon"></i> <span>Chat Bot</span>
         </button>
 
         <button class="nav-item {% if current_route == 'podcast' %}active{% endif %}"
           onclick="redirectToPage('/podcast')">
-          <i class="fas fa-podcast nav-icon"></i> Podcast
+          <i class="fas fa-podcast nav-icon"></i> <span>Podcast</span>
         </button>
 
         <button class="nav-item {% if current_route == 'flashcards' %}active{% endif %}"
           onclick="redirectToPage('/flashcards')">
-          <i class="fas fa-chalkboard-teacher nav-icon"></i> Flashcards
+          <i class="fas fa-chalkboard-teacher nav-icon"></i> <span>Flashcards</span>
         </button>
 
         <button class="nav-item {% if current_route == 'quiz' %}active{% endif %}" onclick="redirectToPage('/quiz')">
-          <i class="fas fa-question-circle nav-icon"></i> Quiz
+          <i class="fas fa-question-circle nav-icon"></i> <span>Quiz</span>
         </button>
 
         <button class="nav-item {% if current_route == 'transcript' %}active{% endif %}"
           onclick="redirectToPage('/transcript')">
-          <i class="fas fa-file-alt nav-icon"></i> Transcript
+          <i class="fas fa-file-alt nav-icon"></i> <span>Transcript</span>
         </button>
 
         <button class="nav-item {% if current_route == 'settings' %}active{% endif %}"
           onclick="redirectToPage('/settings')">
-          <i class="fas fa-cogs nav-icon"></i> Settings
+          <i class="fas fa-cogs nav-icon"></i> <span>Settings</span>
         </button>
       </nav>
 
       <button class="premium-button" onclick="redirectToPage('/pricing')">
-        <i class="fas fa-star nav-icon"></i> ✨ Upgrade to Premium
+        <i class="fas fa-star nav-icon"></i> <span>✨ Upgrade to Premium</span>
       </button>
     </aside>
 
@@ -136,6 +134,37 @@
   </div>
 
   <script src="{{ url_for('static', filename='js/util.js') }}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const container = document.querySelector('.container');
+      const sidebar = document.querySelector('.sidebar');
+      const toggleBtn = document.getElementById('sidebar-toggle');
+      const toggleIcon = document.getElementById('toggle-icon');
+
+      // Load saved state
+      const sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+      if (sidebarCollapsed) {
+        sidebar.classList.add('collapsed');
+        container.classList.add('sidebar-collapsed');
+        toggleIcon.classList.replace('fa-chevron-left', 'fa-chevron-right');
+      }
+
+      toggleBtn.addEventListener('click', function() {
+        sidebar.classList.toggle('collapsed');
+        container.classList.toggle('sidebar-collapsed');
+
+        // Toggle icon
+        if (sidebar.classList.contains('collapsed')) {
+          toggleIcon.classList.replace('fa-chevron-left', 'fa-chevron-right');
+        } else {
+          toggleIcon.classList.replace('fa-chevron-right', 'fa-chevron-left');
+        }
+
+        // Save state
+        localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+      });
+    });
+  </script>
 </body>
 
 </html>
