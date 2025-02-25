@@ -1,6 +1,6 @@
 import requests
 from functools import wraps
-from flask import request, jsonify, g # type: ignore
+from flask import request, jsonify, g, redirect, session # type: ignore
 import jwt  # noqa: E402
 
 def get_clerk_public_keys():
@@ -43,19 +43,28 @@ def verify_clerk_token(token):
     return None
 
 
-def clerk_required(f):
+def requires_auth(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
+        # First, try to get the token from the Authorization header
         auth_header = request.headers.get("Authorization")
-        if not auth_header or not auth_header.startswith("Bearer "):
-            return jsonify({"error": "Missing or invalid Authorization header"}), 401
+        token = None
+        if auth_header and auth_header.startswith("Bearer "):
+            token = auth_header.split(" ")[1]
+        else:
+            # Fallback: try to get the token from the session
+            token = session.get("token")
+        
+        if not token:
+            # If no token is found, redirect to login
+            return redirect('/auth/login')
 
-        token = auth_header.split(" ")[1]
         payload = verify_clerk_token(token)
         if not payload:
             return jsonify({"error": "Invalid or expired token"}), 401
 
-        # Optionally, store the payload in Flask's global context for later use
+        # Store the token payload in Flask's global context if needed
         g.clerk_payload = payload
         return f(*args, **kwargs)
     return decorated_function
+

@@ -6,7 +6,7 @@ from flask_wtf.csrf import CSRFProtect, generate_csrf # type: ignore
 # Import your configuration and blueprints
 from app.config import DevelopmentConfig  # or use config["development"] from the mapping if preferred
 from app.routes import (
-    dashboard_blueprint,
+    dashboard_blueprint,  # noqa: F401
     notes_blueprint,
     transcribe_blueprint,
     chatbot_blueprint,
@@ -40,9 +40,13 @@ mail = Mail(app)
 init_db()
 
 @app.context_processor
-def inject_clerk_frontend_api():
-    # Inject the publishable key into all templates
-    return dict(clerk_frontend_api=app.config['CLERK_PUBLISHABLE_KEY'])
+def inject_clerk_config():
+    """Make Clerk configuration available to all templates."""
+    if not app.config.get('CLERK_PUBLISHABLE_KEY'):
+        raise ValueError("CLERK_PUBLISHABLE_KEY is not set in app configuration")
+    return {
+        'clerk_key': app.config['CLERK_PUBLISHABLE_KEY']
+    }
 
 # Register blueprints within an application context
 with app.app_context():
@@ -64,6 +68,7 @@ def settings():
 @app.route("/pricing")
 def pricing():
     return render_template("pricing.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="::", port=5000)
