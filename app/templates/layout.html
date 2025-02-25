@@ -15,14 +15,11 @@
   {% if csrf_token is defined %}
   <meta name="csrf-token" content="{{ csrf_token() }}">
   {% endif %}
-
   <script defer crossorigin="anonymous"
     data-clerk-publishable-key="pk_test_cGxlYXNhbnQtaHVtcGJhY2stNDcuY2xlcmsuYWNjb3VudHMuZGV2JA"
-    src="https://pleasant-humpback-47.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
-    type="text/javascript" onload="window.clerkLoaded = true;">
-  </script>
+    src="https://pleasant-humpback-47.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"></script>
 
-  {% block other_head_stuff %} {% endblock %}
+  {% block other_head_stuff %}{% endblock %}
 </head>
 
 <body>
@@ -145,7 +142,7 @@
 
   <script src="{{ url_for('static', filename='js/util.js') }}"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       const container = document.querySelector('.container');
       const sidebar = document.querySelector('.sidebar');
       const toggleBtn = document.getElementById('sidebar-toggle');
@@ -195,7 +192,7 @@
         toggleIcon.classList.replace('fa-chevron-left', 'fa-chevron-right');
       }
 
-      toggleBtn.addEventListener('click', function() {
+      toggleBtn.addEventListener('click', function () {
         sidebar.classList.toggle('collapsed');
         container.classList.toggle('sidebar-collapsed');
 
