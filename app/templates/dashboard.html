@@ -10,10 +10,26 @@
 
 {% block content %}
 <div id="main-content">
+    <!-- base.html -->
+<header>
     <div class="profile">
-        <span class="profile-icon">S</span>
-        <span class="profile-name">Shoaib Shaik</span>
+    <div class="user-button">
+      {% if current_user %}
+        <button id="user-button">
+          {{ current_user.first_name or "User" }}
+          <img src="{{ current_user.profile_image_url or '/static/default-avatar.png' }}" alt="User avatar">
+        </button>
+        <div id="user-dropdown" class="hidden">
+          <a href="/profile">Profile</a>
+          <a href="/logout">Logout</a>
+        </div>
+      {% else %}
+        <a href="/auth/login">Login</a>
+      {% endif %}
     </div>
+    </div>
+  </header>
+  
     <!-- Dashboard Header -->
     <section class="dashboard-header">
         <h2>Dashboard</h2>
@@ -100,4 +116,32 @@
 
 <!-- Only include the consolidated popup.js - REMOVE ALL OTHER POPUP SCRIPT IMPORTS -->
 <script src="{{ url_for('static', filename='js/dashboard/popup.js') }}"></script>
+<script>
+    window.addEventListener('load', async function () {
+      await Clerk.load()
+    
+      if (Clerk.user) {
+        document.getElementById('app').innerHTML = `
+          <div id="user-button"></div>
+        `
+    
+        const userButtonDiv = document.getElementById('user-button')
+    
+        Clerk.mountUserButton(userButtonDiv)
+      }
+    })
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const userButton = document.getElementById('user-button');
+      const userDropdown = document.getElementById('user-dropdown');
+  
+      if(userButton && userDropdown) {
+        userButton.addEventListener('click', function() {
+          // Toggle the "hidden" class on the dropdown
+          userDropdown.classList.toggle('hidden');
+        });
+      }
+    });
+  </script>  
 {% endblock %}

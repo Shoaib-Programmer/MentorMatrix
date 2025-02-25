@@ -1,15 +1,32 @@
 import requests
 from functools import wraps
-from flask import request, jsonify, g, redirect, session # type: ignore
-import jwt  # noqa: E402
+from flask import request, jsonify, g, redirect, session  # type: ignore
+import jwt
+import json
+import os
+from dotenv import load_dotenv # type: ignore
+
+load_dotenv()
 
 def get_clerk_public_keys():
-    # Adjust the URL according to Clerk's documentation
-    response = requests.get("https://api.clerk.dev/public-keys")
+    url = "https://api.clerk.dev/v1/jwks"
+    secret_key = os.environ.get("CLERK_SECRET_KEY")
+    if not secret_key:
+        raise Exception("Missing Clerk secret key")
+
+    headers = {"Authorization": f"Bearer {secret_key}"}
+    response = requests.get(url, headers=headers)
     if response.status_code != 200:
+        print("Response status:", response.status_code)
+        print("Response text:", response.text)
         raise Exception("Failed to fetch Clerk public keys")
-    # Assume the response is a JSON object mapping key IDs (kid) to public keys.
-    return response.json()
+
+    jwks = response.json()  # JWKS format: {"keys": [ ... ]}
+    keys = {}
+    for key in jwks.get("keys", []):
+        # Convert each JWKS key to a PEM key usable by PyJWT.
+        keys[key["kid"]] = jwt.algorithms.RSAAlgorithm.from_jwk(json.dumps(key))
+    return keys
 
 
 def verify_clerk_token(token):
@@ -54,10 +71,10 @@ def requires_auth(f):
         else:
             # Fallback: try to get the token from the session
             token = session.get("token")
-        
+
         if not token:
             # If no token is found, redirect to login
-            return redirect('/auth/login')
+            return redirect("/auth/login")
 
         payload = verify_clerk_token(token)
         if not payload:
@@ -66,5 +83,5 @@ def requires_auth(f):
         # Store the token payload in Flask's global context if needed
         g.clerk_payload = payload
         return f(*args, **kwargs)
-    return decorated_function
 
+    return decorated_function

@@ -33,9 +33,13 @@ def handle_successful_login(token):
 
 @auth_blueprint.route('/callback')
 def auth_callback():
-    """Handle authentication callback from Clerk."""
-    token = request.args.get("token")  # Get token from Clerk's redirect URL
+    # Use __clerk_handshake as it appears to be a valid JWT
+    token = request.args.get("__clerk_handshake")
+    print("Received token:", token)  # For debugging
+    
     if not token:
         return redirect('/auth/login')
+    
+    session['token'] = token
+    return redirect('/dashboard')
 
-    return handle_successful_login(token)

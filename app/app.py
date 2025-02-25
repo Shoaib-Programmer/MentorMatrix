@@ -1,4 +1,4 @@
-from flask import Flask, render_template # type: ignore
+from flask import Flask, render_template, g # type: ignore
 from flask_session import Session
 from flask_mail import Mail # type: ignore
 from flask_wtf.csrf import CSRFProtect, generate_csrf # type: ignore
@@ -41,12 +41,8 @@ init_db()
 
 @app.context_processor
 def inject_clerk_config():
-    """Make Clerk configuration available to all templates."""
-    if not app.config.get('CLERK_PUBLISHABLE_KEY'):
-        raise ValueError("CLERK_PUBLISHABLE_KEY is not set in app configuration")
-    return {
-        'clerk_key': app.config['CLERK_PUBLISHABLE_KEY']
-    }
+    return dict(current_user=g.get('clerk_payload'))
+
 
 # Register blueprints within an application context
 with app.app_context():
