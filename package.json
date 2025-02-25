@@ -18,20 +18,21 @@
   "license": "MIT",
   "devDependencies": {
     "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.49",
+    "postcss": "^8.5.3",
     "postcss-cli": "^11.0.0",
-    "sass": "^1.82.0",
-    "tailwindcss": "^3.4.16",
-    "vite": "^6.1.1"
+    "sass": "^1.85.1",
+    "tailwindcss": "^3.4.17",
+    "vite": "^6.2.0"
   },
   "dependencies": {
     "@clerk/clerk-js": "^5.53.0",
+    "@clerk/themes": "^2.2.19",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/container-queries": "^0.1.1",
-    "@tailwindcss/forms": "^0.5.9",
+    "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/line-clamp": "^0.4.4",
-    "@tailwindcss/typography": "^0.5.15",
-    "marked": "^15.0.4",
+    "@tailwindcss/typography": "^0.5.16",
+    "marked": "^15.0.7",
     "tailwind": "^4.0.0",
     "tailwind-scrollbar": "^3.1.0",
     "tailwindcss-animate": "^1.0.7",
