@@ -299,13 +299,13 @@ a:focus {
 .sidebar.collapsed .logo img {
   width: 50px !important;
   height: 50px !important;
-  margin: 15px auto;
+  margin: 15px auto 30px auto; /* Add more bottom margin */
 }
 
 .sidebar-toggle {
-  position: absolute;
-  top: 20px;
-  left: calc(100% - 12px); /* Position relative to sidebar width */
+  position: relative; /* Change from absolute to relative */
+  left: auto; /* Remove left positioning */
+  top: auto; /* Remove top positioning */
   background: #121212;
   border: 1px solid #333;
   border-radius: 50%;
@@ -318,12 +318,7 @@ a:focus {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   z-index: 100;
   color: #fff;
-  transform: translateX(0); /* Ensure stable positioning */
-}
-
-.sidebar-toggle:hover {
-  background: #1a1a1a;
-  border-color: #444;
+  margin: 1rem auto; /* Add margin to create space above and below */
 }
 
 .sidebar .logo img {
@@ -336,7 +331,7 @@ a:focus {
 
 .sidebar .logo {
   flex-shrink: 0; /* Prevent logo from shrinking */
-  padding: 1rem 0;
+  padding: 1rem 0 0 0; /* Remove bottom padding */
 }
 
 /* Remove or comment out this rule since we're using container padding instead */
@@ -356,28 +351,25 @@ a:focus {
   flex-direction: column;
   gap: 1rem;
   /* Space between items */
-  margin-top: 1.5rem;
+  margin-top: 0; /* Adjust top margin */
   flex: 1;
   overflow-y: auto; /* Enable scrolling */
   margin: 1.5rem 0;
   padding-right: 0.5rem; /* Space for scrollbar */
   /* Improve scrollbar styling */
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
 }
 
-/* Custom scrollbar for WebKit browsers */
+/* Hide WebKit scrollbar */
 .nav-links::-webkit-scrollbar {
-  width: 6px;
+  display: none;
 }
 
-.nav-links::-webkit-scrollbar-track {
-  background: transparent;
-}
-
+/* Remove these rules since we're hiding the scrollbar completely */
+.nav-links::-webkit-scrollbar-track,
 .nav-links::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 3px;
+  display: none;
 }
 
 /* Base style for sidebar buttons */
@@ -463,11 +455,17 @@ a:focus {
 .sidebar.collapsed .nav-item {
   padding: 0.75rem;
   justify-content: center;
+  /* margin-top: -15px; Move icons up slightly */
 }
 
 .sidebar.collapsed .nav-item i {
   margin: 0;
   font-size: 1.2rem;
+}
+
+/* Adjust nav-links top margin in collapsed state */
+.sidebar.collapsed .nav-links {
+  margin-top: 0; /* Reduce top margin when collapsed */
 }
 
 /* Profile section at top-right */
