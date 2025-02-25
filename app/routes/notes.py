@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash  # type: ignore
 from app.models import db
 from app.notes import summarize_text
+from app.middleware import requires_auth
 import markdown  # type: ignore
 from icecream import ic  # type: ignore
 
@@ -8,6 +9,7 @@ notes_blueprint = Blueprint("notes", __name__)
 
 
 @notes_blueprint.route("/notes")
+@requires_auth
 def notes():
     # Fetch notes along with associated files and transcript titles
 
@@ -29,6 +31,7 @@ def notes():
 
 
 @notes_blueprint.route("/generate_notes/<int:transcript_id>", methods=["GET", "POST"])
+@requires_auth
 def generate_notes(transcript_id):
     # Fetch relevant file details and transcript content
     transcript_data = db.execute(
@@ -91,6 +94,7 @@ def generate_notes(transcript_id):
 
 
 @notes_blueprint.route("/add_note", methods=["POST"])
+@requires_auth
 def add_note():
     # Get form data
     title = request.form.get("title")
@@ -120,6 +124,7 @@ def add_note():
 
 
 @notes_blueprint.route("/notes/<int:note_id>")
+@requires_auth
 def view_note(note_id):
     # Fetch the note details by ID
     result = db.execute(
@@ -155,6 +160,7 @@ def view_note(note_id):
 
 
 @notes_blueprint.route("/delete_note/<int:note_id>", methods=["POST"])
+@requires_auth
 def delete_note(note_id):
     # Attempt to delete the note by ID
     try:
@@ -178,6 +184,7 @@ def delete_note(note_id):
 
 
 @notes_blueprint.route("/edit_title", methods=["POST"])
+@requires_auth
 def edit_title():
     """
     Route to update the title of a note.

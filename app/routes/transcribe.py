@@ -17,6 +17,7 @@ from app.notes import (
     get_video_id_from_url,
     get_transcript_from_youtube,
 )
+from app.middleware import requires_auth
 import logging
 from typing import Optional
 from dotenv import load_dotenv  # type: ignore
@@ -32,7 +33,7 @@ googleapiclient.discovery_cache.DISABLE_CACHE = True
 
 load_dotenv()
 
-YOUTUBE_API_KEY = os.environ.get('YOUTUBE_API_KEY')
+YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY")
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -52,6 +53,7 @@ def save_file(file, folder):
 
 
 @transcribe_blueprint.route("/upload_audio", methods=["POST"])
+@requires_auth
 def upload_audio():
     logging.debug("Upload_audio route called.")
 
@@ -95,6 +97,7 @@ def upload_audio():
 
 
 @transcribe_blueprint.route("/upload_pdf", methods=["POST"])
+@requires_auth
 def upload_pdf():
     if "pdf" not in request.files:
         flash("No PDF file uploaded.", "error")
@@ -147,7 +150,9 @@ def fetch_youtube_video_title(video_id: str) -> Optional[str]:
     :return: Video title, or None if an error occurs.
     """
     try:
-        youtube = build("youtube", "v3", developerKey=YOUTUBE_API_KEY, cache_discovery=False)
+        youtube = build(
+            "youtube", "v3", developerKey=YOUTUBE_API_KEY, cache_discovery=False
+        )
         response = youtube.videos().list(part="snippet", id=video_id).execute()
         if "items" in response and len(response["items"]) > 0:
             return response["items"][0]["snippet"]["title"]
@@ -158,6 +163,7 @@ def fetch_youtube_video_title(video_id: str) -> Optional[str]:
 
 
 @transcribe_blueprint.route("/upload_youtube", methods=["POST"])
+@requires_auth
 def upload_youtube():
     logging.debug("Upload_youtube route called.")
 
@@ -215,6 +221,7 @@ def upload_youtube():
 
 
 @transcribe_blueprint.route("/transcript")
+@requires_auth
 def transcript():
     # Query and group files by type
     files = db.execute("""
@@ -235,6 +242,7 @@ def transcript():
 
 
 @transcribe_blueprint.route("/view_transcript/<int:file_id>")
+@requires_auth
 def view_transcript(file_id):
     # Fetch the transcript based on the file_id from the database
     transcript = db.execute(

@@ -3,11 +3,13 @@ from app.notes import generate_flashcards, get_title, generate_description
 from datetime import datetime
 from app.models import db
 from icecream import ic  # type: ignore
+from app.middleware import requires_auth
 
 flashcards_blueprint = Blueprint("flashcards", __name__)
 
 
 @flashcards_blueprint.route("/flashcards")
+@requires_auth
 def flashcards():
     """
     Display the list of flashcards from the database, ordered by creation date.
@@ -37,6 +39,7 @@ def flashcards():
 
 
 @flashcards_blueprint.route("/add_flashcard", methods=["POST"])
+@requires_auth
 def add_flashcard():
     """
     Add a new flashcard manually, with an option to choose a deck.
@@ -69,6 +72,7 @@ def add_flashcard():
 
 
 @flashcards_blueprint.route("/delete_flashcard/<int:flashcard_id>", methods=["POST"])
+@requires_auth
 def delete_flashcard(flashcard_id):
     """
     Delete a flashcard by its ID.
@@ -84,6 +88,7 @@ def delete_flashcard(flashcard_id):
 @flashcards_blueprint.route(
     "/edit_flashcard/<int:flashcard_id>", methods=["GET", "POST"]
 )
+@requires_auth
 def edit_flashcard(flashcard_id):
     """
     Edit an existing flashcard.
@@ -130,6 +135,7 @@ def edit_flashcard(flashcard_id):
 
 
 @flashcards_blueprint.route("/search_flashcards")
+@requires_auth
 def search_flashcards():
     """
     Search flashcards by a query string.
@@ -160,6 +166,7 @@ def search_flashcards():
 
 
 @flashcards_blueprint.route("/create_deck", methods=["GET"])
+@requires_auth
 def create_deck():
     # Fetch available notes for the "Generate Deck from Notes" option
     notes = db.execute("SELECT id, title FROM notes ORDER BY created_at DESC")
@@ -167,6 +174,7 @@ def create_deck():
 
 
 @flashcards_blueprint.route("/create_deck_plain", methods=["POST"])
+@requires_auth
 def create_deck_plain():
     """
     Handle creation of a plain deck (no text or note-based generation).
@@ -197,6 +205,7 @@ def create_deck_plain():
 
 
 @flashcards_blueprint.route("/generate_deck", methods=["POST"])
+@requires_auth
 def generate_deck():
     input_text = request.form.get("input_text")
 
@@ -259,6 +268,7 @@ def generate_deck():
 
 
 @flashcards_blueprint.route("/generate_deck_automatic", methods=["POST"])
+@requires_auth
 def generate_deck_automatic():
     """
     Automatically generate flashcards for a deck using the content of selected notes (by note_ids).
@@ -349,6 +359,7 @@ def generate_deck_automatic():
 
 
 @flashcards_blueprint.route("/review", methods=["GET"])
+@requires_auth
 def review():
     """
     Review mode for students: fetch all flashcards for the selected deck

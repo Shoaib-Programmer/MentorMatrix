@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, jsonify  # type: ignore
 from app.notes import chat
 import markdown  # type: ignore
+from app.middleware import requires_auth
 
 # Define the chatbot blueprint
 chatbot_blueprint = Blueprint("chatbot", __name__)
@@ -11,12 +12,14 @@ chat_history = None
 
 # Route to render the chatbot page
 @chatbot_blueprint.route("/chatbot")
+@requires_auth
 def chatbot():
     return render_template("chatbot.html", current_route="chatbot")
 
 
 # Route to handle the user's message (POST request)
 @chatbot_blueprint.route("/chat", methods=["POST"])
+@requires_auth
 def chat_route():
     global chat_history  # Use the global chat history variable
 

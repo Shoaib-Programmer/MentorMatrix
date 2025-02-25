@@ -17,6 +17,7 @@ from app.routes import (
     error_blueprint,
 )
 from app.models import init_db
+from app.middleware import requires_auth
 
 # Create the Flask application
 app = Flask(__name__, static_folder='static', template_folder='templates')
@@ -58,6 +59,7 @@ with app.app_context():
 
 # Miscellaneous routes
 @app.route("/settings")
+@requires_auth
 def settings():
     return render_template("settings.html", current_route="settings")
 

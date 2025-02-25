@@ -9,11 +9,13 @@ from flask import (  # type: ignore
 from app.notes.AI import generate_podcast, text_to_podcast
 from app.models import db
 from pathlib import Path
+from app.middleware import requires_auth
 
 podcast_blueprint = Blueprint("podcast", __name__)
 
 
 @podcast_blueprint.route("/podcast")
+@requires_auth
 def podcast():
     """List all podcasts."""
     podcasts = db.execute("SELECT * FROM podcasts ORDER BY created_at DESC")
@@ -21,6 +23,7 @@ def podcast():
 
 
 @podcast_blueprint.route("/podcast/<int:podcast_id>")
+@requires_auth
 def podcast_detail(podcast_id):
     """View details of a specific podcast."""
     podcast = db.execute("SELECT * FROM podcasts WHERE id = ?", podcast_id)
@@ -31,6 +34,7 @@ def podcast_detail(podcast_id):
 
 
 @podcast_blueprint.route("/podcast/generate", methods=["GET", "POST"])
+@requires_auth
 def generate_podcast_route():
     """Generate a new podcast."""
     if request.method == "GET":
