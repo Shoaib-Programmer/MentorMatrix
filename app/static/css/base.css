@@ -306,19 +306,33 @@ a:focus {
   position: relative; /* Change from absolute to relative */
   left: auto; /* Remove left positioning */
   top: auto; /* Remove top positioning */
-  background: #121212;
-  border: 1px solid #333;
+  background: transparent; /* Remove background */
+  border: none; /* Remove border */
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
+  width: 40px; /* Increased container size */
+  height: 40px; /* Increased container size */
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   z-index: 100;
-  color: #fff;
+  padding: 0;
   margin: 1rem auto; /* Add margin to create space above and below */
+  transition: transform 0.3s ease;
+}
+
+.toggle-icon {
+  width: 24px; /* Increased icon size */
+  height: 24px; /* Increased icon size */
+  transition: transform 0.3s ease;
+  display: block; /* Ensure image is displayed as block */
+  filter: brightness(0) invert(1); /* Make SVG white */
+}
+
+.sidebar-toggle:hover {
+  transform: scale(1.1); /* Add subtle hover effect */
+  background: transparent; /* Keep transparent on hover */
+  box-shadow: none; /* Remove shadow */
 }
 
 .sidebar .logo img {
@@ -549,7 +563,9 @@ a:focus {
   .nav-links {
     margin-top: 4rem; /* Push nav items down below logo */
     gap: 0.5rem;
-    max-height: calc(100vh - 200px); /* Adjust based on logo and premium button height */
+    max-height: calc(
+      100vh - 200px
+    ); /* Adjust based on logo and premium button height */
     margin: 1rem 0;
   }
 
@@ -672,7 +688,7 @@ a:focus {
 }
 
 .cl-internal-1acnfz5 {
-  filter: drop-shadow(5px 5px 5px rgba(255, 255, 255, 1.0));
+  filter: drop-shadow(5px 5px 5px rgba(255, 255, 255, 1));
 }
 
 cl-userButtonPopoverActionButton:focus {

@@ -35,7 +35,7 @@
     <!-- Sidebar -->
     <aside class="sidebar">
       <button class="sidebar-toggle" id="sidebar-toggle">
-        <i class="fas fa-chevron-left" id="toggle-icon"></i>
+        <img src="{{ url_for('static', filename='images/sidebar-toggle.svg') }}" id="toggle-icon" alt="Toggle Sidebar Icon" class="toggle-icon">
       </button>
       <div class="logo">
         <center>
@@ -46,46 +46,48 @@
       <nav class="nav-links">
         <!-- Buttons with redirect functionality -->
         <button class="nav-item {% if current_route == 'dashboard' %}active{% endif %}"
-          onclick="redirectToPage('/dashboard')">
+          onclick="redirectToPage('/dashboard')" title="Dashboard">
           <i class="fas fa-home nav-icon"></i> <span>Dashboard</span>
         </button>
 
-        <button class="nav-item {% if current_route == 'notes' %}active{% endif %}" onclick="redirectToPage('/notes')">
+        <button class="nav-item {% if current_route == 'notes' %}active{% endif %}"
+          onclick="redirectToPage('/notes')" title="Notes">
           <i class="fas fa-book nav-icon"></i> <span>Notes</span>
         </button>
 
         <button class="nav-item {% if current_route == 'chatbot' %}active{% endif %}"
-          onclick="redirectToPage('/chatbot')">
+          onclick="redirectToPage('/chatbot')" title="Chat Bot">
           <i class="fas fa-comments nav-icon"></i> <span>Chat Bot</span>
         </button>
 
         <button class="nav-item {% if current_route == 'podcast' %}active{% endif %}"
-          onclick="redirectToPage('/podcast')">
+          onclick="redirectToPage('/podcast')" title="Podcast">
           <i class="fas fa-podcast nav-icon"></i> <span>Podcast</span>
         </button>
 
         <button class="nav-item {% if current_route == 'flashcards' %}active{% endif %}"
-          onclick="redirectToPage('/flashcards')">
+          onclick="redirectToPage('/flashcards')" title="Flashcards">
           <i class="fas fa-chalkboard-teacher nav-icon"></i> <span>Flashcards</span>
         </button>
 
-        <button class="nav-item {% if current_route == 'quiz' %}active{% endif %}" onclick="redirectToPage('/quiz')">
+        <button class="nav-item {% if current_route == 'quiz' %}active{% endif %}"
+          onclick="redirectToPage('/quiz')" title="Quiz">
           <i class="fas fa-question-circle nav-icon"></i> <span>Quiz</span>
         </button>
 
         <button class="nav-item {% if current_route == 'transcript' %}active{% endif %}"
-          onclick="redirectToPage('/transcript')">
+          onclick="redirectToPage('/transcript')" title="Transcript">
           <i class="fas fa-file-alt nav-icon"></i> <span>Transcript</span>
         </button>
 
         <button class="nav-item {% if current_route == 'settings' %}active{% endif %}"
-          onclick="redirectToPage('/settings')">
+          onclick="redirectToPage('/settings')" title="Settings">
           <i class="fas fa-cogs nav-icon"></i> <span>Settings</span>
         </button>
       </nav>
 
       <div class="premium-button-container">
-        <button class="premium-button" onclick="redirectToPage('/pricing')">
+        <button class="premium-button" onclick="redirectToPage('/pricing')" title="Upgrade to Premium">
           <i class="fas fa-star nav-icon"></i> <span>✨ Upgrade to Premium</span>
         </button>
       </div>
@@ -95,8 +97,7 @@
     <main class="main-content">
       <!-- Display flashed messages -->
       <div id="flash-messages" class="mt-4">
-        {% with messages = get_flashed_messages(with_categories=true) %} {% if
-        messages %}
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %}
         <div class="space-y-4">
           {% for category, message in messages %}
           <div
@@ -189,21 +190,20 @@
       if (sidebarCollapsed) {
         sidebar.classList.add('collapsed');
         container.classList.add('sidebar-collapsed');
-        toggleIcon.classList.replace('fa-chevron-left', 'fa-chevron-right');
+        toggleIcon.style.transform = 'rotate(180deg)';
       }
 
       toggleBtn.addEventListener('click', function () {
         sidebar.classList.toggle('collapsed');
         container.classList.toggle('sidebar-collapsed');
 
-        // Toggle icon
+        // Toggle icon rotation
         if (sidebar.classList.contains('collapsed')) {
-          toggleIcon.classList.replace('fa-chevron-left', 'fa-chevron-right');
+          toggleIcon.style.transform = 'rotate(180deg)';
         } else {
-          toggleIcon.classList.replace('fa-chevron-right', 'fa-chevron-left');
+          toggleIcon.style.transform = 'rotate(0deg)';
         }
 
-        // Save state
         localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
       });
     });
