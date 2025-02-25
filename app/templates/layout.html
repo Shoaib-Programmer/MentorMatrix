@@ -26,6 +26,14 @@
 </head>
 
 <body>
+  <!-- Add hamburger menu button -->
+  <button class="hamburger-menu" id="hamburger-menu" aria-label="Menu">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Add overlay div -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
   <div class="container">
     <!-- Sidebar -->
     <aside class="sidebar">
@@ -79,9 +87,11 @@
         </button>
       </nav>
 
-      <button class="premium-button" onclick="redirectToPage('/pricing')">
-        <i class="fas fa-star nav-icon"></i> <span>✨ Upgrade to Premium</span>
-      </button>
+      <div class="premium-button-container">
+        <button class="premium-button" onclick="redirectToPage('/pricing')">
+          <i class="fas fa-star nav-icon"></i> <span>✨ Upgrade to Premium</span>
+        </button>
+      </div>
     </aside>
 
     <!-- Main content area where other templates can inject content -->
@@ -140,6 +150,42 @@
       const sidebar = document.querySelector('.sidebar');
       const toggleBtn = document.getElementById('sidebar-toggle');
       const toggleIcon = document.getElementById('toggle-icon');
+      const hamburgerBtn = document.getElementById('hamburger-menu');
+      const overlay = document.getElementById('sidebar-overlay');
+
+      // Mobile menu handlers
+      function openMobileMenu() {
+        sidebar.classList.add('mobile-open');
+        document.body.classList.add('sidebar-open');
+        overlay.classList.add('active');
+      }
+
+      function closeMobileMenu() {
+        sidebar.classList.remove('mobile-open');
+        document.body.classList.remove('sidebar-open');
+        overlay.classList.remove('active');
+      }
+
+      // Event listeners for mobile
+      hamburgerBtn.addEventListener('click', openMobileMenu);
+      overlay.addEventListener('click', closeMobileMenu);
+
+      // Close mobile menu when clicking nav items
+      const navItems = document.querySelectorAll('.nav-item');
+      navItems.forEach(item => {
+        item.addEventListener('click', () => {
+          if (window.innerWidth <= 768) {
+            closeMobileMenu();
+          }
+        });
+      });
+
+      // Handle window resize
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+          closeMobileMenu();
+        }
+      });
 
       // Load saved state
       const sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';

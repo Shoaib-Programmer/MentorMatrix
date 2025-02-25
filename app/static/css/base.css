@@ -283,6 +283,7 @@ a:focus {
   top: 0;
   height: 100vh;
   z-index: 100;
+  overflow: hidden; /* Prevent sidebar itself from scrolling */
 }
 
 .sidebar.collapsed {
@@ -333,6 +334,11 @@ a:focus {
   aspect-ratio: 1;
 }
 
+.sidebar .logo {
+  flex-shrink: 0; /* Prevent logo from shrinking */
+  padding: 1rem 0;
+}
+
 /* Remove or comment out this rule since we're using container padding instead */
 /* .sidebar.collapsed + .main-content {
   margin-left: 80px;
@@ -351,6 +357,27 @@ a:focus {
   gap: 1rem;
   /* Space between items */
   margin-top: 1.5rem;
+  flex: 1;
+  overflow-y: auto; /* Enable scrolling */
+  margin: 1.5rem 0;
+  padding-right: 0.5rem; /* Space for scrollbar */
+  /* Improve scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+/* Custom scrollbar for WebKit browsers */
+.nav-links::-webkit-scrollbar {
+  width: 6px;
+}
+
+.nav-links::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.nav-links::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
 }
 
 /* Base style for sidebar buttons */
@@ -375,39 +402,36 @@ a:focus {
   /* Hint for browser optimization */
   gap: 12px;
   justify-content: flex-start;
+  outline: none !important; /* Force remove outline */
+  -webkit-tap-highlight-color: transparent; /* Remove mobile tap highlight */
 }
 
 /* Hover effect with smooth transition, subtle shadow, and scaling */
 .nav-links .nav-item:hover {
   background-color: var(--hover-bg-color);
   /* Soft white hover */
-  border-color: rgba(255, 255, 255, 0.3);
-  /* Lighter border on hover */
-  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.2);
-  /* Soft, elevated shadow */
+  border-color: transparent; /* Remove border on hover */
+  box-shadow: none; /* Remove shadow if you want */
   transform: translateX(5px);
-  /* Slight horizontal movement for interactivity */
 }
 
 /* Active state styling with depth and emphasis */
 .nav-links .nav-item.active {
   background-color: var(--active-bg-color);
   /* Slightly stronger background */
-  border-color: #fff;
-  /* White border for active state */
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.4);
-  /* Deeper shadow for active state */
+  border-color: transparent; /* Remove border on active state */
+  box-shadow: none;
   transform: scale(1.05);
-  /* Slight scale effect for emphasis */
   padding-left: 1.2rem;
 }
 
 /* Focus state for accessibility (subtle styling) */
 .nav-links .nav-item:focus {
-  outline: none;
+  outline: none !important;
   background-color: rgba(255, 255, 255, 0.12);
   /* Slightly darker on focus */
   border-color: #fff;
+  box-shadow: none; /* Remove any focus shadow */
 }
 
 /* Icon styling inside nav items */
@@ -431,6 +455,8 @@ a:focus {
 .nav-links .nav-item:focus-visible {
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
   /* Light outline for focused item */
+  outline: none !important;
+  box-shadow: none;
 }
 
 /* Adjust nav items when collapsed */
@@ -466,4 +492,160 @@ a:focus {
   align-items: center;
   justify-content: center;
   font-size: 1rem;
+}
+
+/* Premium button container */
+.premium-button-container {
+  flex-shrink: 0; /* Prevent button from shrinking */
+  padding: 1rem 0;
+  margin-top: auto; /* Push to bottom */
+}
+
+/* Mobile responsive styles */
+@media screen and (max-width: 768px) {
+  .container {
+    padding-left: 0;
+  }
+
+  .container.sidebar-collapsed {
+    padding-left: 0;
+  }
+
+  .main-content {
+    padding: 1rem;
+    padding-top: 5rem; /* Add space for hamburger menu */
+  }
+
+  .sidebar {
+    transform: translateX(-100%);
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-toggle {
+    display: none;
+  }
+
+  .hamburger-menu {
+    display: block;
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
+    z-index: 200;
+    background: var(--background-color);
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+
+  .profile {
+    top: 1rem;
+    right: 1rem;
+  }
+
+  /* Adjust nav links container for better mobile layout */
+  .nav-links {
+    margin-top: 4rem; /* Push nav items down below logo */
+    gap: 0.5rem;
+    max-height: calc(100vh - 200px); /* Adjust based on logo and premium button height */
+    margin: 1rem 0;
+  }
+
+  /* Make logo smaller on mobile */
+  .sidebar .logo img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .sidebar .logo h1 {
+    font-size: 1.25rem;
+  }
+
+  /* Stack buttons vertically with full width */
+  .nav-links .nav-item {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 0.25rem;
+    text-align: left;
+    justify-content: flex-start;
+  }
+
+  /* Adjust premium button for mobile */
+  .premium-button {
+    width: 100%;
+    margin: 1rem 0;
+    padding: 1rem;
+  }
+
+  /* Prevent scrolling when sidebar is open */
+  body.sidebar-open {
+    overflow: hidden;
+  }
+
+  /* Overlay when sidebar is open */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 90;
+  }
+
+  .sidebar-overlay.active {
+    display: block;
+  }
+}
+
+/* Smaller screens adjustments */
+@media screen and (max-width: 480px) {
+  .profile {
+    font-size: 0.875rem;
+  }
+
+  .profile-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+  }
+
+  .premium-button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .hamburger-menu {
+    top: 1rem;
+    left: 1rem;
+    padding: 0.5rem;
+  }
+
+  .main-content {
+    padding-top: 4rem;
+  }
+
+  .nav-links {
+    margin-top: 3rem;
+  }
 }
