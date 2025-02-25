@@ -16,10 +16,11 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   {% endif %}
 
-  <script async crossorigin="anonymous"
+  <script defer crossorigin="anonymous"
     data-clerk-publishable-key="pk_test_cGxlYXNhbnQtaHVtcGJhY2stNDcuY2xlcmsuYWNjb3VudHMuZGV2JA"
     src="https://pleasant-humpback-47.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
-    type="text/javascript"></script>
+    type="text/javascript" onload="window.clerkLoaded = true;">
+  </script>
 
   {% block other_head_stuff %} {% endblock %}
 </head>
