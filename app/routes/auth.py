@@ -1,6 +1,6 @@
-from flask import blueprint, render_template  # type: ignore
+from flask import Blueprint, render_template  # type: ignore
 
-auth_blueprint = blueprint('auth', __name__, url_prefix='/auth')
+auth_blueprint = Blueprint('auth', __name__, url_prefix='/auth')
 
 @auth_blueprint.route('/login')
 def login():

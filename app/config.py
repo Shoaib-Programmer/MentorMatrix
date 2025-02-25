@@ -27,6 +27,9 @@ class Config:
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME", "authsimple.eshaan@gmail.com")
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD", "kuqb lgto jtod lfjm")
     MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", "authsimple.eshaan@gmail.com")
+    
+    CLERK_PUBLISHABLE_KEY = os.environ.get("VITE_CLERK_PUBLISHABLE_KEY")
+
 
     @staticmethod
     def init_app(app):

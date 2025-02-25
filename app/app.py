@@ -39,6 +39,11 @@ mail = Mail(app)
 # Initialize the database (this creates the necessary tables)
 init_db()
 
+@app.context_processor
+def inject_clerk_frontend_api():
+    # Inject the publishable key into all templates
+    return dict(clerk_frontend_api=app.config['CLERK_PUBLISHABLE_KEY'])
+
 # Register blueprints within an application context
 with app.app_context():
     app.register_blueprint(dashboard_blueprint)
