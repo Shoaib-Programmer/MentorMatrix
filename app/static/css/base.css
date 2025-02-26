@@ -1,16 +1,9 @@
 /* base.css */
 
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
-
-/* General reset and font */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* Remove existing font imports */
 
 :root {
-  --font-family: "Arial", sans-serif;
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
   --background-color: #121212;
   --text-color: #e0e0e0;
   --primary-blue: #2563eb;  /* Tailwind blue-600 */
@@ -26,6 +19,48 @@ body {
   font-family: var(--font-family);
   background-color: var(--background-color);
   color: var(--text-color);
+}
+
+/* Typography enhancements */
+h1, h2, h3 {
+  font-family: var(--font-family);
+  font-optical-sizing: auto;
+  letter-spacing: -0.025em;
+  font-feature-settings: "liga" 1, "calt" 1, "ss01" 1;
+  text-transform: none; /* Remove uppercase transform */
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+h2 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+h3 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+}
+
+p {
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  letter-spacing: -0.006em;
+  color: #d1d1d1;
+  line-height: 1.8;
+  font-size: 1.1rem;
+  margin-bottom: 1.5em;
 }
 
 .container {
@@ -57,6 +92,9 @@ body {
   font-size: 1rem;
   padding: 0.75rem 0;
   text-decoration: none;
+  font-family: var(--font-family);
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 .nav-item i {
@@ -90,6 +128,9 @@ body {
   display: inline-block;
   transition: all 0.3s ease-in-out;
   /* Smooth transition for all properties */
+  font-family: var(--font-family);
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 /* Hover and Active States */
@@ -131,6 +172,9 @@ button {
   display: inline-block;
   transition: all 0.3s ease;
   /* Smooth transition for hover and active states */
+  font-family: var(--font-family);
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 /* Hover and Active States */
@@ -179,9 +223,7 @@ h3 {
   /* Slightly lighter than bold for sophistication */
   letter-spacing: -0.5px;
   /* Adds a subtle space between letters for a more refined look */
-  text-transform: uppercase;
-  /* Adds a sense of grandeur, especially for headings */
-  font-family: "Montserrat", serif;
+  font-family: var(--font-family), serif;
   /* Modern and stylish font for headings */
   line-height: 1.2;
   /* Gives space between lines for better readability */
@@ -223,7 +265,7 @@ h3 {
 p {
   color: #d1d1d1;
   /* Slightly lighter grey for a softer text color */
-  font-family: "Century Gothic", sans-serif;
+  font-family: var(--font-family), sans-serif;
   /* Clean and highly readable font */
   line-height: 1.8;
   /* Increased line height for better readability */
@@ -250,6 +292,9 @@ a {
   /* Medium weight for links to make them stand out but not too bold */
   transition: color 0.3s ease-in-out, text-decoration 0.3s ease-in-out;
   /* Smooth transition for color and underline on hover */
+  font-family: var(--font-family);
+  font-weight: 500;
+  letter-spacing: -0.006em;
 }
 
 a:hover {
@@ -365,6 +410,9 @@ a:focus {
   font-size: 1.5rem;
   color: #ffffff;
   margin-top: 0.5rem;
+  font-family: var(--font-family);
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 /* Container for the navigation items */
@@ -647,14 +695,22 @@ a:focus {
 
   h1 {
     font-size: 2rem;
+    letter-spacing: -0.02em;
   }
 
   h2 {
     font-size: 1.75rem;
+    letter-spacing: -0.015em;
   }
 
   h3 {
     font-size: 1.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    font-size: 1rem;
+    line-height: 1.5;
   }
 
   .premium-button {
