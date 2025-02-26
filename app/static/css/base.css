@@ -13,9 +13,9 @@
   --font-family: "Arial", sans-serif;
   --background-color: #121212;
   --text-color: #e0e0e0;
-  --primary-purple: #6a0dad;
-  --hover-purple: #5c0ab8;
-  --active-purple: #4b0997;
+  --primary-blue: #2563eb;  /* Tailwind blue-600 */
+  --hover-blue: #1d4ed8;    /* Tailwind blue-700 */
+  --active-blue: #1e40af;   /* Tailwind blue-800 */
   --hover-bg-color: #333333;
   --active-bg-color: #333333;
   --white: #ffffff;
@@ -73,8 +73,7 @@ body {
 
 /* Premium Button Styles */
 .premium-button {
-  background-color: var(--primary-purple);
-  /* Deep purple */
+  background-color: var(--primary-blue);
   color: var(--white);
   font-size: 1rem;
   font-weight: 600;
@@ -84,7 +83,7 @@ body {
   text-align: center;
   border-radius: 12px;
   /* Softer, larger radius */
-  border: 2px solid #6a0dad;
+  border: 2px solid var(--primary-blue);
   /* Subtle border for depth */
   cursor: pointer;
   margin-top: 1rem;
@@ -95,8 +94,8 @@ body {
 
 /* Hover and Active States */
 .premium-button:hover {
-  background-color: var(--hover-purple);
-  /* Slightly darker purple */
+  background-color: var(--hover-blue);
+  /* Slightly darker blue */
   transform: translateY(-2px);
   /* Slight elevation effect */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -104,7 +103,7 @@ body {
 }
 
 .premium-button:active {
-  background-color: var(--active-purple);
+  background-color: var(--active-blue);
   /* Darker shade for pressed state */
   transform: translateY(0);
   /* Reset elevation on click */
@@ -114,7 +113,7 @@ body {
 
 .premium-button:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(106, 13, 173, 0.4);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.4);
   /* Focus ring for accessibility */
 }
 
@@ -244,8 +243,7 @@ p {
 
 /* Links */
 a {
-  color: #bb86fc;
-  /* Soft purple for a sophisticated link color */
+  color: #60a5fa; /* Tailwind blue-400 */
   text-decoration: none;
   /* Remove underline by default */
   font-weight: 500;
@@ -255,16 +253,15 @@ a {
 }
 
 a:hover {
-  color: #6200ee;
-  /* Darker shade of purple on hover for contrast */
+  color: #3b82f6; /* Tailwind blue-500 */
   text-decoration: underline;
   /* Adds underline on hover for interaction clarity */
 }
 
 /* Optional: Subtle focus effect for accessibility */
 a:focus {
-  outline: 2px solid #bb86fc;
-  /* Focus outline with the same purple for accessibility */
+  outline: 2px solid #60a5fa;
+  /* Focus outline with the same blue for accessibility */
   outline-offset: 2px;
   /* Slightly offset for visual clarity */
 }
@@ -272,22 +269,25 @@ a:focus {
 /* Sidebar styling */
 .sidebar {
   width: 260px;
-  background-color: #1b1b1b;
-  padding: 1rem;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: width 0.3s ease;
-  position: fixed; /* Change to fixed */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: fixed;
   left: 0;
   top: 0;
   height: 100vh;
   z-index: 100;
-  overflow: hidden; /* Prevent sidebar itself from scrolling */
+  overflow: hidden;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.3);
 }
 
 .sidebar.collapsed {
   width: 80px;
+  padding: 1.5rem 0.8rem;
 }
 
 .sidebar.collapsed .nav-item span,
@@ -340,12 +340,20 @@ a:focus {
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  aspect-ratio: 1;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.sidebar .logo img:hover {
+  transform: scale(1.05);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .sidebar .logo {
   flex-shrink: 0; /* Prevent logo from shrinking */
-  padding: 1rem 0 0 0; /* Remove bottom padding */
+  padding: 1rem 0 2rem;
+  text-align: center;
 }
 
 /* Remove or comment out this rule since we're using container padding instead */
@@ -390,19 +398,21 @@ a:focus {
 .nav-links .nav-item {
   display: flex;
   align-items: center;
-  padding: 0.75rem 1.2rem;
+  padding: 0.85rem 1.2rem;
+  margin: 0.3rem 0;
   border-radius: 12px;
   /* Slightly more rounded corners */
-  color: #fff;
-  font-size: 1rem;
-  background-color: transparent;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  background: transparent;
   /* Transparent background */
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   /* Transparent border by default */
   cursor: pointer;
   text-align: left;
-  transition: background-color 0.3s, border 0.3s, box-shadow 0.3s,
-    transform 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
   will-change: transform, background-color;
   /* Hint for browser optimization */
@@ -414,20 +424,19 @@ a:focus {
 
 /* Hover effect with smooth transition, subtle shadow, and scaling */
 .nav-links .nav-item:hover {
-  background-color: var(--hover-bg-color);
-  /* Soft white hover */
-  border-color: transparent; /* Remove border on hover */
-  box-shadow: none; /* Remove shadow if you want */
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
   transform: translateX(5px);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Active state styling with depth and emphasis */
 .nav-links .nav-item.active {
-  background-color: var(--active-bg-color);
-  /* Slightly stronger background */
-  border-color: transparent; /* Remove border on active state */
-  box-shadow: none;
-  transform: scale(1.05);
+  background: linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+  border-color: transparent;
+  transform: scale(1.02);
   padding-left: 1.2rem;
 }
 
@@ -445,7 +454,8 @@ a:focus {
   margin-right: 0;
   width: 24px;
   text-align: center;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
 }
 
 /* Remove default button styling (especially for links or buttons) */
@@ -459,7 +469,7 @@ a:focus {
 
 /* Optional: Add focus visible for accessibility */
 .nav-links .nav-item:focus-visible {
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.5);
   /* Light outline for focused item */
   outline: none !important;
   box-shadow: none;
@@ -467,14 +477,14 @@ a:focus {
 
 /* Adjust nav items when collapsed */
 .sidebar.collapsed .nav-item {
-  padding: 0.75rem;
+  padding: 0.85rem;
   justify-content: center;
   /* margin-top: -15px; Move icons up slightly */
 }
 
 .sidebar.collapsed .nav-item i {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
 }
 
 /* Adjust nav-links top margin in collapsed state */
