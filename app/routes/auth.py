@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template , redirect, session, request # type: ignore
+from flask import Blueprint, redirect, session, request # type: ignore
 from app.middleware import verify_clerk_token
 
 auth_blueprint = Blueprint('auth', __name__, url_prefix='/auth')
@@ -19,12 +19,12 @@ def login():
         return redirect('/')
     
     # Otherwise, show the login page
-    return render_template('login.html')
+    return redirect('https://pleasant-humpback-47.accounts.dev/sign-in')
 
 
 @auth_blueprint.route('/register')
 def register():
-    return redirect('https://pleasant-humpback-47.accounts.dev/sign-up?redirect_url=http%3A%2F%2F127.0.0.1%3A5000%2F')
+    return redirect('https://pleasant-humpback-47.accounts.dev/sign-up')
 
 def handle_successful_login(token):
     """Store the JWT token in the session and redirect to the home page."""

@@ -549,9 +549,16 @@ a:focus {
     background: var(--background-color);
     padding: 0.75rem;
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     cursor: pointer;
+    padding: 8px; /* Adjust padding to better fit the SVG */
+  }
+
+  .hamburger-icon {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) invert(1); /* Make SVG white */
+    display: block;
   }
 
   .profile {
@@ -691,6 +698,34 @@ a:focus {
   filter: drop-shadow(5px 5px 5px rgba(255, 255, 255, 1));
 }
 
-cl-userButtonPopoverActionButton:focus {
+.cl-userButtonPopoverActionButton:focus {
   box-shadow: 0 0 0 3px rgba(245, 243, 243, 0.5);
+}
+
+.cl-headerTitle {
+  color: #ffffff;
+}
+
+.cl-headerSubtitle {
+  color: #ffffff;
+}
+
+.cl-socialButtonsBlockButtonText {
+  color: #ffffff;
+}
+
+.cl-dividerText {
+  color: #ffffff;
+}
+
+.cl-formFieldLabel {
+  color: #ffffff;
+}
+
+.cl-footerActionText {
+  color: #ffffff;
+}
+
+.cl-formFieldInput {
+  border-radius: 10px;
 }

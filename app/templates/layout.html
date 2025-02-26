@@ -25,7 +25,7 @@
 <body>
   <!-- Add hamburger menu button -->
   <button class="hamburger-menu" id="hamburger-menu" aria-label="Menu">
-    <i class="fas fa-bars"></i>
+    <img src="{{ url_for('static', filename='images/hamburger.svg') }}" alt="Menu" class="hamburger-icon">
   </button>
 
   <!-- Add overlay div -->
@@ -35,7 +35,8 @@
     <!-- Sidebar -->
     <aside class="sidebar">
       <button class="sidebar-toggle" id="sidebar-toggle">
-        <img src="{{ url_for('static', filename='images/sidebar-toggle.svg') }}" id="toggle-icon" alt="Toggle Sidebar Icon" class="toggle-icon">
+        <img src="{{ url_for('static', filename='images/sidebar-toggle.svg') }}" id="toggle-icon"
+          alt="Toggle Sidebar Icon" class="toggle-icon">
       </button>
       <div class="logo">
         <center>
@@ -50,8 +51,8 @@
           <i class="fas fa-home nav-icon"></i> <span>Dashboard</span>
         </button>
 
-        <button class="nav-item {% if current_route == 'notes' %}active{% endif %}"
-          onclick="redirectToPage('/notes')" title="Notes">
+        <button class="nav-item {% if current_route == 'notes' %}active{% endif %}" onclick="redirectToPage('/notes')"
+          title="Notes">
           <i class="fas fa-book nav-icon"></i> <span>Notes</span>
         </button>
 
@@ -70,8 +71,8 @@
           <i class="fas fa-chalkboard-teacher nav-icon"></i> <span>Flashcards</span>
         </button>
 
-        <button class="nav-item {% if current_route == 'quiz' %}active{% endif %}"
-          onclick="redirectToPage('/quiz')" title="Quiz">
+        <button class="nav-item {% if current_route == 'quiz' %}active{% endif %}" onclick="redirectToPage('/quiz')"
+          title="Quiz">
           <i class="fas fa-question-circle nav-icon"></i> <span>Quiz</span>
         </button>
 
