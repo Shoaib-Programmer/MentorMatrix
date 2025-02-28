@@ -2,17 +2,109 @@
 
 /* Remove existing font imports */
 
+/* Global variables that don't change between themes */
 :root {
   --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --primary-blue: #2563eb;
+  --hover-blue: #1d4ed8;
+  --active-blue: #1e40af;
+  
+  /* Spacing and sizing constants */
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 80px;
+  --nav-item-padding: 0.85rem 1.2rem;
+  --border-radius-sm: 8px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 20px;
+}
+
+/* Dark theme (default) */
+:root {
+  /* Theme-specific variables */
   --background-color: #121212;
   --text-color: #e0e0e0;
-  --primary-blue: #2563eb;  /* Tailwind blue-600 */
-  --hover-blue: #1d4ed8;    /* Tailwind blue-700 */
-  --active-blue: #1e40af;   /* Tailwind blue-800 */
   --hover-bg-color: #333333;
   --active-bg-color: #333333;
   --white: #ffffff;
+  --text-secondary: #bbbbbb;
+  --text-tertiary: #999999;
   --soft-text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --box-shadow-light: 0 4px 10px rgba(0, 0, 0, 0.3);
+  --box-shadow-medium: 0 6px 12px rgba(0, 0, 0, 0.4);
+  --box-shadow-deep: 0 8px 16px rgba(0, 0, 0, 0.5);
+  --border-light: rgba(255, 255, 255, 0.1);
+  --border-medium: rgba(255, 255, 255, 0.15);
+  --border-dark: rgba(255, 255, 255, 0.2);
+  
+  /* Semantic colors - dark theme */
+  --success-color: #059669;
+  --error-color: #dc2626;
+  --warning-color: #d97706;
+  --info-color: #3b82f6;
+}
+
+/* Light theme overrides */
+@media (prefers-color-scheme: light) {
+  :root {
+    /* Only override colors that change in light theme */
+    --background-color: #ffffff;
+    --text-color: #1a1a2e;
+    --hover-bg-color: #f3f4f6;
+    --active-bg-color: #e5e7eb;
+    --white: #000000;
+    --text-secondary: #4b5563;
+    --text-tertiary: #6b7280;
+    --soft-text-shadow: none;
+    --box-shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --box-shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.12);
+    --box-shadow-deep: 0 8px 12px rgba(0, 0, 0, 0.15);
+    --border-light: #e5e7eb;
+    --border-medium: #d1d5db;
+    --border-dark: #9ca3af;
+    
+    /* Semantic colors - light theme */
+    --success-color: #047857;
+    --error-color: #b91c1c;
+    --warning-color: #b45309;
+    --info-color: #2563eb;
+  }
+
+  .sidebar {
+    background: linear-gradient(180deg, #ffffff 0%, #f3f4f6 100%);
+    border-right: 1px solid var(--border-light);
+  }
+
+  .nav-item {
+    color: var(--text-secondary);
+  }
+
+  .nav-links .nav-item:hover {
+    background: var(--hover-bg-color);
+    border-color: var(--border-medium);
+  }
+}
+
+/* Manual theme override option */
+html[data-theme='light'] {
+  /* Same overrides as light theme media query */
+  --background-color: #ffffff;
+  --text-color: #1a1a2e;
+  --hover-bg-color: #f3f4f6;
+  --active-bg-color: #e5e7eb;
+  --white: #000000;
+  --text-secondary: #4b5563;
+  --text-tertiary: #6b7280;
+  --soft-text-shadow: none;
+  --box-shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --box-shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.12);
+  --box-shadow-deep: 0 8px 12px rgba(0, 0, 0, 0.15);
+  --border-light: #e5e7eb;
+  --border-medium: #d1d5db;
+  --border-dark: #9ca3af;
+  --success-color: #047857;
+  --error-color: #b91c1c;
+  --warning-color: #b45309;
+  --info-color: #2563eb;
 }
 
 body {
