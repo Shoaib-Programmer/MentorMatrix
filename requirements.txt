@@ -40,3 +40,4 @@ google-auth-oauthlib
 google-auth-httplib2
 pyttsx3
 pyjwt
+clerk-backend-api
