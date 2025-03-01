@@ -159,12 +159,22 @@
         sidebar.classList.add('mobile-open');
         document.body.classList.add('sidebar-open');
         overlay.classList.add('active');
+        // Add fade out and then hide hamburger
+        hamburgerBtn.classList.add('fade-out');
+        setTimeout(() => {
+          hamburgerBtn.classList.add('hidden');
+        }, 300); // Match the transition duration
       }
 
       function closeMobileMenu() {
         sidebar.classList.remove('mobile-open');
         document.body.classList.remove('sidebar-open');
         overlay.classList.remove('active');
+        // Show and fade in hamburger
+        hamburgerBtn.classList.remove('hidden');
+        setTimeout(() => {
+          hamburgerBtn.classList.remove('fade-out');
+        }, 0);
       }
 
       // Event listeners for mobile

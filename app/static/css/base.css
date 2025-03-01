@@ -4,11 +4,11 @@
 
 /* Global variables that don't change between themes */
 :root {
-  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family: "Inter", system-ui, -apple-system, sans-serif;
   --primary-blue: #2563eb;
   --hover-blue: #1d4ed8;
   --active-blue: #1e40af;
-  
+
   /* Spacing and sizing constants */
   --sidebar-width: 260px;
   --sidebar-collapsed-width: 80px;
@@ -35,7 +35,7 @@
   --border-light: rgba(255, 255, 255, 0.1);
   --border-medium: rgba(255, 255, 255, 0.15);
   --border-dark: rgba(255, 255, 255, 0.2);
-  
+
   /* Semantic colors - dark theme */
   --success-color: #059669;
   --error-color: #dc2626;
@@ -61,7 +61,7 @@
     --border-light: #e5e7eb;
     --border-medium: #d1d5db;
     --border-dark: #9ca3af;
-    
+
     /* Semantic colors - light theme */
     --success-color: #047857;
     --error-color: #b91c1c;
@@ -85,7 +85,7 @@
 }
 
 /* Manual theme override option */
-html[data-theme='light'] {
+html[data-theme="light"] {
   /* Same overrides as light theme media query */
   --background-color: #ffffff;
   --text-color: #1a1a2e;
@@ -114,7 +114,9 @@ body {
 }
 
 /* Typography enhancements */
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-family: var(--font-family);
   font-optical-sizing: auto;
   letter-spacing: -0.025em;
@@ -680,6 +682,11 @@ a:focus {
     max-width: 300px;
     display: flex;
     flex-direction: column;
+    /* background: rgba(26, 26, 46, 0.85); More transparent background */
+    /* backdrop-filter: blur(10px); Glass effect */
+    /* -webkit-backdrop-filter: blur(10px); For Safari */
+    /* border-right: 1px solid rgba(255, 255, 255, 0.1); */
+    /* box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); */
   }
 
   .sidebar.mobile-open {
@@ -702,6 +709,8 @@ a:focus {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     padding: 8px; /* Adjust padding to better fit the SVG */
+    transition: opacity 0.3s ease;
+    opacity: 1;
   }
 
   .hamburger-icon {
@@ -709,6 +718,14 @@ a:focus {
     height: 24px;
     filter: brightness(0) invert(1); /* Make SVG white */
     display: block;
+  }
+
+  .hamburger-menu.hidden {
+    display: none;
+  }
+
+  .hamburger-menu.fade-out {
+    opacity: 0;
   }
 
   .profile {
@@ -743,6 +760,10 @@ a:focus {
     margin-bottom: 0.25rem;
     text-align: left;
     justify-content: flex-start;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
   }
 
   /* Adjust premium button for mobile */
@@ -771,6 +792,18 @@ a:focus {
 
   .sidebar-overlay.active {
     display: block;
+  }
+
+
+  /* Optional: Adjust active state for glass effect */
+  .nav-links .nav-item.active {
+    background: linear-gradient(
+      135deg,
+      rgba(37, 99, 235, 0.8) 0%,
+      rgba(96, 165, 250, 0.8) 100%
+    );
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
   }
 }
 
