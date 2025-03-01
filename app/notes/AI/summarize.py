@@ -31,9 +31,7 @@ from icecream import ic  # type: ignore  # noqa: F401
 #     return output.strip()
 
 def summarize_text(text: str) -> str:
-    return """It is a very good summary. 
-
-            Please contact Sarthak Vadlamudi if this happens in production."""
+    return """It is a very good summary. Please contact Sarthak Vadlamudi if this happens in production."""
 
 
 if __name__ == "__main__":

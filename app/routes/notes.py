@@ -30,7 +30,7 @@ def notes():
     return render_template("notes.html", notes=notes_data, current_route="notes")
 
 
-@notes_blueprint.route("/generate_notes/<int:transcript_id>", methods=["GET", "POST"])
+@notes_blueprint.route("/generate_notes/<transcript_id>", methods=["GET", "POST"])
 @requires_auth
 def generate_notes(transcript_id):
     # Fetch relevant file details and transcript content
@@ -123,7 +123,7 @@ def add_note():
     return redirect(url_for("notes.notes"))
 
 
-@notes_blueprint.route("/notes/<int:note_id>")
+@notes_blueprint.route("/notes/<note_id>")
 @requires_auth
 def view_note(note_id):
     # Fetch the note details by ID
@@ -159,7 +159,7 @@ def view_note(note_id):
     return render_template("view_note.html", current_route="notes", note=note)
 
 
-@notes_blueprint.route("/delete_note/<int:note_id>", methods=["POST"])
+@notes_blueprint.route("/delete_note/<note_id>", methods=["POST"])
 @requires_auth
 def delete_note(note_id):
     # Attempt to delete the note by ID
