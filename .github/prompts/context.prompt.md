@@ -145,7 +145,8 @@ Here is the structure of the app:
 
 38 directories, 186 files
 
-This app uses Clerk for auth. It also uses an SQLite Database.
+This app uses Clerk for auth. It also uses an SQLite Database, with the cs50 library.
+
 Here is the schema for your reference:
 
 CREATE TABLE transcripts (

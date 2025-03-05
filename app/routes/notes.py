@@ -1,9 +1,11 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash  # type: ignore
+from flask import Blueprint, render_template, request, redirect, url_for, flash, g  # type: ignore
 from app.models import db
 from app.notes import summarize_text
 from app.middleware import requires_auth
 import markdown  # type: ignore
 from icecream import ic  # type: ignore
+
+import logging
 
 notes_blueprint = Blueprint("notes", __name__)
 
@@ -11,23 +13,41 @@ notes_blueprint = Blueprint("notes", __name__)
 @notes_blueprint.route("/notes")
 @requires_auth
 def notes():
-    # Fetch notes along with associated files and transcript titles
+    if not g.user:
+        flash("Authentication required", "error")
+        return redirect(url_for("auth.login"))
 
-    notes_data = db.execute("""
-        SELECT
-            notes.id,
-            notes.title AS note_title,
-            notes.content AS note_content,
-            notes.created_at,
-            files.name AS file_name,
-            files.file_type,
-            files.metadata,
-            transcripts.title AS transcript_title
-        FROM notes
-        LEFT JOIN files ON notes.transcript_id = files.transcript_id
-        LEFT JOIN transcripts ON notes.transcript_id = transcripts.id
-    """)
-    return render_template("notes.html", notes=notes_data, current_route="notes")
+    try:
+        # Get user_id from Clerk authentication
+        user_id = g.user.get("sub")
+        if not user_id:
+            flash("User ID not found", "error")
+            return redirect(url_for("auth.login"))
+
+        # Fetch notes for current user only
+        notes_data = db.execute(
+            """
+            SELECT
+                notes.id,
+                notes.title AS note_title,
+                notes.content AS note_content,
+                notes.created_at,
+                files.name AS file_name,
+                files.file_type,
+                files.metadata,
+                transcripts.title AS transcript_title
+            FROM notes
+            LEFT JOIN files ON notes.transcript_id = files.transcript_id
+            LEFT JOIN transcripts ON notes.transcript_id = transcripts.id
+            WHERE notes.user_id = ?
+        """,
+            user_id,
+        )
+        return render_template("notes.html", notes=notes_data, current_route="notes")
+    except Exception as e:
+        logging.error(f"Error in notes route: {e}")
+        flash("An error occurred while fetching notes", "error")
+        return redirect(url_for("auth.login"))
 
 
 @notes_blueprint.route("/generate_notes/<transcript_id>", methods=["GET", "POST"])
@@ -96,25 +116,28 @@ def generate_notes(transcript_id):
 @notes_blueprint.route("/add_note", methods=["POST"])
 @requires_auth
 def add_note():
+    # Get user_id from Clerk authentication
+    user_id = g.user.get("sub")
+
     # Get form data
     title = request.form.get("title")
     content = request.form.get("content")
-    transcript_id = request.form.get("transcript_id")  # Can be None
+    transcript_id = request.form.get("transcript_id")
 
     if not title or not content:
         flash("Both title and content are required.", "error")
         return redirect(url_for("notes.notes"))
 
-    # Save note in the database with the associated transcript_id (optional)
     try:
         db.execute(
             """
-            INSERT INTO notes (transcript_id, title, content, created_at)
-            VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+            INSERT INTO notes (transcript_id, title, content, created_at, user_id)
+            VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?)
         """,
             transcript_id,
             title,
             content,
+            user_id,
         )
         flash("Note added successfully.", "success")
     except Exception as e:
@@ -126,7 +149,10 @@ def add_note():
 @notes_blueprint.route("/notes/<note_id>")
 @requires_auth
 def view_note(note_id):
-    # Fetch the note details by ID
+    # Get user_id from Clerk authentication
+    user_id = g.user.get("sub")
+
+    # Fetch the note details by ID and verify ownership
     result = db.execute(
         """
         SELECT
@@ -140,9 +166,10 @@ def view_note(note_id):
         FROM notes
         LEFT JOIN files ON notes.transcript_id = files.transcript_id
         LEFT JOIN transcripts ON notes.transcript_id = transcripts.id
-        WHERE notes.id = ?
+        WHERE notes.id = ? AND notes.user_id = ?
     """,
         note_id,
+        user_id,
     )
 
     # Extract the first row if the result is not empty
@@ -162,15 +189,18 @@ def view_note(note_id):
 @notes_blueprint.route("/delete_note/<note_id>", methods=["POST"])
 @requires_auth
 def delete_note(note_id):
-    # Attempt to delete the note by ID
+    # Get user_id from Clerk authentication
+    user_id = g.user.get("sub")
+
     try:
-        # Delete the note from the database
+        # Delete the note only if it belongs to the current user
         rows_deleted = db.execute(
             """
             DELETE FROM notes
-            WHERE id = ?
+            WHERE id = ? AND user_id = ?
         """,
             note_id,
+            user_id,
         )
 
         if rows_deleted == 0:
@@ -186,9 +216,9 @@ def delete_note(note_id):
 @notes_blueprint.route("/edit_title", methods=["POST"])
 @requires_auth
 def edit_title():
-    """
-    Route to update the title of a note.
-    """
+    # Get user_id from Clerk authentication
+    user_id = g.user.get("sub")
+
     try:
         note_id = request.form.get("note_id")
         new_title = request.form.get("title")
@@ -197,15 +227,16 @@ def edit_title():
             flash("Note ID and title are required.", "error")
             return redirect(url_for("notes.notes"))
 
-        # Update the note's title in the database
+        # Update the note's title only if it belongs to the current user
         db.execute(
             """
             UPDATE notes
             SET title = ?, updated_at = CURRENT_TIMESTAMP
-            WHERE id = ?
+            WHERE id = ? AND user_id = ?
         """,
             new_title,
             note_id,
+            user_id,
         )
 
         flash("Note title updated successfully.", "success")

@@ -30,6 +30,7 @@ def init_db():
                     transcript_id TEXT,
                     title TEXT NOT NULL,
                     content TEXT NOT NULL,
+                    user_id TEXT NOT NULL DEFAULT '',
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (transcript_id) REFERENCES transcripts(id) ON DELETE CASCADE
@@ -118,6 +119,11 @@ def init_db():
     db.execute(
         "CREATE INDEX IF NOT EXISTS idx_flashcard_deck_id ON flashcards (deck_id);"
     )
+
+    # Create index for faster user-based queries
+    db.execute("""
+        CREATE INDEX IF NOT EXISTS idx_notes_user_id ON notes (user_id);
+    """)
 
 
 if __name__ == "__main__":

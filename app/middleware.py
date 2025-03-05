@@ -1,10 +1,10 @@
 import os
 import logging
 from functools import wraps
-from flask import request, g, redirect, session
-import httpx
-from clerk_backend_api import Clerk
-from clerk_backend_api.jwks_helpers import AuthenticateRequestOptions
+from flask import request, g, redirect, session # type: ignore
+import httpx # type: ignore
+from clerk_backend_api import Clerk # type: ignore
+from clerk_backend_api.jwks_helpers import AuthenticateRequestOptions # type: ignore
 
 # Initialize a Clerk client instance once
 clerk_client = Clerk(bearer_auth=os.getenv("CLERK_SECRET_KEY"))
