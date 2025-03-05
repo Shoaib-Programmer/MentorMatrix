@@ -113,48 +113,101 @@ body {
   color: var(--text-color);
 }
 
-/* Typography enhancements */
-h1,
-h2,
-h3 {
+/* Enhanced Typography for Headings */
+h1, h2, h3 {
   font-family: var(--font-family);
   font-optical-sizing: auto;
   letter-spacing: -0.025em;
   font-feature-settings: "liga" 1, "calt" 1, "ss01" 1;
-  text-transform: none; /* Remove uppercase transform */
+  color: var(--text-color);
+  font-weight: 900;
+  text-shadow: var(--soft-text-shadow);
+  margin-bottom: 0.2em;
 }
 
 h1 {
-  font-size: 3rem;
-  font-weight: 800;
-  line-height: 1.1;
+  font-size: 4rem; /* Increased from 3rem */
+  line-height: 1;
   letter-spacing: -0.03em;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: none;
+  margin-top: 0.5em;
 }
 
 h2 {
-  font-size: 2.25rem;
-  font-weight: 700;
+  font-size: 3rem; /* Increased from 2.25rem */
   line-height: 1.2;
   letter-spacing: -0.02em;
+  position: relative;
+  padding-bottom: 0.5rem;
 }
 
+/* h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: var(--primary-blue);
+  border-radius: 2px;
+} */
+
 h3 {
-  font-size: 1.75rem;
-  font-weight: 600;
+  font-size: 1.85rem; /* Increased from 1.75rem */
   line-height: 1.3;
   letter-spacing: -0.015em;
+  border-left: 4px solid var(--primary-blue);
+  padding-left: 0.75rem;
+}
+
+/* Light theme adjustments */
+@media (prefers-color-scheme: light), html[data-theme="light"] {
+  h1, h2, h3 {
+    color: #1a1a2e;
+  }
+  
+  h1 {
+    background: linear-gradient(135deg, #1a1a2e 0%, #4b5563 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  h1 {
+    font-size: 3rem;
+  }
+  
+  h2 {
+    font-size: 2.25rem;
+  }
+  
+  h3 {
+    font-size: 1.75rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+  
+  h2 {
+    font-size: 2rem;
+  }
+  
+  h3 {
+    font-size: 1.6rem;
+  }
 }
 
 p {
   font-family: var(--font-family);
-  font-weight: 400;
-  font-size: 1.1rem;
-  line-height: 1.6;
-  letter-spacing: -0.006em;
-  color: #d1d1d1;
-  line-height: 1.8;
-  font-size: 1.1rem;
-  margin-bottom: 1.5em;
 }
 
 .container {
@@ -858,65 +911,68 @@ a:focus {
   }
 }
 
-.cl-card {
-  background-color: #212121;
-  color: #ffffff;
-  transition: all 0.3s ease;
+
+
+@media (prefers-color-scheme: dark) {
+  .cl-card {
+    background-color: #212121;
+    color: #ffffff;
+    transition: all 0.3s ease;
+  }
+  .cl-navbar {
+    background-color: #474747;
+    color: #ffffff;
+    transition: all 0.3s ease;
+  }
+
+  /* Elements with white text color */
+  .cl-userPreviewSecondaryIdentifier,
+  .cl-userButtonPopoverActionButtonText,
+  .cl-internal-td400p,
+  .cl-headerTitle,
+  .cl-headerSubtitle,
+  .cl-socialButtonsBlockButtonText,
+  .cl-dividerText,
+  .cl-formFieldLabel,
+  .cl-footerActionText,
+  .cl-navbarMobileMenuButton,
+  .cl-profileSectionTitleText,
+  .cl-internal-1ho4xv,
+  .cl-internal-l1ab9q,
+  .cl-internal-rscu79,
+  .cl-internal-of57g,
+  .cl-internal-fqx4fd,
+  .cl-internal-3vf5mz,
+  .cl-navbarButton {
+    color: #ffffff;
+  }
+
+  .cl-userButtonPopoverActionButtonIcon {
+    fill: #a09c9c !important;
+  }
+  
+  .cl-userButtonPopoverActionButtonIcon path,
+  .cl-userButtonPopoverActionButtonIcon rect {
+    fill: #a09c9c;
+  }
+
+  .cl-userButtonPopoverActionButton:focus {
+    box-shadow: 0 0 0 3px rgba(245, 243, 243, 0.5);
+  }
+
+  .cl-formFieldInput {
+    border-radius: 10px;
+  }
+
+  .cl-userButtonPopoverFooter {
+    display: none;
+  }
+
+  /* Elements with inverted colors */
+  .cl-navbarMobileMenuButtonIcon,
+  .cl-navbarButtonIcon,
+  .cl-internal-4muonf {
+    filter: invert(1);
+  }
 }
 
-.cl-userPreviewSecondaryIdentifier {
-  color: #ffffff;
-}
-
-.cl-userButtonPopoverActionButtonText {
-  color: #ffffff;
-}
-
-.cl-userButtonPopoverActionButtonIcon {
-  fill: #a09c9c !important; /* sets the fill to dark black */
-}
-
-.cl-userButtonPopoverActionButtonIcon path,
-.cl-userButtonPopoverActionButtonIcon rect {
-  fill: #a09c9c;
-}
-
-.cl-internal-td400p {
-  color: #ffffff;
-}
-
-.cl-internal-1acnfz5 {
-  filter: drop-shadow(5px 5px 5px rgba(255, 255, 255, 1));
-}
-
-.cl-userButtonPopoverActionButton:focus {
-  box-shadow: 0 0 0 3px rgba(245, 243, 243, 0.5);
-}
-
-.cl-headerTitle {
-  color: #ffffff;
-}
-
-.cl-headerSubtitle {
-  color: #ffffff;
-}
-
-.cl-socialButtonsBlockButtonText {
-  color: #ffffff;
-}
-
-.cl-dividerText {
-  color: #ffffff;
-}
-
-.cl-formFieldLabel {
-  color: #ffffff;
-}
-
-.cl-footerActionText {
-  color: #ffffff;
-}
-
-.cl-formFieldInput {
-  border-radius: 10px;
-}
