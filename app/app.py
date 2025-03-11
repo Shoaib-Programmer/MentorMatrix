@@ -1,6 +1,6 @@
-from flask import Flask, render_template, g # type: ignore
+from flask import Flask, render_template, g
 from flask_session import Session
-from flask_mail import Mail # type: ignore
+from flask_mail import Mail
 from flask_wtf.csrf import CSRFProtect, generate_csrf # type: ignore
 
 # Import your configuration and blueprints

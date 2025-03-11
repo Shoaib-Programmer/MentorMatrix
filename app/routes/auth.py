@@ -1,12 +1,13 @@
-from flask import ( # type: ignore
+from flask import (  # type: ignore
     Blueprint,
     redirect,
     session,
     request,
-    url_for,
+    url_for,  # noqa: F401
     render_template_string,
     render_template,
 )
+
 import os
 import logging
 
@@ -19,7 +20,7 @@ def login():
     session.clear()
 
     # Build callback URL (using HTTPS in production, HTTP otherwise)
-    
+
     # callback_url = url_for(
     #     "auth.auth_callback",
     #     _external=True,
