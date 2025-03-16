@@ -1,117 +1,167 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}{% endblock %} - MentorMatrix</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/tailwind.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/popup.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/base.css') }}"
+    />
+    {% if csrf_token is defined %}
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    {% endif %} {% block other_head_stuff %} {% endblock %}
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='images/favicon.ico') }}"
+    />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}{% endblock %} - MentorMatrix</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/popup.css') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-  {% if csrf_token is defined %}
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-  {% endif %}
-  {% block other_head_stuff %} {% endblock %}
-  <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
-</head>
-
-<body>
-  <div class="container">
-    <div class="main-content">
-      <header>
-        <nav>
-          <div class="logo">
-            <h1>MentorMatrix</h1>
-          </div>
-          <div id="user-button"></div>
-        </nav>
-      </header>
-
-      <main>
-        <!-- Display flashed messages -->
-        <div id="flash-messages" class="mt-4">
-          {% with messages = get_flashed_messages(with_categories=true) %} {% if
-          messages %}
-          <div class="space-y-4">
-            {% for category, message in messages %}
-            <div
-              class="p-5 rounded-lg shadow-lg flash-message {% if category == 'success' %}bg-gradient-to-r from-green-400 via-green-500 to-green-600{% endif %} {% if category == 'error' %}bg-gradient-to-r from-red-400 via-red-500 to-red-600{% endif %} {% if category == 'info' %}bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600{% endif %} {% if category == 'warning' %}bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600{% endif %} text-white flex items-center space-x-3 transform transition-transform duration-500 hover:scale-105">
-              <!-- Icon -->
-              <div class="flex-shrink-0">
-                {% if category == 'success' %}
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                {% elif category == 'error' %}
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-                {% elif category == 'info' %}
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 6v6M12 18v.01M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"></path>
-                </svg>
-                {% elif category == 'warning' %}
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 8v4M12 16h.01M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"></path>
-                </svg>
-                {% endif %}
-              </div>
-              <!-- Message text -->
-              <div class="flex-1">{{ message }}</div>
+  <body>
+    <div class="container">
+      <div class="main-content">
+        <header>
+          <nav>
+            <div class="logo">
+              <h1>MentorMatrix</h1>
             </div>
-            {% endfor %}
+            <div id="user-button"></div>
+          </nav>
+        </header>
+
+        <main>
+          <!-- Display flashed messages -->
+          <div id="flash-messages" class="mt-4">
+            {% with messages = get_flashed_messages(with_categories=true) %} {%
+            if messages %}
+            <div class="space-y-4">
+              {% for category, message in messages %}
+              <div
+                class="p-5 rounded-lg shadow-lg flash-message {% if category == 'success' %}bg-gradient-to-r from-green-400 via-green-500 to-green-600{% endif %} {% if category == 'error' %}bg-gradient-to-r from-red-400 via-red-500 to-red-600{% endif %} {% if category == 'info' %}bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600{% endif %} {% if category == 'warning' %}bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600{% endif %} text-white flex items-center space-x-3 transform transition-transform duration-500 hover:scale-105"
+              >
+                <!-- Icon -->
+                <div class="flex-shrink-0">
+                  {% if category == 'success' %}
+                  <svg
+                    class="w-6 h-6 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                  {% elif category == 'error' %}
+                  <svg
+                    class="w-6 h-6 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    ></path>
+                  </svg>
+                  {% elif category == 'info' %}
+                  <svg
+                    class="w-6 h-6 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6v6M12 18v.01M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"
+                    ></path>
+                  </svg>
+                  {% elif category == 'warning' %}
+                  <svg
+                    class="w-6 h-6 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 8v4M12 16h.01M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"
+                    ></path>
+                  </svg>
+                  {% endif %}
+                </div>
+                <!-- Message text -->
+                <div class="flex-1">{{ message }}</div>
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %} {% endwith %}
           </div>
-          {% endif %} {% endwith %}
-        </div>
 
-        {% block content %}{% endblock %}
-      </main>
-
+          {% block content %}{% endblock %}
+        </main>
+      </div>
     </div>
-  </div>
-  <!-- <script src="{{ url_for('static', filename='js/util.js') }}" type="module"></script> -->
-   <!-- Initialize Clerk with your
+    <!-- <script src="{{ url_for('static', filename='js/util.js') }}" type="module"></script> -->
+    <!-- Initialize Clerk with your
 Clerk Publishable Key and Frontend API URL -->
-<script
-async
-crossorigin="anonymous"
-data-clerk-publishable-key="pk_test_cGxlYXNhbnQtaHVtcGJhY2stNDcuY2xlcmsuYWNjb3VudHMuZGV2JA"
-src="https://pleasant-humpback-47.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
-type="text/javascript"
-></script>
+    <script
+      async
+      crossorigin="anonymous"
+      data-clerk-publishable-key="pk_test_cGxlYXNhbnQtaHVtcGJhY2stNDcuY2xlcmsuYWNjb3VudHMuZGV2JA"
+      src="https://pleasant-humpback-47.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+      type="text/javascript"
+    ></script>
 
-<script>
-window.addEventListener('load', async function () {
-  await Clerk.load()
+    <script>
+      window.addEventListener("load", async function () {
+        await Clerk.load();
 
-  if (Clerk.user) {
-    document.getElementById('app').innerHTML = `
+        if (Clerk.user) {
+          document.getElementById("app").innerHTML = `
       <div id="user-button"></div>
-    `
+    `;
 
-    const userButtonDiv = document.getElementById('user-button')
+          const userButtonDiv = document.getElementById("user-button");
 
-    Clerk.mountUserButton(userButtonDiv)
-  } else {
-    document.getElementById('app').innerHTML = `
+          Clerk.mountUserButton(userButtonDiv);
+        } else {
+          document.getElementById("app").innerHTML = `
       <div id="sign-in"></div>
-    `
+    `;
 
-    const signInDiv = document.getElementById('sign-in')
+          const signInDiv = document.getElementById("sign-in");
 
-    Clerk.mountSignIn(signInDiv)
-  }
-})
-</script>
-</body>
-
+          Clerk.mountSignIn(signInDiv);
+        }
+      });
+    </script>
+  </body>
 </html>

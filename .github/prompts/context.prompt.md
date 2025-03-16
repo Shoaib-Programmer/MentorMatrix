@@ -10,7 +10,7 @@ Here is the structure of the app:
 ├── MentorMatrix.pdf
 ├── README.md
 ├── app
-│   ├── __init__.py
+│   ├── **init**.py
 │   ├── app.py
 │   ├── config.py
 │   ├── forms.py
@@ -18,7 +18,7 @@ Here is the structure of the app:
 │   ├── models.py
 │   ├── notes
 │   │   ├── AI
-│   │   │   ├── __init__.py
+│   │   │   ├── **init**.py
 │   │   │   ├── answer_open.py
 │   │   │   ├── chatbot.py
 │   │   │   ├── description.py
@@ -32,23 +32,23 @@ Here is the structure of the app:
 │   │   │   ├── semantic_compare.py
 │   │   │   ├── stopwords.py
 │   │   │   └── summarize.py
-│   │   ├── __init__.py
+│   │   ├── **init**.py
 │   │   └── transcription
-│   │       ├── __init__.py
-│   │       ├── audio
-│   │       │   ├── __init__.py
-│   │       │   └── audio_analysis.py
-│   │       ├── text
-│   │       │   └── pdf.py
-│   │       ├── util.py
-│   │       ├── video
-│   │       │   ├── __init__.py
-│   │       │   └── video_analysis.py
-│   │       ├── video_transcribe.py
-│   │       ├── youtube.py
-│   │       └── youtube_id.py
+│   │   ├── **init**.py
+│   │   ├── audio
+│   │   │   ├── **init**.py
+│   │   │   └── audio_analysis.py
+│   │   ├── text
+│   │   │   └── pdf.py
+│   │   ├── util.py
+│   │   ├── video
+│   │   │   ├── **init**.py
+│   │   │   └── video_analysis.py
+│   │   ├── video_transcribe.py
+│   │   ├── youtube.py
+│   │   └── youtube_id.py
 │   ├── routes
-│   │   ├── __init__.py
+│   │   ├── **init**.py
 │   │   ├── auth.py
 │   │   ├── chatbot.py
 │   │   ├── dashboard.py
@@ -60,7 +60,7 @@ Here is the structure of the app:
 │   │   └── transcribe.py
 │   ├── src
 │   │   └── styles
-│   │       └── tailwind.css
+│   │   └── tailwind.css
 │   ├── static
 │   │   ├── css
 │   │   │   ├── base.css
@@ -93,16 +93,16 @@ Here is the structure of the app:
 │   │   │   ├── three_dots.svg
 │   │   │   └── upload.svg
 │   │   └── js
-│   │       ├── chatbot.js
-│   │       ├── dashboard
-│   │       │   └── popup.js
-│   │       ├── flashcards.js
-│   │       ├── notes.js
-│   │       ├── progress.js
-│   │       ├── quiz.js
-│   │       ├── settings.js
-│   │       ├── transcript.js
-│   │       └── util.js
+│   │   ├── chatbot.js
+│   │   ├── dashboard
+│   │   │   └── popup.js
+│   │   ├── flashcards.js
+│   │   ├── notes.js
+│   │   ├── progress.js
+│   │   ├── quiz.js
+│   │   ├── settings.js
+│   │   ├── transcript.js
+│   │   └── util.js
 │   ├── templates
 │   │   ├── 404.html
 │   │   ├── 500.html
@@ -130,7 +130,7 @@ Here is the structure of the app:
 ├── instance
 │   ├── dev.db
 │   └── flask_session
-│       ...
+│   ...
 ├── package.json
 ├── pnpm-lock.yaml
 ├── podcasts
@@ -150,90 +150,89 @@ This app uses Clerk for auth. It also uses an SQLite Database, with the cs50 lib
 Here is the schema for your reference:
 
 CREATE TABLE transcripts (
-                    id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
-                    title TEXT NOT NULL,
-                    content TEXT NOT NULL,
-                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-                );
+id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+title TEXT NOT NULL,
+content TEXT NOT NULL,
+created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 CREATE TABLE notes (
-                    id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
-                    transcript_id TEXT,
-                    title TEXT NOT NULL,
-                    content TEXT NOT NULL,
-                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    FOREIGN KEY (transcript_id) REFERENCES transcripts(id) ON DELETE CASCADE
-                );
+id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+transcript_id TEXT,
+title TEXT NOT NULL,
+content TEXT NOT NULL,
+created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+FOREIGN KEY (transcript_id) REFERENCES transcripts(id) ON DELETE CASCADE
+);
 CREATE TABLE files (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    transcript_id TEXT NOT NULL,
-                    file_type TEXT CHECK(file_type IN ('audio', 'youtube', 'pdf')) NOT NULL,
-                    name TEXT NOT NULL,
-                    metadata TEXT,
-                    uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    FOREIGN KEY (transcript_id) REFERENCES transcripts(id) ON DELETE CASCADE);
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+transcript_id TEXT NOT NULL,
+file_type TEXT CHECK(file_type IN ('audio', 'youtube', 'pdf')) NOT NULL,
+name TEXT NOT NULL,
+metadata TEXT,
+uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+FOREIGN KEY (transcript_id) REFERENCES transcripts(id) ON DELETE CASCADE);
 CREATE TABLE sqlite_sequence(name,seq);
 CREATE TABLE quizzes (
-                    id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
-                    transcript_id TEXT NOT NULL,
-                    title TEXT NOT NULL,
-                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    FOREIGN KEY (transcript_id) REFERENCES transcripts(id) ON DELETE CASCADE
-                );
+id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+transcript_id TEXT NOT NULL,
+title TEXT NOT NULL,
+created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+FOREIGN KEY (transcript_id) REFERENCES transcripts(id) ON DELETE CASCADE
+);
 CREATE TABLE quiz_questions (
-                    id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
-                    quiz_id TEXT NOT NULL,
-                    question TEXT NOT NULL,
-                    answer TEXT NOT NULL,
-                    question_type TEXT CHECK(question_type IN ('open_ended', 'multiple_choice')) NOT NULL,
-                    options TEXT,
-                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
-                );
+id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+quiz_id TEXT NOT NULL,
+question TEXT NOT NULL,
+answer TEXT NOT NULL,
+question_type TEXT CHECK(question_type IN ('open_ended', 'multiple_choice')) NOT NULL,
+options TEXT,
+created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
+);
 CREATE TABLE decks (
-                    id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
-                    title TEXT NOT NULL,
-                    description TEXT,
-                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-                );
+id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+title TEXT NOT NULL,
+description TEXT,
+created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 CREATE TABLE flashcards (
-                    id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
-                    deck_id TEXT NOT NULL,
-                    note_id TEXT,
-                    question TEXT NOT NULL,
-                    answer TEXT NOT NULL,
-                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    FOREIGN KEY (deck_id) REFERENCES decks(id) ON DELETE CASCADE,
-                    FOREIGN KEY (note_id) REFERENCES notes(id) ON DELETE CASCADE
-                );
+id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+deck_id TEXT NOT NULL,
+note_id TEXT,
+question TEXT NOT NULL,
+answer TEXT NOT NULL,
+created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+FOREIGN KEY (deck_id) REFERENCES decks(id) ON DELETE CASCADE,
+FOREIGN KEY (note_id) REFERENCES notes(id) ON DELETE CASCADE
+);
 CREATE TABLE quiz_results (
-                    id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
-                    quiz_id TEXT NOT NULL,
-                    score INTEGER NOT NULL,
-                    total_questions INTEGER NOT NULL,
-                    attempted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
-                );
+id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+quiz_id TEXT NOT NULL,
+score INTEGER NOT NULL,
+total_questions INTEGER NOT NULL,
+attempted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
+);
 CREATE TABLE podcasts (
-                    id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
-                    note_id TEXT,
-                    content TEXT NOT NULL,
-                    path TEXT NOT NULL,
-                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    FOREIGN KEY (note_id) REFERENCES notes(id) ON DELETE CASCADE
-                );
+id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+note_id TEXT,
+content TEXT NOT NULL,
+path TEXT NOT NULL,
+created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+FOREIGN KEY (note_id) REFERENCES notes(id) ON DELETE CASCADE
+);
 CREATE INDEX idx_transcript_id ON notes (transcript_id);
 CREATE INDEX idx_file_transcript_id ON files (transcript_id);
 CREATE INDEX idx_quiz_transcript_id ON quizzes (transcript_id);
 CREATE INDEX idx_quiz_question_quiz_id ON quiz_questions (quiz_id);
 CREATE INDEX idx_deck_title ON decks (title);
 CREATE INDEX idx_flashcard_deck_id ON flashcards (deck_id);
-
 
 Secrets are stored in .env.
 

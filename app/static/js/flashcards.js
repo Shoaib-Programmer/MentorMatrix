@@ -1,8 +1,8 @@
 // Function to flip flashcards
 function flipCard(index) {
   const flashcard = document.getElementById(`flashcard-${index}`);
-  const front = flashcard.querySelector('.flashcard-front');
-  const back = flashcard.querySelector('.flashcard-back');
+  const front = flashcard.querySelector(".flashcard-front");
+  const back = flashcard.querySelector(".flashcard-back");
 
   // Toggle visibility
   if (front.style.display === "block") {
@@ -62,15 +62,15 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-const reviewDeckBtn = document.getElementById('reviewDeckBtn');
-const deckDropdown = document.getElementById('deckDropdown');
+const reviewDeckBtn = document.getElementById("reviewDeckBtn");
+const deckDropdown = document.getElementById("deckDropdown");
 
-reviewDeckBtn.addEventListener('click', () => {
-  deckDropdown.classList.toggle('hidden');
+reviewDeckBtn.addEventListener("click", () => {
+  deckDropdown.classList.toggle("hidden");
 });
 
-document.addEventListener('click', (e) => {
+document.addEventListener("click", (e) => {
   if (!reviewDeckBtn.contains(e.target) && !deckDropdown.contains(e.target)) {
-    deckDropdown.classList.add('hidden');
+    deckDropdown.classList.add("hidden");
   }
 });

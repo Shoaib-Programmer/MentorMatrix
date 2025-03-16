@@ -6,11 +6,18 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* Dark background with some transparency */
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.6
+  ); /* Dark background with some transparency */
   z-index: 1000;
   justify-content: center;
   align-items: center;
-  transition: opacity 0.3s ease, visibility 0.3s ease; /* Smooth transition for visibility and opacity */
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease; /* Smooth transition for visibility and opacity */
 }
 
 /* Modal content styling */
@@ -22,14 +29,16 @@
   width: 90%;
   max-width: 550px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth entry transition */
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease; /* Smooth entry transition */
   opacity: 0;
   transform: translateY(-20px);
 }
 
 .modal.show .modal-content {
   opacity: 1;
-transform: translateY(0); /* Modal slide-in effect */
+  transform: translateY(0); /* Modal slide-in effect */
 }
 
 .modal-content h2 {
@@ -146,8 +155,8 @@ transform: translateY(0); /* Modal slide-in effect */
 /* Open modal button */
 #openModalBtn {
   position: fixed;
-  bottom: 20px;  /* Distance from the bottom of the viewport */
-  right: 20px;   /* Distance from the right side of the viewport */
+  bottom: 20px; /* Distance from the bottom of the viewport */
+  right: 20px; /* Distance from the right side of the viewport */
   padding: 12px 24px;
   background-color: #007bff;
   color: white;
@@ -155,9 +164,11 @@ transform: translateY(0); /* Modal slide-in effect */
   border-radius: 50px;
   font-size: 16px;
   font-weight: bold;
-  z-index: 1000;  /* Ensure it's on top of other content */
+  z-index: 1000; /* Ensure it's on top of other content */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease;
 }
 
 #openModalBtn:hover {

@@ -114,11 +114,16 @@ body {
 }
 
 /* Enhanced Typography for Headings */
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-family: var(--font-family);
   font-optical-sizing: auto;
   letter-spacing: -0.025em;
-  font-feature-settings: "liga" 1, "calt" 1, "ss01" 1;
+  font-feature-settings:
+    "liga" 1,
+    "calt" 1,
+    "ss01" 1;
   color: var(--text-color);
   font-weight: 900;
   text-shadow: var(--soft-text-shadow);
@@ -165,10 +170,12 @@ h3 {
 
 /* Light theme adjustments */
 @media (prefers-color-scheme: light), html[data-theme="light"] {
-  h1, h2, h3 {
+  h1,
+  h2,
+  h3 {
     color: #1a1a2e;
   }
-  
+
   h1 {
     background: linear-gradient(135deg, #1a1a2e 0%, #4b5563 100%);
     -webkit-background-clip: text;
@@ -182,11 +189,11 @@ h3 {
   h1 {
     font-size: 3rem;
   }
-  
+
   h2 {
     font-size: 2.25rem;
   }
-  
+
   h3 {
     font-size: 1.75rem;
   }
@@ -196,11 +203,11 @@ h3 {
   h1 {
     font-size: 2.5rem;
   }
-  
+
   h2 {
     font-size: 2rem;
   }
-  
+
   h3 {
     font-size: 1.6rem;
   }
@@ -437,7 +444,9 @@ a {
   /* Remove underline by default */
   font-weight: 500;
   /* Medium weight for links to make them stand out but not too bold */
-  transition: color 0.3s ease-in-out, text-decoration 0.3s ease-in-out;
+  transition:
+    color 0.3s ease-in-out,
+    text-decoration 0.3s ease-in-out;
   /* Smooth transition for color and underline on hover */
   font-family: var(--font-family);
   font-weight: 500;
@@ -534,7 +543,9 @@ a:focus {
   object-fit: cover;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   border: 3px solid rgba(255, 255, 255, 0.1);
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .sidebar .logo img:hover {
@@ -847,7 +858,6 @@ a:focus {
     display: block;
   }
 
-
   /* Optional: Adjust active state for glass effect */
   .nav-links .nav-item.active {
     background: linear-gradient(
@@ -911,8 +921,6 @@ a:focus {
   }
 }
 
-
-
 @media (prefers-color-scheme: dark) {
   .cl-card {
     background-color: #212121;
@@ -950,7 +958,7 @@ a:focus {
   .cl-userButtonPopoverActionButtonIcon {
     fill: #a09c9c !important;
   }
-  
+
   .cl-userButtonPopoverActionButtonIcon path,
   .cl-userButtonPopoverActionButtonIcon rect {
     fill: #a09c9c;
@@ -975,4 +983,3 @@ a:focus {
     filter: invert(1);
   }
 }
-

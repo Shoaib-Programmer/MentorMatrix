@@ -16,17 +16,18 @@
 }
 
 /* .container { */
-  /* max-width: 1200px; Adjust to your desired width */
-  /* margin: 0 auto;    Centers the container */
-  /* padding: 20px;     Inner spacing */
+/* max-width: 1200px; Adjust to your desired width */
+/* margin: 0 auto;    Centers the container */
+/* padding: 20px;     Inner spacing */
 /* } */
 
-.quiz-controls, .quiz-list {
+.quiz-controls,
+.quiz-list {
   margin-bottom: 20px;
 }
 
-
-.hint-content, .answer-content {
+.hint-content,
+.answer-content {
   margin-top: 10px;
   color: #f0e68c;
   font-style: italic;
@@ -67,4 +68,3 @@ p {
   margin-bottom: 30px;
   align-self: left;
 }
-

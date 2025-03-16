@@ -1,137 +1,231 @@
-{% extends "layout.html" %}
+{% extends "layout.html" %} {% block title %} Flashcards - MentorMatrix {%
+endblock %} {% block other_head_stuff %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/popup.css') }}"
+/>
+{% endblock %} {% block content %}
+<div class="container text-white">
+  <div class="main-content">
+    <h1 class="text-center text-4xl mb-5">Flashcards</h1>
 
-{% block title %}
-Flashcards - MentorMatrix
-{% endblock %}
+    <div class="absolute top-2 right-2">
+      <a
+        id="create_new_deck"
+        href="{{ url_for('flashcards.create_deck') }}"
+        class="px-6 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-300"
+      >
+        Create New Deck
+      </a>
+    </div>
 
-{% block other_head_stuff %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/popup.css') }}">
-{% endblock %}
-
-{% block content %}
-  <div class="container text-white">
-    <div class="main-content">
-      <h1 class="text-center text-4xl mb-5">Flashcards</h1>
-
-      <div class="absolute top-2 right-2">
-        <a id="create_new_deck" 
-           href="{{ url_for('flashcards.create_deck') }}" 
-           class="px-6 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-300">
-            Create New Deck
-        </a>
-      </div>
-
-      <!-- Review Deck Dropdown -->
-      <div class="relative mb-5">
-        <button id="reviewDeckBtn" class="px-6 py-2 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring focus:ring-green-300">
-          Review Deck
-        </button>
-        <div id="deckDropdown" class="hidden absolute mt-2 bg-white text-black rounded-md shadow-lg w-56">
-          <ul>
-            {% for deck in decks %}
-              <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                <a href="{{ url_for('flashcards.review', deck_id=deck.id) }}">{{ deck.title }}</a>
-              </li>
-            {% endfor %}
-            <li class="px-4 py-2 text-gray-400">No decks available.</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Deck selection -->
-      <form action="{{ url_for('flashcards.flashcards') }}" method="GET" class="mb-5">
-        <label for="deck-select" class="block mb-2">Select Deck:</label>
-        <select name="deck_id" id="deck-select" class="block w-full p-2 rounded-md border border-gray-300 text-black" onchange="this.form.submit()">
-          <option value="">All Decks</option>
+    <!-- Review Deck Dropdown -->
+    <div class="relative mb-5">
+      <button
+        id="reviewDeckBtn"
+        class="px-6 py-2 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring focus:ring-green-300"
+      >
+        Review Deck
+      </button>
+      <div
+        id="deckDropdown"
+        class="hidden absolute mt-2 bg-white text-black rounded-md shadow-lg w-56"
+      >
+        <ul>
           {% for deck in decks %}
-          <option value="{{ deck.id }}" {% if deck.id == selected_deck_id %}selected{% endif %}>{{ deck.title }}</option>
+          <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+            <a href="{{ url_for('flashcards.review', deck_id=deck.id) }}"
+              >{{ deck.title }}</a
+            >
+          </li>
+          {% endfor %}
+          <li class="px-4 py-2 text-gray-400">No decks available.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Deck selection -->
+    <form
+      action="{{ url_for('flashcards.flashcards') }}"
+      method="GET"
+      class="mb-5"
+    >
+      <label for="deck-select" class="block mb-2">Select Deck:</label>
+      <select
+        name="deck_id"
+        id="deck-select"
+        class="block w-full p-2 rounded-md border border-gray-300 text-black"
+        onchange="this.form.submit()"
+      >
+        <option value="">All Decks</option>
+        {% for deck in decks %}
+        <option
+          value="{{ deck.id }}"
+          {%
+          if
+          deck.id=""
+          ="selected_deck_id"
+          %}selected{%
+          endif
+          %}
+        >
+          {{ deck.title }}
+        </option>
+        {% endfor %}
+      </select>
+    </form>
+
+    <!-- Flashcard creation button -->
+    <button
+      id="openModalBtn"
+      class="fixed bottom-5 right-5 z-50 bg-purple-700 text-white px-5 py-2 rounded-lg text-lg hover:bg-purple-800 transition"
+    >
+      Create New Flashcard
+    </button>
+
+    <!-- Search feature -->
+    <form
+      action="/search_flashcards"
+      method="GET"
+      class="flex items-center gap-2 mb-5"
+    >
+      <input
+        type="text"
+        name="query"
+        placeholder="Search flashcards..."
+        value="{{ search_query or '' }}"
+        class="flex-grow p-2 rounded-md border border-gray-300 text-black"
+      />
+      <button
+        type="submit"
+        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+      >
+        Search
+      </button>
+    </form>
+
+    {% if search_query %}
+    <p class="mb-5">
+      <strong>Search results for "{{ search_query }}":</strong>
+    </p>
+    {% endif %}
+
+    <!-- Display flashcard list -->
+    <ul class="space-y-4">
+      {% for flashcard in flashcards %}
+      <li class="bg-gray-800 p-4 rounded-md text-center relative">
+        <div class="flashcard-content">
+          <div class="flashcard-front">
+            <h2 class="text-2xl mb-2 text-blue-400">
+              Q: {{ flashcard.question }}
+            </h2>
+          </div>
+          <div class="flashcard-back">
+            <h2 class="text-2xl mb-2 text-green-400">
+              A: {{ flashcard.answer }}
+            </h2>
+          </div>
+        </div>
+        <small class="block mt-2 text-gray-400"
+          >Created on: {{ flashcard.created_at }}</small
+        >
+
+        <!-- Edit and Delete buttons -->
+        <div class="flex justify-center gap-4 mt-4">
+          <form
+            action="/edit_flashcard/{{ flashcard.id }}"
+            method="GET"
+            class="inline"
+          >
+            <button
+              type="submit"
+              class="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition"
+            >
+              Edit
+            </button>
+          </form>
+          <form
+            action="/delete_flashcard/{{ flashcard.id }}"
+            method="POST"
+            class="inline"
+          >
+            <button
+              type="submit"
+              class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+            >
+              Delete
+            </button>
+          </form>
+        </div>
+      </li>
+      {% else %}
+      <li class="text-gray-400 text-center">
+        No flashcards were created. Want to make some?
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<!-- Modal for creating a new flashcard -->
+<div
+  id="myModal"
+  class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center hidden"
+>
+  <div class="bg-white p-6 rounded-lg relative w-96">
+    <span
+      class="absolute top-3 right-3 text-gray-400 text-2xl cursor-pointer hover:text-gray-600"
+      >&times;</span
+    >
+    <h2 class="text-xl font-bold mb-4">Create a New Flashcard</h2>
+    <form action="/add_flashcard" method="POST" class="space-y-4">
+      <label for="question" class="block">
+        Question:
+        <input
+          type="text"
+          id="question"
+          name="question"
+          class="w-full p-2 border border-gray-300 rounded-md"
+          required
+        />
+      </label>
+      <label for="answer" class="block">
+        Answer:
+        <textarea
+          id="answer"
+          name="answer"
+          class="w-full p-2 border border-gray-300 rounded-md"
+          required
+        ></textarea>
+      </label>
+      <label for="deck_id" class="block">
+        Deck:
+        <select
+          name="deck_id"
+          id="deck-select"
+          class="w-full p-2 border border-gray-300 rounded-md"
+          required
+        >
+          {% for deck in decks %}
+          <option value="{{ deck.id }}">{{ deck.title }}</option>
           {% endfor %}
         </select>
-      </form>
-
-      <!-- Flashcard creation button -->
-      <button id="openModalBtn" class="fixed bottom-5 right-5 z-50 bg-purple-700 text-white px-5 py-2 rounded-lg text-lg hover:bg-purple-800 transition">
-        Create New Flashcard
+      </label>
+      <button
+        type="submit"
+        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+      >
+        Save Flashcard
       </button>
-
-      <!-- Search feature -->
-      <form action="/search_flashcards" method="GET" class="flex items-center gap-2 mb-5">
-        <input type="text" name="query" placeholder="Search flashcards..." value="{{ search_query or '' }}" class="flex-grow p-2 rounded-md border border-gray-300 text-black" />
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
-          Search
-        </button>
-      </form>
-
-      {% if search_query %}
-      <p class="mb-5"><strong>Search results for "{{ search_query }}":</strong></p>
-      {% endif %}
-
-      <!-- Display flashcard list -->
-      <ul class="space-y-4">
-        {% for flashcard in flashcards %}
-          <li class="bg-gray-800 p-4 rounded-md text-center relative">
-            <div class="flashcard-content">
-              <div class="flashcard-front">
-                <h2 class="text-2xl mb-2 text-blue-400">Q: {{ flashcard.question }}</h2>
-              </div>
-              <div class="flashcard-back">
-                <h2 class="text-2xl mb-2 text-green-400">A: {{ flashcard.answer }}</h2>
-              </div>
-            </div>
-            <small class="block mt-2 text-gray-400">Created on: {{ flashcard.created_at }}</small>
-
-            <!-- Edit and Delete buttons -->
-            <div class="flex justify-center gap-4 mt-4">
-              <form action="/edit_flashcard/{{ flashcard.id }}" method="GET" class="inline">
-                <button type="submit" class="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition">
-                  Edit
-                </button>
-              </form>
-              <form action="/delete_flashcard/{{ flashcard.id }}" method="POST" class="inline">
-                <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition">
-                  Delete
-                </button>
-              </form>
-            </div>
-          </li>
-        {% else %}
-        <li class="text-gray-400 text-center">No flashcards were created. Want to make some?</li>
-        {% endfor %}
-      </ul>
-    </div>
+    </form>
+    <button
+      id="closeModalBtn"
+      class="mt-4 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition"
+    >
+      Cancel
+    </button>
   </div>
+</div>
 
-  <!-- Modal for creating a new flashcard -->
-  <div id="myModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center hidden">
-    <div class="bg-white p-6 rounded-lg relative w-96">
-      <span class="absolute top-3 right-3 text-gray-400 text-2xl cursor-pointer hover:text-gray-600">&times;</span>
-      <h2 class="text-xl font-bold mb-4">Create a New Flashcard</h2>
-      <form action="/add_flashcard" method="POST" class="space-y-4">
-        <label for="question" class="block">
-          Question:
-          <input type="text" id="question" name="question" class="w-full p-2 border border-gray-300 rounded-md" required>
-        </label>
-        <label for="answer" class="block">
-          Answer:
-          <textarea id="answer" name="answer" class="w-full p-2 border border-gray-300 rounded-md" required></textarea>
-        </label>
-        <label for="deck_id" class="block">
-          Deck:
-          <select name="deck_id" id="deck-select" class="w-full p-2 border border-gray-300 rounded-md" required>
-            {% for deck in decks %}
-              <option value="{{ deck.id }}">{{ deck.title }}</option>
-            {% endfor %}
-          </select>
-        </label>
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
-          Save Flashcard
-        </button>
-      </form>
-      <button id="closeModalBtn" class="mt-4 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">
-        Cancel
-      </button>
-    </div>
-  </div>
-
-  <script src="{{ url_for('static', filename='js/flashcards.js') }}"></script>
+<script src="{{ url_for('static', filename='js/flashcards.js') }}"></script>
 {% endblock %}

@@ -1,40 +1,39 @@
 /* light.css */
 
-
 /* Override root variables for light theme */
 :root {
-    /* Base colors */
-    --background-color: #ffffff;
-    --text-color: #1a1a2e;  /* Darker text for contrast */
-    
-    /* Blue theme (matching base.css but adjusted for light mode) */
-    --primary-blue: #2563eb;  /* Same as base - good contrast on white */
-    --hover-blue: #1d4ed8;    /* Same as base */
-    --active-blue: #1e40af;   /* Same as base */
-    
-    /* Background states */
-    --hover-bg-color: #f3f4f6;  /* Light gray for hover */
-    --active-bg-color: #e5e7eb; /* Slightly darker for active */
-    
-    /* Text colors */
-    --white: #000000;  /* Main text color for light mode */
-    --text-secondary: #4b5563;  /* Secondary text */
-    --text-tertiary: #6b7280;   /* Tertiary text */
-    
-    /* Shadows and effects */
-    --soft-text-shadow: none;  /* Remove text shadow in light mode */
-    --box-shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
-    --box-shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.12);
-    --box-shadow-deep: 0 8px 12px rgba(0, 0, 0, 0.15);
-    
-    /* Semantic colors */
-    --success-color: #059669;  /* Green */
-    --error-color: #dc2626;    /* Red */
-    --warning-color: #d97706;  /* Orange */
-    --info-color: #2563eb;     /* Blue */
-    
-    /* Border colors */
-    --border-light: #e5e7eb;
-    --border-medium: #d1d5db;
-    --border-dark: #9ca3af;
+  /* Base colors */
+  --background-color: #ffffff;
+  --text-color: #1a1a2e; /* Darker text for contrast */
+
+  /* Blue theme (matching base.css but adjusted for light mode) */
+  --primary-blue: #2563eb; /* Same as base - good contrast on white */
+  --hover-blue: #1d4ed8; /* Same as base */
+  --active-blue: #1e40af; /* Same as base */
+
+  /* Background states */
+  --hover-bg-color: #f3f4f6; /* Light gray for hover */
+  --active-bg-color: #e5e7eb; /* Slightly darker for active */
+
+  /* Text colors */
+  --white: #000000; /* Main text color for light mode */
+  --text-secondary: #4b5563; /* Secondary text */
+  --text-tertiary: #6b7280; /* Tertiary text */
+
+  /* Shadows and effects */
+  --soft-text-shadow: none; /* Remove text shadow in light mode */
+  --box-shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --box-shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.12);
+  --box-shadow-deep: 0 8px 12px rgba(0, 0, 0, 0.15);
+
+  /* Semantic colors */
+  --success-color: #059669; /* Green */
+  --error-color: #dc2626; /* Red */
+  --warning-color: #d97706; /* Orange */
+  --info-color: #2563eb; /* Blue */
+
+  /* Border colors */
+  --border-light: #e5e7eb;
+  --border-medium: #d1d5db;
+  --border-dark: #9ca3af;
 }

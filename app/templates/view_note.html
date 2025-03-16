@@ -1,39 +1,41 @@
-{% extends "layout.html" %}
-
-{% block title %}
-    {{ note.note_title }} - MentorMatrix
-{% endblock %}
-
-{% block other_head_stuff %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/view_note.css') }}">
-{% endblock %}
-
-{% block content %}
+{% extends "layout.html" %} {% block title %} {{ note.note_title }} -
+MentorMatrix {% endblock %} {% block other_head_stuff %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/view_note.css') }}"
+/>
+{% endblock %} {% block content %}
 <div class="container">
-    <div class="main-content">
-        <h1>{{ note.note_title }}</h1>
-        
-        <!-- Render Markdown content using Flask-Markdown -->
-        <div id="note">{{ note.note_content | safe }}</div>
-        
-        <p id="note_created_at"><strong>Created on:</strong> {{ note.created_at }}</p>
-        
-        {% if note.transcript_title %}
-            <p id="note_transcript"><strong>Associated Transcript:</strong> 
-            <a href="{{ url_for('dashboard.dashboard') }}">{{ note.transcript_title }}</a></p>
-        {% endif %}
-        
-        {% if note.file_name %}
-            <p id="note_source_file"><strong>Source File:</strong> {{ note.file_name }}</p>
-            {% if note.file_type %}
-                <p id="notes_file_type"><strong>File Type:</strong> {{ note.file_type }}</p>
-            {% endif %}
-            {% if note.metadata %}
-                <p><strong>Metadata:</strong> {{ note.metadata }}</p>
-            {% endif %}
-        {% endif %}
-        
-        <a href="{{ url_for('notes.notes') }}" class="premium-button">Back to Notes</a>
-    </div>
+  <div class="main-content">
+    <h1>{{ note.note_title }}</h1>
+
+    <!-- Render Markdown content using Flask-Markdown -->
+    <div id="note">{{ note.note_content | safe }}</div>
+
+    <p id="note_created_at">
+      <strong>Created on:</strong> {{ note.created_at }}
+    </p>
+
+    {% if note.transcript_title %}
+    <p id="note_transcript">
+      <strong>Associated Transcript:</strong>
+      <a href="{{ url_for('dashboard.dashboard') }}"
+        >{{ note.transcript_title }}</a
+      >
+    </p>
+    {% endif %} {% if note.file_name %}
+    <p id="note_source_file">
+      <strong>Source File:</strong> {{ note.file_name }}
+    </p>
+    {% if note.file_type %}
+    <p id="notes_file_type"><strong>File Type:</strong> {{ note.file_type }}</p>
+    {% endif %} {% if note.metadata %}
+    <p><strong>Metadata:</strong> {{ note.metadata }}</p>
+    {% endif %} {% endif %}
+
+    <a href="{{ url_for('notes.notes') }}" class="premium-button"
+      >Back to Notes</a
+    >
+  </div>
 </div>
 {% endblock %}

@@ -1,80 +1,99 @@
-{% extends "layout.html" %}
+{% extends "layout.html" %} {% block title %} Notes - MentorMatrix {% endblock
+%} {% block other_head_stuff %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/notes.css') }}"
+/>
+{% endblock %} {% block content %}
+<div class="container">
+  <div class="main-content">
+    <h1>My Notes</h1>
 
-{% block title %}
-    Notes - MentorMatrix
-{% endblock %}
+    <!-- Display notes list -->
+    <ul class="notes-list">
+      {% for note in notes %}
+      <li class="note-item">
+        <h2>{{ note.note_title }}</h2>
+        <small>Created on: {{ note.created_at }}</small>
 
-{% block other_head_stuff %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/notes.css') }}">
-{% endblock %}
+        <!-- View Details Button -->
+        <a
+          href="{{ url_for('notes.view_note', note_id=note.id) }}"
+          class="view-details-btn"
+          >View Details</a
+        >
 
-{% block content %}
-    <div class="container">
-        <div class="main-content">
-            <h1>My Notes</h1>
+        <!-- Button to open settings modal -->
+        <button
+          class="settings-btn"
+          onclick="openNoteSettings({{ note.id }}, '{{ note.note_title | escape }}')"
+        >
+          <img
+            src="{{ url_for('static', filename='images/three_dots.svg') }}"
+            alt=""
+          />
+        </button>
+      </li>
+      {% else %}
+      <p>No notes available. Generate one to get started!</p>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
 
-            <!-- Display notes list -->
-            <ul class="notes-list">
-                {% for note in notes %}
-                    <li class="note-item">
-                        <h2>{{ note.note_title }}</h2>
-                        <small>Created on: {{ note.created_at }}</small>
+<!-- Modal for Note Settings -->
+<div id="noteSettingsModal" class="modal hidden">
+  <div class="modal-content">
+    <span
+      class="close-btn"
+      onclick="closeNoteSettings()"
+      aria-label="Close Modal"
+      >&times;</span
+    >
+    <h2>Note Settings</h2>
+    <form
+      id="editTitleForm"
+      action="{{ url_for('notes.edit_title') }}"
+      method="POST"
+    >
+      <label for="noteTitle">Note Title</label>
+      <input type="text" id="noteTitle" name="title" required />
+      <input type="hidden" id="noteId" name="note_id" />
+      <button type="submit" class="premium-button">Save Changes</button>
+    </form>
 
-                        <!-- View Details Button -->
-                        <a href="{{ url_for('notes.view_note', note_id=note.id) }}" class="view-details-btn">View Details</a>
-
-                        <!-- Button to open settings modal -->
-                        <button class="settings-btn" onclick="openNoteSettings({{ note.id }}, '{{ note.note_title | escape }}')">
-                            <img src="{{ url_for('static', filename='images/three_dots.svg') }}" alt="">
-                        </button>
-                        
-                    </li>
-                {% else %}
-                    <p>No notes available. Generate one to get started!</p>
-                {% endfor %}
-            </ul>
-        </div>
+    <!-- Export Note Section -->
+    <div class="export-section">
+      <button class="premium-button">Export Note as PDF</button>
     </div>
 
-    <!-- Modal for Note Settings -->
-    <div id="noteSettingsModal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeNoteSettings()" aria-label="Close Modal">&times;</span>
-            <h2>Note Settings</h2>
-            <form id="editTitleForm" action="{{ url_for('notes.edit_title') }}" method="POST">
-                <label for="noteTitle">Note Title</label>
-                <input type="text" id="noteTitle" name="title" required>
-                <input type="hidden" id="noteId" name="note_id">
-                <button type="submit" class="premium-button">Save Changes</button>
-            </form>
+    <!-- Delete Note Section -->
+    <form
+      id="deleteNoteForm"
+      action="{{ url_for('notes.delete_note', note_id=0) }}"
+      method="POST"
+    >
+      <button type="submit" class="danger-button">Delete Note</button>
+    </form>
+  </div>
+</div>
 
-            <!-- Export Note Section -->
-            <div class="export-section">
-                <button class="premium-button">Export Note as PDF</button>
-            </div>
+<script>
+  function openNoteSettings(noteId, noteTitle) {
+    // Populate modal fields
+    document.getElementById("noteId").value = noteId;
+    document.getElementById("noteTitle").value = noteTitle;
 
-            <!-- Delete Note Section -->
-            <form id="deleteNoteForm" action="{{ url_for('notes.delete_note', note_id=0) }}" method="POST">
-                <button type="submit" class="danger-button">Delete Note</button>
-            </form>
-        </div>
-    </div>
+    // Update delete form action
+    document.getElementById("deleteNoteForm").action =
+      "{{ url_for('notes.delete_note', note_id=0) }}".replace("0", noteId);
 
-    <script>
-        function openNoteSettings(noteId, noteTitle) {
-            // Populate modal fields
-            document.getElementById('noteId').value = noteId;
-            document.getElementById('noteTitle').value = noteTitle;
+    // Show the modal
+    document.getElementById("noteSettingsModal").classList.remove("hidden");
+  }
 
-            // Update delete form action
-            document.getElementById('deleteNoteForm').action = "{{ url_for('notes.delete_note', note_id=0) }}".replace('0', noteId);
-
-            // Show the modal
-            document.getElementById('noteSettingsModal').classList.remove('hidden');
-        }
-
-        function closeNoteSettings() {
-            document.getElementById('noteSettingsModal').classList.add('hidden');
-        }
-    </script>
+  function closeNoteSettings() {
+    document.getElementById("noteSettingsModal").classList.add("hidden");
+  }
+</script>
 {% endblock %}
