@@ -1,10 +1,12 @@
 from flask import Flask, render_template, g
 from flask_session import Session
 from flask_mail import Mail
-from flask_wtf.csrf import CSRFProtect, generate_csrf # type: ignore
+from flask_wtf.csrf import CSRFProtect, generate_csrf  # type: ignore
 
 # Import your configuration and blueprints
-from app.config import DevelopmentConfig  # or use config["development"] from the mapping if preferred
+from app.config import (
+    DevelopmentConfig,
+)  # or use config["development"] from the mapping if preferred
 from app.routes import (
     dashboard_blueprint,  # noqa: F401
     notes_blueprint,
@@ -20,7 +22,7 @@ from app.models import init_db
 from app.middleware import requires_auth
 
 # Create the Flask application
-app = Flask(__name__, static_folder='static', template_folder='templates')
+app = Flask(__name__, static_folder="static", template_folder="templates")
 
 # Load the configuration (using DevelopmentConfig as an example)
 app.config.from_object(DevelopmentConfig)
@@ -40,9 +42,10 @@ mail = Mail(app)
 # Initialize the database (this creates the necessary tables)
 init_db()
 
+
 @app.context_processor
 def inject_clerk_config():
-    return dict(current_user=g.get('clerk_payload'))
+    return dict(current_user=g.get("clerk_payload"))
 
 
 # Register blueprints within an application context
@@ -57,11 +60,13 @@ with app.app_context():
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(error_blueprint)
 
+
 # Miscellaneous routes
 @app.route("/settings")
 @requires_auth
 def settings():
     return render_template("settings.html", current_route="settings")
+
 
 @app.route("/pricing")
 def pricing():

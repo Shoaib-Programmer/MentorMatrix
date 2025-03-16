@@ -1,24 +1,26 @@
 import os
 import logging
 from functools import wraps
-from flask import request, g, redirect, session # type: ignore
-import httpx # type: ignore
-from clerk_backend_api import Clerk # type: ignore
-from clerk_backend_api.jwks_helpers import AuthenticateRequestOptions # type: ignore
+from flask import request, g, redirect, session  # type: ignore
+import httpx  # type: ignore
+from clerk_backend_api import Clerk  # type: ignore
+from clerk_backend_api.jwks_helpers import AuthenticateRequestOptions  # type: ignore
 
 # Initialize a Clerk client instance once
 clerk_client = Clerk(bearer_auth=os.getenv("CLERK_SECRET_KEY"))
 
+
 def get_session_token(req):
     # First try to extract token from the Authorization header
-    auth_header = req.headers.get('Authorization')
+    auth_header = req.headers.get("Authorization")
     logging.debug(f"Authorization header: {auth_header}")
-    if auth_header and auth_header.startswith('Bearer '):
-        return auth_header.split(' ')[1]
+    if auth_header and auth_header.startswith("Bearer "):
+        return auth_header.split(" ")[1]
     # Fall back to the token stored in session under 'clerk_db_jwt'
-    token = session.get('clerk_db_jwt')
+    token = session.get("clerk_db_jwt")
     logging.debug(f"Session token (clerk_db_jwt): {token}")
     return token
+
 
 def verify_user(req):
     token = get_session_token(req)
@@ -30,7 +32,9 @@ def verify_user(req):
         headers = {"Authorization": f"Bearer {token}"}
         fake_request = httpx.Request("GET", "http://dummy", headers=headers)
         # Supply the required options argument. Replace with your actual authorized domain.
-        options = AuthenticateRequestOptions(authorized_parties=["https://your-domain.com"])
+        options = AuthenticateRequestOptions(
+            authorized_parties=["https://your-domain.com"]
+        )
         # Pass the dummy request object to authenticate_request.
         user_data = clerk_client.authenticate_request(fake_request, options)
         logging.debug(f"User data: {user_data}")
@@ -38,6 +42,7 @@ def verify_user(req):
     except Exception as e:
         logging.error(f"Error verifying token: {e}")
         return None
+
 
 def requires_auth(f):
     @wraps(f)
@@ -52,4 +57,5 @@ def requires_auth(f):
         # logging.info(f"Authenticated user: {g.user.payload.get('sub')} from {request.remote_addr}")
         logging.debug(f"RequestState object: {g.user.__dict__}")
         return f(*args, **kwargs)
+
     return decorated

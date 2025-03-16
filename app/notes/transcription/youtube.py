@@ -4,6 +4,7 @@ import logging
 from icecream import ic  # type: ignore
 
 from .audio import download_audio, is_audio_usable, transcribe_audio
+
 # from .video import download_video, transcribe_video_without_audio
 from .youtube_id import get_video_id_from_url
 
@@ -33,9 +34,9 @@ def fetch_transcript(video_id):
         response = YouTubeTranscriptApi.get_transcript(video_id)
         text_results = []
         for part in response:
-            text_results.append(part['text'])
+            text_results.append(part["text"])
 
-        transcript = ' '.join(text_results)
+        transcript = " ".join(text_results)
         return transcript
     except VideoUnavailable:
         logging.error(f"Video unavailable: {video_id}")

@@ -12,6 +12,7 @@ def page_not_found(e):
 def internal_server_error(e):
     return render_template("500.html"), 500
 
+
 @error_blueprint.app_errorhandler(401)
 def unauthorized(e):
     return render_template("401.html"), 401

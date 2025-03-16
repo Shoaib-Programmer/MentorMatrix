@@ -1,5 +1,6 @@
 from transformers import AutoTokenizer, AutoModelForQuestionAnswering, pipeline
 
+
 def generate_answer(context, question):
     """
     Generate an answer to an open-ended question based on the given context.
@@ -15,14 +16,15 @@ def generate_answer(context, question):
     model_name = "bert-large-uncased-whole-word-masking-finetuned-squad"
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForQuestionAnswering.from_pretrained(model_name)
-    
+
     # Initialize QA pipeline
     qa_pipeline = pipeline("question-answering", model=model, tokenizer=tokenizer)
-    
+
     # Generate the answer
     result = qa_pipeline(question=question, context=context)
-    
+
     return result["answer"]
+
 
 if __name__ == "__main__":
     # Example context and question

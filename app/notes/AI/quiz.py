@@ -6,12 +6,12 @@ from .answer_open import generate_answer
 
 # TODO: import random cuz you want to be improving the functionality
 
-class Quiz:
 
+class Quiz:
     """
     A class to generate and evaluate quizzes based on a given text context.
 
-    The Quiz class provides functionality to create open-ended and multiple-choice 
+    The Quiz class provides functionality to create open-ended and multiple-choice
     questions from a provided text and evaluate answers against the generated questions.
 
     Attributes:
@@ -26,9 +26,9 @@ class Quiz:
     Methods:
     -------
     generate_all_questions(ratio: float = 0.9):
-        Generates open-ended and fill-in-the-blank questions from the context based on 
+        Generates open-ended and fill-in-the-blank questions from the context based on
         a specified ratio.
-        
+
     evaluate(question: str, answer: str) -> bool:
         Evaluates a provided answer against the correct answer for a given question.
     """
@@ -44,12 +44,12 @@ class Quiz:
         - context (str): The provided text to base the quiz on.
         - multiple_choice (list): A list to store multiple-choice questions and their options.
         - open_ended (list): A list to store open-ended questions and their answers.
-        
+
         Raises:
         - ValueError: If the provided context is empty.
         """
         if not context:
-            raise ValueError('There must be some context to create a quiz.')
+            raise ValueError("There must be some context to create a quiz.")
         self.context = context
         self.multiple_choice = []
         self.open_ended = []
@@ -75,7 +75,7 @@ class Quiz:
         """
         if not (0 <= ratio <= 1):
             raise ValueError("Ratio must be between 0 and 1.")
-        
+
         sentences = [s.strip() for s in self.context.split(".") if s.strip()]
         total_sentences = len(sentences)
         open_ended_count = round(total_sentences * ratio)
@@ -85,22 +85,19 @@ class Quiz:
                 # Generate an open-ended question
                 question = generate_question(self.context, sentence)
                 answer = generate_answer(self.context, question)
-                self.open_ended.append({
-                    'question': question,
-                    'answer': answer
-                })
+                self.open_ended.append({"question": question, "answer": answer})
             else:
                 # Generate a fill-in-the-blank question
                 result = generate_fill_in_the_blank(sentence)
-                self.open_ended.append({
-                    'question': result['question'],
-                    'answer': result['answer']
-                })
-                choices = generate_choices_from_context(self.context, result['question'], result['answer'])
-                self.multiple_choice.append({
-                    'question': choices['question'],
-                    'choices': choices['choices']
-                })
+                self.open_ended.append(
+                    {"question": result["question"], "answer": result["answer"]}
+                )
+                choices = generate_choices_from_context(
+                    self.context, result["question"], result["answer"]
+                )
+                self.multiple_choice.append(
+                    {"question": choices["question"], "choices": choices["choices"]}
+                )
 
     def evaluate(self, question: str, answer: str) -> bool:
         """
@@ -118,12 +115,15 @@ class Quiz:
         """
         correct_answer = None
         for q in self.open_ended + self.multiple_choice:
-            if q['question'] == question:
-                correct_answer = q.get('answer') or q['choices'][0]  # First choice is the correct answer
+            if q["question"] == question:
+                correct_answer = (
+                    q.get("answer") or q["choices"][0]
+                )  # First choice is the correct answer
                 break
         if not correct_answer:
             raise ValueError("Question not found in the quiz.")
         return evaluate_answer(answer, correct_answer)
+
 
 def generate_quiz_basic(context: str, ratio: float = 0.9) -> Quiz:
     """
@@ -141,7 +141,11 @@ def generate_quiz_basic(context: str, ratio: float = 0.9) -> Quiz:
     quiz.generate_all_questions(ratio=ratio)
     return quiz
 
+
 if __name__ == "__main__":
-    quiz = generate_quiz_basic("The sun is a star. It provides light to Earth. Solar panels harness this light.", ratio=0.8)
+    quiz = generate_quiz_basic(
+        "The sun is a star. It provides light to Earth. Solar panels harness this light.",
+        ratio=0.8,
+    )
     print("Open-ended Questions:", quiz.open_ended)
     print("Multiple-choice Questions:", quiz.multiple_choice)

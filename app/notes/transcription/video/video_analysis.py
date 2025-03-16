@@ -1,6 +1,7 @@
 import cv2
 import pytesseract
 
+
 def extract_key_frames(video_path, interval=5):
     """
     Extracts frames from a video at specified intervals.
@@ -34,6 +35,7 @@ def extract_key_frames(video_path, interval=5):
     cap.release()
     return frames
 
+
 def extract_text_from_image(image):
     """
     Extracts text from an image using OCR (Optical Character Recognition).
@@ -51,6 +53,7 @@ def extract_text_from_image(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     text = pytesseract.image_to_string(gray)
     return text.strip()
+
 
 def analyze_frames(frames):
     """
@@ -76,6 +79,7 @@ def analyze_frames(frames):
         else:
             summary += "No text detected.\n"
     return summary
+
 
 def transcribe_video_without_audio(video_path, frame_interval=5):
     """

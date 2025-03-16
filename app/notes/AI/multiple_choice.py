@@ -3,9 +3,10 @@ import random
 import re
 from .stopwords import stopwords
 
+
 def generate_choices_from_context(context, question, correct_answer, num_choices=4):
     """
-    Generate a list of multiple-choice options (including the correct answer) 
+    Generate a list of multiple-choice options (including the correct answer)
     for a given question and context.
 
     Args:
@@ -33,30 +34,31 @@ def generate_choices_from_context(context, question, correct_answer, num_choices
     for idx in top_predictions:
         word = tokenizer.decode([idx]).strip()
         if (
-            re.match(r'^[A-Za-z]+$', word) and  # Alphanumeric check
-            len(word) > 1 and  # Minimum word length
-            word.lower() not in stopwords and  # Exclude stopwords
-            word.lower() != correct_answer.lower() and  # Exclude correct answer
-            word not in distractors  # No duplicates
+            re.match(r"^[A-Za-z]+$", word)  # Alphanumeric check
+            and len(word) > 1  # Minimum word length
+            and word.lower() not in stopwords  # Exclude stopwords
+            and word.lower() != correct_answer.lower()  # Exclude correct answer
+            and word not in distractors  # No duplicates
         ):
             distractors.append(word)
-        if len(distractors) >= num_choices - 1:  # Stop when enough distractors are found
+        if (
+            len(distractors) >= num_choices - 1
+        ):  # Stop when enough distractors are found
             break
 
     # If insufficient distractors are found, add random words from context
-    context_words = set(re.findall(r'\b[A-Za-z]+\b', context))
-    additional_distractors = [word for word in context_words if word.lower() != correct_answer.lower()]
+    context_words = set(re.findall(r"\b[A-Za-z]+\b", context))
+    additional_distractors = [
+        word for word in context_words if word.lower() != correct_answer.lower()
+    ]
     distractors.extend(additional_distractors[: num_choices - 1 - len(distractors)])
 
     # Combine correct answer with distractors and shuffle
     choices = [correct_answer] + distractors[: num_choices - 1]
     random.shuffle(choices)
 
-    return {
-        "question": question,
-        "choices": choices,
-        "answer": correct_answer
-    }
+    return {"question": question, "choices": choices, "answer": correct_answer}
+
 
 if __name__ == "__main__":
     context = (
@@ -68,7 +70,9 @@ if __name__ == "__main__":
     question = "The Great Wall of ____ is one of the most impressive architectural feats in history."
     correct_answer = "China"
 
-    result = generate_choices_from_context(context, question, correct_answer, num_choices=4)
+    result = generate_choices_from_context(
+        context, question, correct_answer, num_choices=4
+    )
     print("Question:", result["question"])
     print("Choices:", result["choices"])
     print("Correct Answer:", result["answer"])

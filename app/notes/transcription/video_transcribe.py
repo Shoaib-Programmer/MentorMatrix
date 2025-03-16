@@ -16,7 +16,9 @@ def extract_audio_from_video(video_path, audio_path="extracted_audio.wav"):
         str: The path to the extracted audio file.
     """
     # Use ffmpeg to extract the audio from the video and save it as a WAV file
-    os.system(f"ffmpeg -i \"{video_path}\" -vn -acodec pcm_s16le -ar 44100 -ac 2 \"{audio_path}\"")
+    os.system(
+        f'ffmpeg -i "{video_path}" -vn -acodec pcm_s16le -ar 44100 -ac 2 "{audio_path}"'
+    )
     return audio_path
 
 

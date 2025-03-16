@@ -3,6 +3,7 @@ import random
 import re
 from .stopwords import stopwords
 
+
 def generate_fill_in_the_blank(sentence, mask_token="[MASK]") -> dict:
     """
     Generate a fill-in-the-blank question by masking a capitalized word in the sentence.
@@ -21,15 +22,16 @@ def generate_fill_in_the_blank(sentence, mask_token="[MASK]") -> dict:
 
     # Split the sentence into words
     words = sentence.split()
-    
+
     # Identify indices of capitalized words that are not stopwords
     eligible_indices = [
-        i for i, word in enumerate(words)
+        i
+        for i, word in enumerate(words)
         if word[0].isupper()  # Starts with a capital letter
         and word.isalpha()  # Ignore punctuation or non-alphabetic tokens
         and word.lower() not in stopwords  # Exclude stopwords
     ]
-    
+
     if not eligible_indices:
         return {"question": sentence, "answer": None}  # No valid word to mask
 
@@ -44,7 +46,7 @@ def generate_fill_in_the_blank(sentence, mask_token="[MASK]") -> dict:
 
     # Prepare inputs for the model
     inputs = tokenizer.encode(masked_sentence, return_tensors="pt")
-    
+
     # Predict the masked token
     outputs = model(inputs)
     predictions = outputs.logits[0]
@@ -55,10 +57,8 @@ def generate_fill_in_the_blank(sentence, mask_token="[MASK]") -> dict:
     question = sentence.replace(original_word, "____", 1)
 
     # Return the question and answer
-    return {
-        "question": question,
-        "answer": original_word
-    }
+    return {"question": question, "answer": original_word}
+
 
 # Example usage
 if __name__ == "__main__":
