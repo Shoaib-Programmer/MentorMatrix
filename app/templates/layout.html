@@ -27,9 +27,7 @@
       align-items: center;
       padding: 0.75rem 1rem;
       background-color: #1a202c;
-      /* dark gray */
       color: #f7fafc;
-      /* light text */
     }
 
     .navbar a {
@@ -54,7 +52,6 @@
       margin-left: 1rem;
       padding: 0.25rem 0.5rem;
       background-color: #e53e3e;
-      /* red */
       color: #fff;
       border-radius: 0.25rem;
     }
@@ -70,12 +67,14 @@
     <div class="navbar-right">
       {% if user %}
       <div class="user-button">
+        {% if user.picture %}
         <img src="{{ user.picture }}" alt="User Avatar" class="user-avatar" />
+        {% endif %}
         <span class="user-name">{{ user.name }}</span>
         <a href="/auth/logout" class="logout-link">Logout</a>
       </div>
       {% else %}
-      <a href="/login" class="login-link">Login</a>
+      <a href="/auth/login" class="login-link">Login</a>
       {% endif %}
     </div>
   </nav>
@@ -151,13 +150,12 @@
         {% if messages %}
         <div class="space-y-4">
           {% for category, message in messages %}
-          <div
-            class="p-5 rounded-lg shadow-lg flash-message
-                              {% if category == 'success' %}bg-gradient-to-r from-green-400 via-green-500 to-green-600{% endif %}
-                              {% if category == 'error' %}bg-gradient-to-r from-red-400 via-red-500 to-red-600{% endif %}
-                              {% if category == 'info' %}bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600{% endif %}
-                              {% if category == 'warning' %}bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600{% endif %}
-                              text-white flex items-center space-x-3 transform transition-transform duration-500 hover:scale-105">
+          <div class="p-5 rounded-lg shadow-lg flash-message
+              {% if category == 'success' %}bg-gradient-to-r from-green-400 via-green-500 to-green-600{% endif %}
+              {% if category == 'error' %}bg-gradient-to-r from-red-400 via-red-500 to-red-600{% endif %}
+              {% if category == 'info' %}bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600{% endif %}
+              {% if category == 'warning' %}bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600{% endif %}
+              text-white flex items-center space-x-3 transform transition-transform duration-500 hover:scale-105">
             <div class="flex-shrink-0">
               {% if category == 'success' %}
               <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

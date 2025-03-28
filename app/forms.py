@@ -1,33 +1,76 @@
-from flask_wtf import FlaskForm  # type: ignore
-from wtforms import StringField, PasswordField, SubmitField  # type: ignore
-from wtforms.validators import DataRequired, Email, Length  # type: ignore
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField, EmailField
+from wtforms.validators import DataRequired, Email, EqualTo, Length
+
+
+class RegisterForm(FlaskForm):
+    username = StringField(
+        "Username",
+        validators=[DataRequired(), Length(min=3, max=50)],
+        render_kw={"placeholder": "Enter a username"},
+    )
+    email = EmailField(
+        "Email",
+        validators=[DataRequired(), Email(), Length(max=255)],
+        render_kw={"placeholder": "Enter your email"},
+    )
+    password = PasswordField(
+        "Password",
+        validators=[DataRequired(), Length(min=6)],
+        render_kw={"placeholder": "Enter a password"},
+    )
+    confirm = PasswordField(
+        "Confirm Password",
+        validators=[
+            DataRequired(),
+            EqualTo("password", message="Passwords must match."),
+        ],
+        render_kw={"placeholder": "Confirm your password"},
+    )
+    submit = SubmitField("Register")
 
 
 class LoginForm(FlaskForm):
     username_or_email = StringField(
-        "Username or Email", validators=[DataRequired(), Length(max=50)]
+        "Username or Email",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Enter your username or email"},
     )
     password = PasswordField(
         "Password",
-        validators=[
-            DataRequired(),
-            Length(min=6, message="Password must be at least 6 characters long"),
-        ],
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Enter your password"},
     )
     submit = SubmitField("Login")
 
 
-class RegisterForm(FlaskForm):
-    username = StringField("Username", validators=[DataRequired(), Length(max=50)])
-    email = StringField(
+class PasswordResetRequestForm(FlaskForm):
+    email = EmailField(
         "Email",
-        validators=[DataRequired(), Email(message="Invalid email"), Length(max=50)],
+        validators=[DataRequired(), Email()],
+        render_kw={"placeholder": "Enter your email"},
     )
+    submit = SubmitField("Request Password Reset")
+
+
+class PasswordResetForm(FlaskForm):
     password = PasswordField(
-        "Password",
+        "New Password",
+        validators=[DataRequired(), Length(min=6)],
+        render_kw={"placeholder": "Enter a new password"},
+    )
+    confirm = PasswordField(
+        "Confirm New Password",
         validators=[
             DataRequired(),
-            Length(min=6, message="Password must be at least 6 characters long"),
+            EqualTo("password", message="Passwords must match."),
         ],
+        render_kw={"placeholder": "Confirm your new password"},
     )
-    submit = SubmitField("Register")
+    submit = SubmitField("Reset Password")
+
+
+
+class ResendConfirmationForm(FlaskForm):
+    email = EmailField("Email", validators=[DataRequired(), Email()])
+    submit = SubmitField("Resend Confirmation")

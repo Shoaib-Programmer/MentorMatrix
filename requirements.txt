@@ -16,12 +16,10 @@ cs50
 transformers
 torch
 flask-wtf
-flask-login
 python-dotenv
 flask-mail
 pytest
 requests
-flask-socketio
 flask-dropzone
 python-magic
 gunicorn
@@ -40,4 +38,3 @@ google-auth-oauthlib
 google-auth-httplib2
 pyttsx3
 pyjwt
-clerk-backend-api

@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}Resend Confirmation Email{% endblock %}
+{% block other_head_stuff %}
+<style>
+    .form-container {
+        width: 400px;
+        margin: 50px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+    }
+
+    .form-container h2 {
+        text-align: center;
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        font-size: 14px;
+    }
+
+    .form-group span.error {
+        color: #d9534f;
+        font-size: 12px;
+    }
+
+    .form-btn {
+        width: 100%;
+        padding: 10px;
+        background-color: #337ab7;
+        border: none;
+        border-radius: 3px;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .form-btn:hover {
+        background-color: #286090;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="form-container">
+    <h2>Resend Confirmation Email</h2>
+    <form method="POST" action="{{ url_for('auth.resend_confirmation') }}">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.email.label() }}
+            {{ form.email(placeholder="Enter your email") }}
+            {% for error in form.email.errors %}
+            <span class="error">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.submit(class="form-btn") }}
+        </div>
+    </form>
+</div>
+{% endblock %}

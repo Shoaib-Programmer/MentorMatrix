@@ -13,7 +13,8 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
   {% if csrf_token is defined %}
   <meta name="csrf-token" content="{{ csrf_token() }}" />
-  {% endif %} {% block other_head_stuff %} {% endblock %}
+  {% endif %}
+  {% block other_head_stuff %}{% endblock %}
   <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" />
 </head>
 
@@ -25,58 +26,55 @@
           <div class="logo">
             <h1>MentorMatrix</h1>
           </div>
-          <div id="user-button"></div>
+          <div id="user-button">
+            <!-- This area can be dynamically populated with user info if needed -->
+          </div>
         </nav>
       </header>
 
       <main>
-        <!-- Display flashed messages -->
+        <!-- Flash messages -->
         <div id="flash-messages" class="mt-4">
-          {% with messages = get_flashed_messages(with_categories=true) %} {%
-          if messages %}
+          {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
           <div class="space-y-4">
             {% for category, message in messages %}
             <div
               class="p-5 rounded-lg shadow-lg flash-message {% if category == 'success' %}bg-gradient-to-r from-green-400 via-green-500 to-green-600{% endif %} {% if category == 'error' %}bg-gradient-to-r from-red-400 via-red-500 to-red-600{% endif %} {% if category == 'info' %}bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600{% endif %} {% if category == 'warning' %}bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600{% endif %} text-white flex items-center space-x-3 transform transition-transform duration-500 hover:scale-105">
-              <!-- Icon -->
               <div class="flex-shrink-0">
                 {% if category == 'success' %}
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                 </svg>
                 {% elif category == 'error' %}
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
                 {% elif category == 'info' %}
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M12 6v6M12 18v.01M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"></path>
                 </svg>
                 {% elif category == 'warning' %}
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M12 8v4M12 16h.01M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"></path>
                 </svg>
                 {% endif %}
               </div>
-              <!-- Message text -->
               <div class="flex-1">{{ message }}</div>
             </div>
             {% endfor %}
           </div>
-          {% endif %} {% endwith %}
+          {% endif %}
+          {% endwith %}
         </div>
 
         {% block content %}{% endblock %}
       </main>
     </div>
   </div>
-  <!-- <script src="{{ url_for('static', filename='js/util.js') }}" type="module"></script> -->
+  <!-- Uncomment if needed: <script src="{{ url_for('static', filename='js/util.js') }}" type="module"></script> -->
 </body>
 
 </html>

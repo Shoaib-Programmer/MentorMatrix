@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Email Confirmation</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .container { margin: 20px; }
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin-top: 20px;
+      background-color: #1a73e8;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Confirm Your Email Address</h2>
+    <p>Thank you for registering with MentorMatrix. Please confirm your email address by clicking the button below:</p>
+    <p><a href="{{ confirm_url }}" class="button">Confirm Email</a></p>
+    <p>If the button doesn't work, copy and paste this URL into your browser:</p>
+    <p>{{ confirm_url }}</p>
+  </div>
+</body>
+</html>

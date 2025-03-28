@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block title %}Log In{% endblock %}
+{% block other_head_stuff %}
+<style>
+  /* Container for the login form */
+  .login-container {
+    width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+
+  .login-container h2 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  /* Form group styling */
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 14px;
+  }
+
+  .form-group span.error {
+    color: #d9534f;
+    font-size: 12px;
+  }
+
+  /* Button styling */
+  .login-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #337ab7;
+    border: none;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .login-btn:hover {
+    background-color: #286090;
+  }
+
+  /* Registration link styling */
+  .register-link {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+  }
+
+  .register-link a {
+    color: #337ab7;
+    text-decoration: none;
+  }
+
+  .register-link a:hover {
+    text-decoration: underline;
+  }
+</style>
+{% endblock %}
+{% block content %}
+<div class="login-container">
+  <h2>Log In</h2>
+  <form method="POST" action="{{ url_for('auth.login') }}">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+      {{ form.username_or_email.label() }}
+      {{ form.username_or_email(placeholder="Enter your username or email") }}
+      {% for error in form.username_or_email.errors %}
+      <span class="error">{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-group">
+      {{ form.password.label() }}
+      {{ form.password(placeholder="Enter your password") }}
+      {% for error in form.password.errors %}
+      <span class="error">{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-group">
+      {{ form.submit(class="login-btn") }}
+    </div>
+  </form>
+  <div class="register-link">
+    <p>Don't have an account? <a href="{{ url_for('auth.register') }}">Register here</a>.</p>
+  </div>
+</div>
+{% endblock %}
