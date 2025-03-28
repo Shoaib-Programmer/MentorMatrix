@@ -1,20 +1,11 @@
 {% extends "layout.html" %} {% block title %}Dashboard - MentorMatrix{% endblock
 %} {% block other_head_stuff %}
-<link
-  rel="stylesheet"
-  href="{{ url_for('static', filename='css/dashboard/dashboard.css') }}"
-/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard/dashboard.css') }}" />
 <!-- Replace individual popup styles with the merged file -->
-<link
-  rel="stylesheet"
-  href="{{ url_for('static', filename='css/popup.css') }}"
-/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/popup.css') }}" />
 {% endblock %} {% block content %}
 <div id="main-content">
   <header>
-    <div class="profile">
-      <div id="user-button-container"></div>
-    </div>
   </header>
 
   <!-- Dashboard Header -->
@@ -37,36 +28,23 @@
   <!-- Audio Popup Modal -->
   <div
     class="popup-overlay audio-popup hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full transition-opacity duration-300"
-    data-modal-type="audio"
-  >
+    data-modal-type="audio">
     <div
-      class="popup-container relative top-20 mx-auto p-8 border w-96 shadow-lg rounded-lg bg-white transition-all duration-300 transform scale-95 hover:scale-100"
-    >
+      class="popup-container relative top-20 mx-auto p-8 border w-96 shadow-lg rounded-lg bg-white transition-all duration-300 transform scale-95 hover:scale-100">
       <span
-        class="close-btn absolute top-4 right-4 text-gray-600 text-2xl cursor-pointer hover:text-gray-800 transition-colors"
-        >&times;</span
-      >
+        class="close-btn absolute top-4 right-4 text-gray-600 text-2xl cursor-pointer hover:text-gray-800 transition-colors">&times;</span>
       <h3 class="text-2xl font-semibold text-gray-800 mb-6">
         Record or Upload Audio
       </h3>
       <div class="space-y-4">
-        <input
-          id="audio-input"
-          type="file"
-          accept="audio/*"
-          class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-        />
-        <button
-          id="record-button"
-          class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
-        >
+        <input id="audio-input" type="file" accept="audio/*"
+          class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+        <button id="record-button"
+          class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
           Start Recording
         </button>
-        <button
-          id="upload-button"
-          disabled
-          class="w-full bg-gray-300 text-gray-600 py-2 px-4 rounded-lg disabled:opacity-50 enabled:hover:bg-blue-700 enabled:hover:text-white transition-colors"
-        >
+        <button id="upload-button" disabled
+          class="w-full bg-gray-300 text-gray-600 py-2 px-4 rounded-lg disabled:opacity-50 enabled:hover:bg-blue-700 enabled:hover:text-white transition-colors">
           Upload Audio
         </button>
         <audio id="audio-player" class="hidden w-full mt-4" controls></audio>
@@ -77,33 +55,20 @@
   <!-- YouTube Popup Modal -->
   <div
     class="popup-overlay youtube-popup hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full transition-opacity duration-300"
-    data-modal-type="youtube"
-  >
+    data-modal-type="youtube">
     <div
-      class="popup-container relative top-20 mx-auto p-8 border w-96 shadow-lg rounded-lg bg-white transition-all duration-300 transform scale-95 hover:scale-100"
-    >
+      class="popup-container relative top-20 mx-auto p-8 border w-96 shadow-lg rounded-lg bg-white transition-all duration-300 transform scale-95 hover:scale-100">
       <span
-        class="close-btn absolute top-4 right-4 text-gray-600 text-2xl cursor-pointer hover:text-gray-800 transition-colors"
-        >&times;</span
-      >
+        class="close-btn absolute top-4 right-4 text-gray-600 text-2xl cursor-pointer hover:text-gray-800 transition-colors">&times;</span>
       <h3 class="text-2xl font-semibold text-gray-800 mb-6">
         Upload YouTube Video
       </h3>
       <div class="space-y-4">
-        <label for="youtube-url" class="block text-sm font-medium text-gray-700"
-          >YouTube URL:</label
-        >
-        <input
-          id="youtube-url"
-          type="url"
-          placeholder="Enter YouTube URL"
-          required
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        />
-        <button
-          id="submit-youtube-button"
-          class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
-        >
+        <label for="youtube-url" class="block text-sm font-medium text-gray-700">YouTube URL:</label>
+        <input id="youtube-url" type="url" placeholder="Enter YouTube URL" required
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+        <button id="submit-youtube-button"
+          class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
           Submit
         </button>
       </div>
@@ -113,27 +78,17 @@
   <!-- PDF Popup Modal -->
   <div
     class="popup-overlay pdf-popup hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full transition-opacity duration-300"
-    data-modal-type="pdf"
-  >
+    data-modal-type="pdf">
     <div
-      class="popup-container relative top-20 mx-auto p-8 border w-96 shadow-lg rounded-lg bg-white transition-all duration-300 transform scale-95 hover:scale-100"
-    >
+      class="popup-container relative top-20 mx-auto p-8 border w-96 shadow-lg rounded-lg bg-white transition-all duration-300 transform scale-95 hover:scale-100">
       <span
-        class="close-btn absolute top-4 right-4 text-gray-600 text-2xl cursor-pointer hover:text-gray-800 transition-colors"
-        >&times;</span
-      >
+        class="close-btn absolute top-4 right-4 text-gray-600 text-2xl cursor-pointer hover:text-gray-800 transition-colors">&times;</span>
       <h3 class="text-2xl font-semibold text-gray-800 mb-6">PDF Upload</h3>
       <div class="space-y-4">
-        <input
-          id="pdf-input"
-          type="file"
-          accept="application/pdf"
-          class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-        />
-        <button
-          id="submit-pdf-button"
-          class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
-        >
+        <input id="pdf-input" type="file" accept="application/pdf"
+          class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+        <button id="submit-pdf-button"
+          class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
           Submit
         </button>
       </div>
@@ -144,27 +99,12 @@
 <!-- Progress Bar Container -->
 <div id="progress-container" class="hidden">
   <div class="w-full bg-gray-200 rounded-full dark:bg-gray-700">
-    <div
-      id="progress-bar"
+    <div id="progress-bar"
       class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
-      style="width: 0%"
-    ></div>
+      style="width: 0%"></div>
   </div>
 </div>
 
 <!-- Only include the consolidated popup.js - REMOVE ALL OTHER POPUP SCRIPT IMPORTS -->
 <script src="{{ url_for('static', filename='js/dashboard/popup.js') }}"></script>
-<script>
-  window.addEventListener("DOMContentLoaded", async function () {
-    if (window.Clerk) {
-      await window.Clerk.load();
-      const userButtonContainer = document.getElementById(
-        "user-button-container",
-      );
-      window.Clerk.mountUserButton(userButtonContainer);
-    } else {
-      console.error("Clerk is not loaded");
-    }
-  });
-</script>
 {% endblock %}

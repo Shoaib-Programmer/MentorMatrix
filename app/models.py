@@ -8,7 +8,7 @@ def init_db():
     Initializes the database by creating the necessary tables and indexes.
 
     This function sets up the following tables:
-        - `users`: (Clerk-managed, unchanged)
+        - `users`: (Auth0-managed, unchanged)
         - `transcripts`, `notes`, `files`, `quizzes`, `quiz_questions`,
           `decks`, `flashcards`, `quiz_results`, and `podcasts` with UUID primary keys.
     """

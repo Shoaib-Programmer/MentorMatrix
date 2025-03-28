@@ -1,25 +1,75 @@
 import os
 import logging
+import requests  # For fetching JWKS
 from functools import wraps
-from flask import request, g, redirect, session  # type: ignore
-import httpx  # type: ignore
-from clerk_backend_api import Clerk  # type: ignore
-from clerk_backend_api.jwks_helpers import AuthenticateRequestOptions  # type: ignore
+from flask import request, g, redirect, session
+from jose import jwt
 
-# Initialize a Clerk client instance once
-clerk_client = Clerk(bearer_auth=os.getenv("CLERK_SECRET_KEY"))
+# Configuration (set these as environment variables)
+AUTH0_DOMAIN = os.getenv("AUTH0_DOMAIN")  # e.g., 'my-domain.us.auth0.com'
+# AUTH0_AUDIENCE = "https://dev-nlswp33on5rnohcr.us.auth0.com/api/v2/"
+ALGORITHMS = ["RS256"]
+ISSUER = f"https://{AUTH0_DOMAIN}/"
 
 
 def get_session_token(req):
-    # First try to extract token from the Authorization header
+    """
+    Extract token from the Authorization header or from session.
+    """
     auth_header = req.headers.get("Authorization")
     logging.debug(f"Authorization header: {auth_header}")
     if auth_header and auth_header.startswith("Bearer "):
         return auth_header.split(" ")[1]
-    # Fall back to the token stored in session under 'clerk_db_jwt'
-    token = session.get("clerk_db_jwt")
-    logging.debug(f"Session token (clerk_db_jwt): {token}")
+    token = session.get("auth0_id_token")
+    logging.debug(f"Session token (auth0_id_token): {token}")
     return token
+
+
+def verify_token(token):
+    """
+    Verify the JWT token using Auth0's JWKS.
+    Returns the decoded payload if verification is successful; otherwise, returns None.
+    """
+    try:
+        jwks_url = f"https://{AUTH0_DOMAIN}/.well-known/jwks.json"
+        jwks = requests.get(jwks_url).json()
+        unverified_header = jwt.get_unverified_header(token)
+    except Exception as e:
+        logging.error(f"Error fetching JWKS or decoding header: {e}")
+        return None
+
+    rsa_key = {}
+    for key in jwks["keys"]:
+        if key["kid"] == unverified_header.get("kid"):
+            rsa_key = {
+                "kty": key["kty"],
+                "kid": key["kid"],
+                "use": key["use"],
+                "n": key["n"],
+                "e": key["e"],
+            }
+            break
+
+    if not rsa_key:
+        logging.error("Unable to find appropriate key")
+        return None
+
+    try:
+        payload = jwt.decode(
+            token,
+            rsa_key,
+            algorithms=ALGORITHMS,
+            issuer=ISSUER,
+            options={"verify_aud": False}
+        )
+        return payload
+    except jwt.ExpiredSignatureError:
+        logging.error("Token expired")
+    except jwt.JWTClaimsError as e:
+        logging.error(f"Invalid claims: {e}")
+    except Exception as e:
+        logging.error(f"Token verification error: {e}")
+    return None
 
 
 def verify_user(req):
@@ -27,35 +77,23 @@ def verify_user(req):
     if not token:
         logging.debug("No token found in request")
         return None
-    try:
-        # Construct a dummy httpx.Request with the token in the Authorization header.
-        headers = {"Authorization": f"Bearer {token}"}
-        fake_request = httpx.Request("GET", "http://dummy", headers=headers)
-        # Supply the required options argument. Replace with your actual authorized domain.
-        options = AuthenticateRequestOptions(
-            authorized_parties=["https://your-domain.com"]
-        )
-        # Pass the dummy request object to authenticate_request.
-        user_data = clerk_client.authenticate_request(fake_request, options)
-        logging.debug(f"User data: {user_data}")
-        return user_data
-    except Exception as e:
-        logging.error(f"Error verifying token: {e}")
-        return None
+    payload = verify_token(token)
+    if payload:
+        logging.debug(f"Verified user payload: {payload}")
+    return payload
 
 
 def requires_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        user_data = verify_user(request)
-        if not user_data:
-            # Clear session if token verification fails and redirect to login.
+        user_payload = verify_user(request)
+        if not user_payload:
+            # Clear session if verification fails and redirect to login.
             session.clear()
             return redirect("/auth/login")
-        # Attach verified user data to Flask's global context for downstream access.
-        g.user = user_data
-        # logging.info(f"Authenticated user: {g.user.payload.get('sub')} from {request.remote_addr}")
-        logging.debug(f"RequestState object: {g.user.__dict__}")
+        # Attach the token payload to Flask's global context.
+        g.user = user_payload
+        logging.debug(f"Authenticated user: {g.user.get('sub')}")
         return f(*args, **kwargs)
 
     return decorated

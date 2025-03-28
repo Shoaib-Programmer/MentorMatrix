@@ -1,329 +1,268 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}MentorMatrix{% endblock %}</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="icon"
-      href="{{ url_for('static', filename='images/favicon.ico') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/tailwind.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/popup.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/base.css') }}"
-    />
-    {% if csrf_token is defined %}
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-    {% endif %}
-    <script
-      defer
-      crossorigin="anonymous"
-      data-clerk-publishable-key="pk_test_cGxlYXNhbnQtaHVtcGJhY2stNDcuY2xlcmsuYWNjb3VudHMuZGV2JA"
-      src="https://pleasant-humpback-47.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
-    ></script>
 
-    {% block other_head_stuff %}{% endblock %}
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}MentorMatrix{% endblock %}</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/popup.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
+  {% if csrf_token is defined %}
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
+  {% endif %}
+  {% block other_head_stuff %}{% endblock %}
 
-  <body>
-    <!-- Add hamburger menu button -->
-    <button class="hamburger-menu" id="hamburger-menu" aria-label="Menu">
-      <img
-        src="{{ url_for('static', filename='images/hamburger.svg') }}"
-        alt="Menu"
-        class="hamburger-icon"
-      />
-    </button>
+  <!-- Inline CSS for the navbar -->
+  <style>
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      background-color: #1a202c;
+      /* dark gray */
+      color: #f7fafc;
+      /* light text */
+    }
 
-    <!-- Add overlay div -->
-    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    .navbar a {
+      color: #f7fafc;
+      text-decoration: none;
+      margin-left: 1rem;
+    }
 
-    <div class="container">
-      <!-- Sidebar -->
-      <aside class="sidebar">
-        <button class="sidebar-toggle" id="sidebar-toggle">
-          <img
-            src="{{ url_for('static', filename='images/sidebar-toggle.svg') }}"
-            id="toggle-icon"
-            alt="Toggle Sidebar Icon"
-            class="toggle-icon"
-          />
-        </button>
-        <div class="logo">
-          <center>
-            <img
-              src="{{ url_for('static', filename='images/MentorMatrix_logo.png') }}"
-              alt="MentorMatrix Logo"
-            />
-            <h1>MentorMatrix</h1>
-          </center>
-        </div>
-        <nav class="nav-links">
-          <!-- Buttons with redirect functionality -->
-          <button
-            class="nav-item {% if current_route == 'dashboard' %}active{% endif %}"
-            onclick="redirectToPage('/dashboard')"
-            title="Dashboard"
-          >
-            <i class="fas fa-home nav-icon"></i> <span>Dashboard</span>
-          </button>
+    .user-button {
+      display: flex;
+      align-items: center;
+    }
 
-          <button
-            class="nav-item {% if current_route == 'notes' %}active{% endif %}"
-            onclick="redirectToPage('/notes')"
-            title="Notes"
-          >
-            <i class="fas fa-book nav-icon"></i> <span>Notes</span>
-          </button>
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
 
-          <button
-            class="nav-item {% if current_route == 'chatbot' %}active{% endif %}"
-            onclick="redirectToPage('/chatbot')"
-            title="Chat Bot"
-          >
-            <i class="fas fa-comments nav-icon"></i> <span>Chat Bot</span>
-          </button>
+    .logout-link {
+      margin-left: 1rem;
+      padding: 0.25rem 0.5rem;
+      background-color: #e53e3e;
+      /* red */
+      color: #fff;
+      border-radius: 0.25rem;
+    }
+  </style>
+</head>
 
-          <button
-            class="nav-item {% if current_route == 'podcast' %}active{% endif %}"
-            onclick="redirectToPage('/podcast')"
-            title="Podcast"
-          >
-            <i class="fas fa-podcast nav-icon"></i> <span>Podcast</span>
-          </button>
-
-          <button
-            class="nav-item {% if current_route == 'flashcards' %}active{% endif %}"
-            onclick="redirectToPage('/flashcards')"
-            title="Flashcards"
-          >
-            <i class="fas fa-chalkboard-teacher nav-icon"></i>
-            <span>Flashcards</span>
-          </button>
-
-          <button
-            class="nav-item {% if current_route == 'quiz' %}active{% endif %}"
-            onclick="redirectToPage('/quiz')"
-            title="Quiz"
-          >
-            <i class="fas fa-question-circle nav-icon"></i> <span>Quiz</span>
-          </button>
-
-          <button
-            class="nav-item {% if current_route == 'transcript' %}active{% endif %}"
-            onclick="redirectToPage('/transcript')"
-            title="Transcript"
-          >
-            <i class="fas fa-file-alt nav-icon"></i> <span>Transcript</span>
-          </button>
-
-          <button
-            class="nav-item {% if current_route == 'settings' %}active{% endif %}"
-            onclick="redirectToPage('/settings')"
-            title="Settings"
-          >
-            <i class="fas fa-cogs nav-icon"></i> <span>Settings</span>
-          </button>
-        </nav>
-
-        <div class="premium-button-container">
-          <button
-            class="premium-button"
-            onclick="redirectToPage('/pricing')"
-            title="Upgrade to Premium"
-          >
-            <i class="fas fa-star nav-icon"></i>
-            <span>✨ Upgrade to Premium</span>
-          </button>
-        </div>
-      </aside>
-
-      <!-- Main content area where other templates can inject content -->
-      <main class="main-content">
-        <!-- Display flashed messages -->
-        <div id="flash-messages" class="mt-4">
-          {% with messages = get_flashed_messages(with_categories=true) %} {% if
-          messages %}
-          <div class="space-y-4">
-            {% for category, message in messages %}
-            <div
-              class="p-5 rounded-lg shadow-lg flash-message {% if category == 'success' %}bg-gradient-to-r from-green-400 via-green-500 to-green-600{% endif %} {% if category == 'error' %}bg-gradient-to-r from-red-400 via-red-500 to-red-600{% endif %} {% if category == 'info' %}bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600{% endif %} {% if category == 'warning' %}bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600{% endif %} text-white flex items-center space-x-3 transform transition-transform duration-500 hover:scale-105"
-            >
-              <!-- Icon -->
-              <div class="flex-shrink-0">
-                {% if category == 'success' %}
-                <svg
-                  class="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 13l4 4L19 7"
-                  ></path>
-                </svg>
-                {% elif category == 'error' %}
-                <svg
-                  class="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  ></path>
-                </svg>
-                {% elif category == 'info' %}
-                <svg
-                  class="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 6v6M12 18v.01M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"
-                  ></path>
-                </svg>
-                {% elif category == 'warning' %}
-                <svg
-                  class="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 8v4M12 16h.01M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"
-                  ></path>
-                </svg>
-                {% endif %}
-              </div>
-              <!-- Message text -->
-              <div class="flex-1">{{ message }}</div>
-            </div>
-            {% endfor %}
-          </div>
-          {% endif %} {% endwith %}
-        </div>
-
-        <!-- Block for page-specific content -->
-        {% block content %} {% endblock %}
-      </main>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-left">
+      <a href="/"><strong>MentorMatrix</strong></a>
     </div>
+    <div class="navbar-right">
+      {% if user %}
+      <div class="user-button">
+        <img src="{{ user.picture }}" alt="User Avatar" class="user-avatar" />
+        <span class="user-name">{{ user.name }}</span>
+        <a href="/auth/logout" class="logout-link">Logout</a>
+      </div>
+      {% else %}
+      <a href="/login" class="login-link">Login</a>
+      {% endif %}
+    </div>
+  </nav>
 
-    <script src="{{ url_for('static', filename='js/util.js') }}"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const container = document.querySelector(".container");
-        const sidebar = document.querySelector(".sidebar");
-        const toggleBtn = document.getElementById("sidebar-toggle");
-        const toggleIcon = document.getElementById("toggle-icon");
-        const hamburgerBtn = document.getElementById("hamburger-menu");
-        const overlay = document.getElementById("sidebar-overlay");
+  <!-- Hamburger menu button for mobile -->
+  <button class="hamburger-menu" id="hamburger-menu" aria-label="Menu">
+    <img src="{{ url_for('static', filename='images/hamburger.svg') }}" alt="Menu" class="hamburger-icon" />
+  </button>
 
-        // Mobile menu handlers
-        function openMobileMenu() {
-          sidebar.classList.add("mobile-open");
-          document.body.classList.add("sidebar-open");
-          overlay.classList.add("active");
-          // Add fade out and then hide hamburger
-          hamburgerBtn.classList.add("fade-out");
-          setTimeout(() => {
-            hamburgerBtn.classList.add("hidden");
-          }, 300); // Match the transition duration
-        }
+  <!-- Overlay for sidebar -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
-        function closeMobileMenu() {
-          sidebar.classList.remove("mobile-open");
-          document.body.classList.remove("sidebar-open");
-          overlay.classList.remove("active");
-          // Show and fade in hamburger
-          hamburgerBtn.classList.remove("hidden");
-          setTimeout(() => {
-            hamburgerBtn.classList.remove("fade-out");
-          }, 0);
-        }
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <button class="sidebar-toggle" id="sidebar-toggle">
+        <img src="{{ url_for('static', filename='images/sidebar-toggle.svg') }}" id="toggle-icon"
+          alt="Toggle Sidebar Icon" class="toggle-icon" />
+      </button>
+      <div class="logo">
+        <center>
+          <img src="{{ url_for('static', filename='images/MentorMatrix_logo.png') }}" alt="MentorMatrix Logo" />
+          <h1>MentorMatrix</h1>
+        </center>
+      </div>
+      <nav class="nav-links">
+        <button class="nav-item {% if current_route == 'dashboard' %}active{% endif %}"
+          onclick="redirectToPage('/dashboard')" title="Dashboard">
+          <i class="fas fa-home nav-icon"></i> <span>Dashboard</span>
+        </button>
+        <button class="nav-item {% if current_route == 'notes' %}active{% endif %}" onclick="redirectToPage('/notes')"
+          title="Notes">
+          <i class="fas fa-book nav-icon"></i> <span>Notes</span>
+        </button>
+        <button class="nav-item {% if current_route == 'chatbot' %}active{% endif %}"
+          onclick="redirectToPage('/chatbot')" title="Chat Bot">
+          <i class="fas fa-comments nav-icon"></i> <span>Chat Bot</span>
+        </button>
+        <button class="nav-item {% if current_route == 'podcast' %}active{% endif %}"
+          onclick="redirectToPage('/podcast')" title="Podcast">
+          <i class="fas fa-podcast nav-icon"></i> <span>Podcast</span>
+        </button>
+        <button class="nav-item {% if current_route == 'flashcards' %}active{% endif %}"
+          onclick="redirectToPage('/flashcards')" title="Flashcards">
+          <i class="fas fa-chalkboard-teacher nav-icon"></i> <span>Flashcards</span>
+        </button>
+        <button class="nav-item {% if current_route == 'quiz' %}active{% endif %}" onclick="redirectToPage('/quiz')"
+          title="Quiz">
+          <i class="fas fa-question-circle nav-icon"></i> <span>Quiz</span>
+        </button>
+        <button class="nav-item {% if current_route == 'transcript' %}active{% endif %}"
+          onclick="redirectToPage('/transcript')" title="Transcript">
+          <i class="fas fa-file-alt nav-icon"></i> <span>Transcript</span>
+        </button>
+        <button class="nav-item {% if current_route == 'settings' %}active{% endif %}"
+          onclick="redirectToPage('/settings')" title="Settings">
+          <i class="fas fa-cogs nav-icon"></i> <span>Settings</span>
+        </button>
+      </nav>
+      <div class="premium-button-container">
+        <button class="premium-button" onclick="redirectToPage('/pricing')" title="Upgrade to Premium">
+          <i class="fas fa-star nav-icon"></i>
+          <span>✨ Upgrade to Premium</span>
+        </button>
+      </div>
+    </aside>
 
-        // Event listeners for mobile
-        hamburgerBtn.addEventListener("click", openMobileMenu);
-        overlay.addEventListener("click", closeMobileMenu);
+    <!-- Main content area -->
+    <main class="main-content">
+      <!-- Flash messages -->
+      <div id="flash-messages" class="mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="space-y-4">
+          {% for category, message in messages %}
+          <div
+            class="p-5 rounded-lg shadow-lg flash-message
+                              {% if category == 'success' %}bg-gradient-to-r from-green-400 via-green-500 to-green-600{% endif %}
+                              {% if category == 'error' %}bg-gradient-to-r from-red-400 via-red-500 to-red-600{% endif %}
+                              {% if category == 'info' %}bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600{% endif %}
+                              {% if category == 'warning' %}bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600{% endif %}
+                              text-white flex items-center space-x-3 transform transition-transform duration-500 hover:scale-105">
+            <div class="flex-shrink-0">
+              {% if category == 'success' %}
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              {% elif category == 'error' %}
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+              {% elif category == 'info' %}
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 6v6M12 18v.01M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"></path>
+              </svg>
+              {% elif category == 'warning' %}
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 8v4M12 16h.01M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"></path>
+              </svg>
+              {% endif %}
+            </div>
+            <div class="flex-1">{{ message }}</div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+      </div>
+      {% block content %}{% endblock %}
+    </main>
+  </div>
 
-        // Close mobile menu when clicking nav items
-        const navItems = document.querySelectorAll(".nav-item");
-        navItems.forEach((item) => {
-          item.addEventListener("click", () => {
-            if (window.innerWidth <= 768) {
-              closeMobileMenu();
-            }
-          });
-        });
+  <script src="{{ url_for('static', filename='js/util.js') }}"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const container = document.querySelector(".container");
+      const sidebar = document.querySelector(".sidebar");
+      const toggleBtn = document.getElementById("sidebar-toggle");
+      const toggleIcon = document.getElementById("toggle-icon");
+      const hamburgerBtn = document.getElementById("hamburger-menu");
+      const overlay = document.getElementById("sidebar-overlay");
 
-        // Handle window resize
-        window.addEventListener("resize", () => {
-          if (window.innerWidth > 768) {
+      // Mobile menu handlers
+      function openMobileMenu() {
+        sidebar.classList.add("mobile-open");
+        document.body.classList.add("sidebar-open");
+        overlay.classList.add("active");
+        hamburgerBtn.classList.add("fade-out");
+        setTimeout(() => {
+          hamburgerBtn.classList.add("hidden");
+        }, 300);
+      }
+
+      function closeMobileMenu() {
+        sidebar.classList.remove("mobile-open");
+        document.body.classList.remove("sidebar-open");
+        overlay.classList.remove("active");
+        hamburgerBtn.classList.remove("hidden");
+        setTimeout(() => {
+          hamburgerBtn.classList.remove("fade-out");
+        }, 0);
+      }
+
+      hamburgerBtn.addEventListener("click", openMobileMenu);
+      overlay.addEventListener("click", closeMobileMenu);
+
+      const navItems = document.querySelectorAll(".nav-item");
+      navItems.forEach((item) => {
+        item.addEventListener("click", () => {
+          if (window.innerWidth <= 768) {
             closeMobileMenu();
           }
         });
-
-        // Load saved state
-        const sidebarCollapsed =
-          localStorage.getItem("sidebarCollapsed") === "true";
-        if (sidebarCollapsed) {
-          sidebar.classList.add("collapsed");
-          container.classList.add("sidebar-collapsed");
-          toggleIcon.style.transform = "rotate(180deg)";
-        }
-
-        toggleBtn.addEventListener("click", function () {
-          sidebar.classList.toggle("collapsed");
-          container.classList.toggle("sidebar-collapsed");
-
-          // Toggle icon rotation
-          if (sidebar.classList.contains("collapsed")) {
-            toggleIcon.style.transform = "rotate(180deg)";
-          } else {
-            toggleIcon.style.transform = "rotate(0deg)";
-          }
-
-          localStorage.setItem(
-            "sidebarCollapsed",
-            sidebar.classList.contains("collapsed"),
-          );
-        });
       });
-    </script>
-  </body>
+
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 768) {
+          closeMobileMenu();
+        }
+      });
+
+      // Handle sidebar collapsed state
+      const sidebarCollapsed = localStorage.getItem("sidebarCollapsed") === "true";
+      if (sidebarCollapsed) {
+        sidebar.classList.add("collapsed");
+        container.classList.add("sidebar-collapsed");
+        toggleIcon.style.transform = "rotate(180deg)";
+      }
+
+      toggleBtn.addEventListener("click", function () {
+        sidebar.classList.toggle("collapsed");
+        container.classList.toggle("sidebar-collapsed");
+        if (sidebar.classList.contains("collapsed")) {
+          toggleIcon.style.transform = "rotate(180deg)";
+        } else {
+          toggleIcon.style.transform = "rotate(0deg)";
+        }
+        localStorage.setItem("sidebarCollapsed", sidebar.classList.contains("collapsed"));
+      });
+    });
+
+    function redirectToPage(url) {
+      window.location.href = url;
+    }
+  </script>
+</body>
+
 </html>

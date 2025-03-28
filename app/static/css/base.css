@@ -120,10 +120,7 @@ h3 {
   font-family: var(--font-family);
   font-optical-sizing: auto;
   letter-spacing: -0.025em;
-  font-feature-settings:
-    "liga" 1,
-    "calt" 1,
-    "ss01" 1;
+  font-feature-settings: "liga" 1, "calt" 1, "ss01" 1;
   color: var(--text-color);
   font-weight: 900;
   text-shadow: var(--soft-text-shadow);
@@ -444,9 +441,7 @@ a {
   /* Remove underline by default */
   font-weight: 500;
   /* Medium weight for links to make them stand out but not too bold */
-  transition:
-    color 0.3s ease-in-out,
-    text-decoration 0.3s ease-in-out;
+  transition: color 0.3s ease-in-out, text-decoration 0.3s ease-in-out;
   /* Smooth transition for color and underline on hover */
   font-family: var(--font-family);
   font-weight: 500;
@@ -543,9 +538,7 @@ a:focus {
   object-fit: cover;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   border: 3px solid rgba(255, 255, 255, 0.1);
-  transition:
-    transform 0.3s ease,
-    border-color 0.3s ease;
+  transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
 .sidebar .logo img:hover {
@@ -918,68 +911,5 @@ a:focus {
 
   .nav-links {
     margin-top: 3rem;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .cl-card {
-    background-color: #212121;
-    color: #ffffff;
-    transition: all 0.3s ease;
-  }
-  .cl-navbar {
-    background-color: #474747;
-    color: #ffffff;
-    transition: all 0.3s ease;
-  }
-
-  /* Elements with white text color */
-  .cl-userPreviewSecondaryIdentifier,
-  .cl-userButtonPopoverActionButtonText,
-  .cl-internal-td400p,
-  .cl-headerTitle,
-  .cl-headerSubtitle,
-  .cl-socialButtonsBlockButtonText,
-  .cl-dividerText,
-  .cl-formFieldLabel,
-  .cl-footerActionText,
-  .cl-navbarMobileMenuButton,
-  .cl-profileSectionTitleText,
-  .cl-internal-1ho4xv,
-  .cl-internal-l1ab9q,
-  .cl-internal-rscu79,
-  .cl-internal-of57g,
-  .cl-internal-fqx4fd,
-  .cl-internal-3vf5mz,
-  .cl-navbarButton {
-    color: #ffffff;
-  }
-
-  .cl-userButtonPopoverActionButtonIcon {
-    fill: #a09c9c !important;
-  }
-
-  .cl-userButtonPopoverActionButtonIcon path,
-  .cl-userButtonPopoverActionButtonIcon rect {
-    fill: #a09c9c;
-  }
-
-  .cl-userButtonPopoverActionButton:focus {
-    box-shadow: 0 0 0 3px rgba(245, 243, 243, 0.5);
-  }
-
-  .cl-formFieldInput {
-    border-radius: 10px;
-  }
-
-  .cl-userButtonPopoverFooter {
-    display: none;
-  }
-
-  /* Elements with inverted colors */
-  .cl-navbarMobileMenuButtonIcon,
-  .cl-navbarButtonIcon,
-  .cl-internal-4muonf {
-    filter: invert(1);
   }
 }

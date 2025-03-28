@@ -1,4 +1,9 @@
-from flask import Flask, render_template, g
+from os import environ as env
+
+from authlib.integrations.flask_client import OAuth
+from dotenv import find_dotenv, load_dotenv
+
+from flask import Flask, render_template
 from flask_session import Session
 from flask_mail import Mail
 from flask_wtf.csrf import CSRFProtect, generate_csrf  # type: ignore
@@ -21,6 +26,10 @@ from app.routes import (
 from app.models import init_db
 from app.middleware import requires_auth
 
+ENV_FILE = find_dotenv()
+if ENV_FILE:
+    load_dotenv(ENV_FILE)
+
 # Create the Flask application
 app = Flask(__name__, static_folder="static", template_folder="templates")
 
@@ -42,11 +51,17 @@ mail = Mail(app)
 # Initialize the database (this creates the necessary tables)
 init_db()
 
+oauth = OAuth(app)
 
-@app.context_processor
-def inject_clerk_config():
-    return dict(current_user=g.get("clerk_payload"))
-
+oauth.register(
+    "auth0",
+    client_id=env.get("AUTH0_CLIENT_ID"),
+    client_secret=env.get("AUTH0_CLIENT_SECRET"),
+    client_kwargs={
+        "scope": "openid profile email",
+    },
+    server_metadata_url=f"https://{env.get('AUTH0_DOMAIN')}/.well-known/openid-configuration",
+)
 
 # Register blueprints within an application context
 with app.app_context():
